@@ -36,6 +36,8 @@ dependencies:
   cupertino_icons: ^1.0.8
   firebase_core: ^3.14.0
   firebase_auth: ^5.6.0
+  cloud_firestore: ^5.6.11
+  google_sign_in: ^7.0.0
   flutter_localizations:
     sdk: flutter
   intl: any
@@ -64,8 +66,7 @@ flutter:
 
   assets:
     - assets/images/
-
-  # An image asset can refer to one or more resolution-specific "variants", see
+    # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 
   # For details regarding adding assets from package dependencies, see
