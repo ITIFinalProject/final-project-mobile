@@ -1,4 +1,3 @@
-import 'package:eventify_app/features/Home.dart';
 import 'package:eventify_app/features/auth/login.dart';
 import 'package:eventify_app/features/auth/register.dart';
 import 'package:eventify_app/features/layout/layout.dart';
