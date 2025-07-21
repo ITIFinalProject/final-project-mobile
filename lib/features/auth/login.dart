@@ -26,9 +26,10 @@ Future<void> LoginUser(String email, String password) async{
         errorMessage = '';
       });
   try {
-    UserCredential userCredential=await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
+    UserCredential userCredential = await FirebaseAuth.instance
+        .signInWithEmailAndPassword(email: email, password: password);
     print("User logged in: ${userCredential.user?.email}");
-      Navigator.pushReplacementNamed(context, AppRoutes.homeScreen);
+    Navigator.pushReplacementNamed(context, AppRoutes.layout);
 
   } on FirebaseAuthException catch (e) {
     if (e.code == 'user-not-found') {
