@@ -26,10 +26,9 @@ class _LoginViewState extends State<LoginView> {
         onTap: () {
           FocusScope.of(context).unfocus(); // علشان اما اضغط بره الfocus يقفل
         },
-        child: ListView(
-          children: [
-
-            Form(
+        child: Center(
+          child: SingleChildScrollView(
+            child: Form(
               key: formKey,
               child: Padding(
                 padding: const EdgeInsets.symmetric(
@@ -73,9 +72,7 @@ class _LoginViewState extends State<LoginView> {
                     SizedBox(height: 24),
 
                     CustomButton(
-                      onPressed: () {
-                       
-                      },
+                      onPressed: () {},
                       buttonChild: isLoading
                           ? CircularProgressIndicator()
                           : buttonText(text: "LOGIN"),
@@ -114,7 +111,7 @@ class _LoginViewState extends State<LoginView> {
                 ),
               ),
             ),
-          ],
+          ),
         ),
       ),
     );
