@@ -53,34 +53,45 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             left: 0,
             right: 0,
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 TextButton(
                   onPressed: () {
                     Navigator.pushReplacementNamed(context, AppRoutes.login);
                   },
-                  child: Text('Skip'),
+                  child: Text('Skip', style: TextStyle(color: Colors.blueGrey,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 20),),
                 ),
-                SizedBox(width: size.width * 0.2),
                 SmoothPageIndicator(
                   controller: _controller,
                   count: 3,
                   effect: ExpandingDotsEffect(),
                 ),
-                SizedBox(width: size.width * 0.1),
                 ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+
+                    ),
+                    backgroundColor: Colors.indigo,
+
+                  ),
                   onPressed: () {
                     currentIndex != 2
                         ? _controller.nextPage(
-                          duration: Duration(seconds: 1),
-                          curve: Curves.ease,
-                        )
+                      duration: Duration(seconds: 1),
+                      curve: Curves.ease,
+                    )
                         : Navigator.pushReplacementNamed(
-                          context,
-                          AppRoutes.login,
-                        );
+                      context,
+                      AppRoutes.login,
+                    );
                   },
-                  child: Text(currentIndex != 2 ? 'Next' : 'Get Started'),
+                  child: Text(currentIndex != 2 ? 'Next' : 'Get Started',
+                    style: TextStyle(color: Colors.white,
+                        fontWeight: FontWeight.normal,
+                        fontSize: 20),),
                 ),
               ],
             ),
