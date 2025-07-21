@@ -2,8 +2,8 @@ import 'package:eventify_app/core/routes.dart';
 import 'package:eventify_app/core/theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main()async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,12 +18,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       routes: AppRoutes.routes,
-      initialRoute: AppRoutes.register,
+      initialRoute: AppRoutes.splash,
       theme: ThemeManager.lightTheme,
       darkTheme: ThemeManager.darkTheme,
-      locale: Locale('ar'),
-    supportedLocales: AppLocalizations.supportedLocales,
-      localizationsDelegates:  [
+      locale: Locale('en'),
+      supportedLocales: AppLocalizations.supportedLocales,
+      localizationsDelegates: [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
