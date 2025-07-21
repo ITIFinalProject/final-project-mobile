@@ -1,9 +1,10 @@
-import 'package:eventify_app/features/Home.dart';
 import 'package:eventify_app/features/add_event/add_event_view.dart';
 import 'package:eventify_app/features/events/events_view.dart';
 import 'package:eventify_app/features/messages/messages_view.dart';
 import 'package:eventify_app/features/profile/profile_view.dart';
 import 'package:flutter/material.dart';
+
+import '../home/home_view.dart';
 
 class LayoutView extends StatefulWidget {
   LayoutView({super.key});
