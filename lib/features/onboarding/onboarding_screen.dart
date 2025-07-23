@@ -1,4 +1,5 @@
 import 'package:eventify_app/core/routes.dart';
+import 'package:eventify_app/core/theme.dart';
 import 'package:eventify_app/features/onboarding/widgets/custom_card.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -57,16 +58,20 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               children: [
                 TextButton(
                   onPressed: () {
-                    Navigator.pushReplacementNamed(context, AppRoutes.login);
+                    Navigator.pushReplacementNamed(context, AppRoutes.layout);
                   },
-                  child: Text('Skip', style: TextStyle(color: Colors.blueGrey,
+                  child: Text(
+                    'Skip', style: TextStyle(color: ThemeManager.primaryColor,
                       fontWeight: FontWeight.w600,
                       fontSize: 20),),
                 ),
                 SmoothPageIndicator(
                   controller: _controller,
                   count: 3,
-                  effect: ExpandingDotsEffect(),
+                  effect: ExpandingDotsEffect(
+                      dotColor: ThemeManager.darkPinkColor,
+                      activeDotColor: ThemeManager.secondaryColor
+                  ),
                 ),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
@@ -74,7 +79,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       borderRadius: BorderRadius.circular(10),
 
                     ),
-                    backgroundColor: Colors.indigo,
+                    backgroundColor: ThemeManager.primaryColor,
 
                   ),
                   onPressed: () {

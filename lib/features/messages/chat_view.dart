@@ -1,3 +1,4 @@
+import 'package:eventify_app/core/theme.dart';
 import 'package:flutter/material.dart';
 
 class ChatPage extends StatefulWidget {
@@ -24,48 +25,54 @@ class _ChatPageState extends State<ChatPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Family Get-Together"),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
-        ),
         actions: const [
-          Padding(
-            padding: EdgeInsets.only(right: 16),
-            child: Center(child: Text("15 Participants")),
-          ),
+          // Padding(
+          //   padding: EdgeInsets.only(right: 16),
+          //   child: Center(child: Text("15 Participants")),
+          // ),
         ],
       ),
       body: Column(
         children: [
-          const Expanded(
+          Expanded(
             child: Center(
               child: Text(
                 "Messages are sent to each guest privately.",
-                style: TextStyle(color: Colors.grey),
+                style: TextStyle(color: ThemeManager.secondaryColor),
               ),
             ),
           ),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-            color: Colors.grey[100],
+          Padding(
+            padding: const EdgeInsets.all(10),
             child: Row(
               children: [
                 Expanded(
                   child: TextField(
                     controller: _messageController,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
+                      fillColor: ThemeManager.primaryColor,
+                      filled: true,
                       hintText: "Write a message",
-                      border: OutlineInputBorder(),
+                      hintStyle: TextStyle(
+                          color: ThemeManager.lightPinkColor
+                      ),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20)
+                      ),
                       isDense: true,
                       contentPadding:
-                          EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                      EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                     ),
                   ),
                 ),
                 const SizedBox(width: 8),
-                IconButton(
-                  icon: const Icon(Icons.send, color: Colors.red),
-                  onPressed: _sendMessage,
+                CircleAvatar(
+                  backgroundColor: ThemeManager.lightPinkColor,
+                  child: IconButton(
+                    icon: const Icon(
+                        Icons.send, color: ThemeManager.primaryColor),
+                    onPressed: _sendMessage,
+                  ),
                 )
               ],
             ),

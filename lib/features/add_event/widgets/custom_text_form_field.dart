@@ -1,3 +1,4 @@
+import 'package:eventify_app/core/theme.dart';
 import 'package:flutter/material.dart';
 
 typedef Validator = String? Function(String?);
@@ -46,29 +47,29 @@ class CustomInputDecoration {
   }) {
     return InputDecoration(
       hintText: hintText,
-      hintStyle: TextStyle(fontSize: 15, color: Colors.grey),
+      hintStyle: TextStyle(fontSize: 15, color: ThemeManager.darkPinkColor),
       prefixIcon:
           icon != null
               ? Container(
                 width: 35,
                 height: 52,
                 decoration: BoxDecoration(
-                  color: Colors.grey[300],
+                  color: ThemeManager.darkPinkColor,
                   borderRadius: BorderRadius.only(
                     bottomLeft: Radius.circular(13),
                     topLeft: Radius.circular(13),
                   ),
                 ),
-                child: Icon(icon),
-              )
-              : null,
+        child: Icon(icon),
+      )
+          : null,
       enabled: true,
       focusedBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.teal),
+        borderSide: BorderSide(color: ThemeManager.primaryColor),
         borderRadius: BorderRadius.circular(13),
       ),
       enabledBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.teal),
+        borderSide: BorderSide(color: ThemeManager.primaryColor),
         borderRadius: BorderRadius.circular(13),
       ),
       errorBorder: OutlineInputBorder(

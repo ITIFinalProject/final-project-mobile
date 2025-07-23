@@ -4,6 +4,8 @@ import 'package:eventify_app/features/add_event/widgets/custom_text_form_field.d
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../../core/theme.dart';
+
 class EventDetailsView extends StatefulWidget {
   EventDetailsView({super.key});
 
@@ -62,9 +64,13 @@ class _EventDetailsViewState extends State<EventDetailsView> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25),
                 child: DropdownButtonFormField<String>(
+                  style: TextStyle(
+                      fontSize: 18, color: ThemeManager.primaryColor),
+                  borderRadius: BorderRadius.circular(15),
                   decoration: CustomInputDecoration.getDecoration(
                     hintText: 'Select event type',
                   ),
+
                   items:
                   eventTypes.map((value) {
                     return DropdownMenuItem(
@@ -212,9 +218,12 @@ class _EventDetailsViewState extends State<EventDetailsView> {
                   return null;
                 },
               ),
-              ElevatedButton(onPressed: () {
-                Navigator.pushNamed(context, AppRoutes.createContacts);
-              }, child: Text('Next: Preview')),
+              Padding(
+                padding: const EdgeInsets.all(15),
+                child: CustomElevatedButton(onPressed: () {
+                  Navigator.pushNamed(context, AppRoutes.createContacts);
+                }, title: ('Next: Preview')),
+              ),
             ],
           ),
         ),

@@ -1,8 +1,8 @@
 
 
 import 'package:eventify_app/core/routes.dart';
+import 'package:eventify_app/core/theme.dart';
 import 'package:flutter/material.dart';
-
 
 class ProfileView extends StatefulWidget {
   const ProfileView({super.key});
@@ -36,24 +36,28 @@ class _ProfileViewState extends State<ProfileView> {
               // Profile Circle Avatar
               CircleAvatar(
                 radius: 40,
-                backgroundColor: Colors.pink[100],
-                child: const Text(
-                  "DT",
-                  style: TextStyle(
-                    fontSize: 24,
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                  ),
+              backgroundColor: ThemeManager.darkPinkColor,
+              child: const Text(
+                "DT",
+                style: TextStyle(
+                  fontSize: 24,
+                  color: ThemeManager.primaryColor,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
+            ),
 
               const SizedBox(height: 12),
 
               // Name and Email
-              const Text(
-                "Dylan Thomas",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            Text(
+              "Dylan Thomas",
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: ThemeManager.primaryColor,
               ),
+            )
               const SizedBox(height: 4),
               const Text(
                 "dylanthomas@server.com",
@@ -64,6 +68,7 @@ class _ProfileViewState extends State<ProfileView> {
             _infoTile(
               "Edit Profile",
               Icons.person,
+
               (){
                 Navigator.pushNamed(context, AppRoutes.editProfile);
               }
@@ -85,9 +90,10 @@ class _ProfileViewState extends State<ProfileView> {
       onTap: ontap
     ,
       child: ListTile(
-        leading: Icon(icon, color: Colors.teal),
-        title: Text(title),
-        trailing: const Icon(Icons.arrow_forward_ios),
+        leading: Icon(icon, color: ThemeManager.primaryColor),
+        title: Text(title, style: TextStyle(color: ThemeManager.primaryColor),),
+        trailing: Icon(
+          Icons.arrow_forward_ios, color: ThemeManager.primaryColor,),
       ),
     );
   }

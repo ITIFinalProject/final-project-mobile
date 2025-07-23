@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:eventify_app/core/routes.dart';
+import 'package:eventify_app/core/theme.dart';
+import 'package:eventify_app/features/add_event/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
 
 class BuildPreview extends StatelessWidget {
@@ -30,63 +32,82 @@ class BuildPreview extends StatelessWidget {
               height: size.height * 0.6,
               margin: EdgeInsets.symmetric(vertical: 20),
               decoration: BoxDecoration(
-                color: Colors.grey[300],
-                borderRadius: BorderRadius.circular(20),
+                  color: ThemeManager.darkPinkColor,
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(
+                      color: ThemeManager.darkPinkColor.withBlue(100)
+                  ),
+                  gradient: LinearGradient(
+                      begin: Alignment.topRight,
+                      end: Alignment.bottomLeft,
+                      colors: [
+                        ThemeManager.darkPinkColor,
+                        ThemeManager.lightPinkColor
+                      ]
+                  )
               ),
 
-              child: Center(child: Text('Your Event Cover Here')),
+              child: Center(child: Text('Your Event Cover Here',
+                style: TextStyle(
+                  color: ThemeManager.secondaryColor, fontSize: 18,),)),
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              spacing: 10,
               children: [
-                ElevatedButton.icon(
-                  onPressed: pickImage,
-                  label: Text('Upload Image'),
-                  icon: Icon(Icons.upload_file),
+                Expanded(child: CustomElevatedButton(
+                  title: 'Upload Image', onPressed: pickImage,)),
+
+                Expanded(
+                  child: CustomElevatedButton(
+                    onPressed: toggleShownTemplates,
+                    title: 'Choose Template',
+                  ),
                 ),
-                ElevatedButton.icon(
-                  onPressed: toggleShownTemplates,
-                  label: Text('Choose Template'),
-                  icon: Icon(Icons.view_module_outlined),
-                ),
+
               ],
             ),
           ],
         )
         : Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Stack(
+          alignment: Alignment.topRight,
           children: [
-            Stack(
-              alignment: Alignment.topRight,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(10),
+            Padding(
+                padding: const EdgeInsets.all(10),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(15),
                   child:
-                      (selectedImage == null)
-                          ? Image.asset(
-                            'assets/images/template${selectedTemplate}.jpg',
-                          )
-                          : Image.file(selectedImage!),
+                  (selectedImage == null)
+                      ? Image.asset(
+                    'assets/images/template$selectedTemplate.jpg',
+                    height: size.height * 0.6,
+                  )
+                      : Image.file(selectedImage!),
+                )),
+            Padding(
+              padding: const EdgeInsets.all(15),
+              child: CircleAvatar(
+                backgroundColor: ThemeManager.secondaryColor,
+                child: IconButton(
+                  onPressed: onEdit,
+                  icon: Icon(Icons.edit, color: ThemeManager.lightPinkColor),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(18),
-                  child: CircleAvatar(
-                    backgroundColor: Colors.blue,
-                    child: IconButton(
-                      onPressed: onEdit,
-                      icon: Icon(Icons.edit, color: Colors.white),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Spacer(),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, AppRoutes.eventDetails);
-              },
-              child: Text('Next: Event Details'),
+              ),
             ),
           ],
+        ),
+        SizedBox(
+          height: size.height * 0.04,
+        ),
+        CustomElevatedButton(
+          onPressed: () {
+            Navigator.pushNamed(context, AppRoutes.eventDetails);
+          },
+          title: ('Next: Event Details'),
+        ),
+      ],
         );
   }
 }

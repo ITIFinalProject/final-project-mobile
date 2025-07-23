@@ -1,4 +1,5 @@
 import 'package:eventify_app/core/routes.dart';
+import 'package:eventify_app/core/theme.dart';
 import 'package:eventify_app/features/auth/login.dart';
 import 'package:eventify_app/features/auth/widgets/custom_button.dart';
 import 'package:eventify_app/features/auth/widgets/custom_text_field.dart';
@@ -18,7 +19,7 @@ class _RegisterViewState extends State<RegisterView> {
   TextEditingController confirmPassController = TextEditingController();
   TextEditingController NameController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
- TextEditingController addressController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
   final formKey = GlobalKey<FormState>();
   bool rememberMe = false;
   bool hidden = true;
@@ -51,22 +52,18 @@ class _RegisterViewState extends State<RegisterView> {
           print('The email address is already in use by another account.');
           isLoading = false;
           errorMessage =
-          'The email address is already in use by another account.';
+              'The email address is already in use by another account.';
         } else {
           print('Error: ${e.message}');
           isLoading = false;
           errorMessage = 'Error: ${e.message}';
         }
-        setState(() {
-
-        });
+        setState(() {});
       } catch (e) {
         print(e);
         isLoading = false;
         errorMessage = '$e';
-        setState(() {
-
-        });
+        setState(() {});
       }
     }
   }
@@ -77,7 +74,7 @@ class _RegisterViewState extends State<RegisterView> {
       backgroundColor: Colors.white,
       body: GestureDetector(
         onTap: () {
-          FocusScope.of(context).unfocus(); // علشان اما اضغط بره الfocus يقفل
+          FocusScope.of(context).unfocus();
         },
         child: Center(
           child: SingleChildScrollView(
@@ -88,33 +85,26 @@ class _RegisterViewState extends State<RegisterView> {
                   CustomTextFIeld(
                     lable: "Name",
                     icon: Icons.person_add,
-                    lines: 1,
-                    color: Color(0xFF42c5a5),
                     textFieldController: NameController,
                   ),
                   CustomTextFIeld(
                     lable: "Phone",
                     icon: Icons.phone_android,
-                    lines: 1,
-                    color: Color(0xFF42c5a5),
+
                     textFieldController: phoneController,
                   ),
                   CustomTextFIeld(
                     lable: "Email",
                     icon: Icons.email_rounded,
-                    lines: 1,
-                    color: Color(0xFF42c5a5),
                     textFieldController: emailController,
                   ),
                   CustomTextFIeld(
                     lable: "Password",
                     icon: Icons.lock_outline_rounded,
-                    lines: 1,
-                    color: Color(0xFF42c5a5),
                     textFieldController: passController,
                     obscure: hidden,
                     suffixIcon:
-                    hidden ? Icons.visibility_off : Icons.visibility,
+                        hidden ? Icons.visibility_off : Icons.visibility,
                     onPressedIcon: () {
                       hidden = !hidden;
                       setState(() {});
@@ -123,12 +113,10 @@ class _RegisterViewState extends State<RegisterView> {
                   CustomTextFIeld(
                     lable: "Confirm Password",
                     icon: Icons.lock_outline,
-                    lines: 1,
-                    color: Color(0xFF42c5a5),
                     textFieldController: confirmPassController,
                     obscure: hiddenConfirm,
                     suffixIcon:
-                    hiddenConfirm ? Icons.visibility_off : Icons.visibility,
+                        hiddenConfirm ? Icons.visibility_off : Icons.visibility,
                     onPressedIcon: () {
                       hiddenConfirm = !hiddenConfirm;
                       setState(() {});
@@ -142,21 +130,25 @@ class _RegisterViewState extends State<RegisterView> {
                       return null;
                     },
                   ),
-              
-                  CustomTextFIeld(lable: "address", icon:Icons.location_on, lines: 1, color:Color(0xFF42c5a5) , textFieldController: addressController,),
-             
+
+                  CustomTextFIeld(
+                    lable: "address",
+                    icon: Icons.location_on,
+                    textFieldController: addressController,
+                  ),
+
                   CustomButton(
                     onPressed: () async {
                       registerUser(emailController.text, passController.text);
                     },
                     buttonChild:
-                    isLoading
-                        ? const CircularProgressIndicator(
-                      color: Colors.white,
-                    )
-                        : buttonText(text: 'Sign Up'),
+                        isLoading
+                            ? const CircularProgressIndicator(
+                              color: ThemeManager.lightPinkColor,
+                            )
+                            : buttonText(text: 'Sign Up'),
 
-                    buttonColor: Color(0xFF42c5a5),
+                    buttonColor: ThemeManager.primaryColor,
 
                     vPadding: 14,
                     hPadding: 100,
@@ -169,11 +161,14 @@ class _RegisterViewState extends State<RegisterView> {
                         style: TextStyle(color: Colors.red),
                       ),
                     ),
-  
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('Already have an account ?'),
+                      Text(
+                        'Already have an account ?',
+                        style: TextStyle(color: ThemeManager.primaryColor),
+                      ),
                       TextButton(
                         onPressed: () {
                           Navigator.pushReplacement(
@@ -188,7 +183,7 @@ class _RegisterViewState extends State<RegisterView> {
                         child: Text(
                           "Login In Now",
                           style: TextStyle(
-                            color: Color(0xFF42c5a5),
+                            color: ThemeManager.secondaryColor,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -203,5 +198,4 @@ class _RegisterViewState extends State<RegisterView> {
       ),
     );
   }
-
 }

@@ -20,7 +20,10 @@ class _AddEventViewState extends State<AddEventView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('1 of 5: Customize'), centerTitle: true),
+      appBar: AppBar(
+        title: Text('1 of 5: Customize'),
+        automaticallyImplyLeading: false,
+      ),
       body: AnimatedSwitcher(
         duration: Duration(seconds: 1),
         child:

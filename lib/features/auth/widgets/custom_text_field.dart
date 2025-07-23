@@ -1,5 +1,7 @@
 // custom textfield******
+import 'package:eventify_app/core/theme.dart';
 import 'package:flutter/material.dart';
+
 typedef Validator = String? Function(String?);
 
 class CustomTextFIeld extends StatelessWidget {
@@ -9,7 +11,6 @@ class CustomTextFIeld extends StatelessWidget {
   IconData? suffixIcon;
   VoidCallback? onPressedIcon;
   int lines;
-  Color color;
   bool obscure;
   TextEditingController textFieldController;
   String? initialValue;
@@ -18,10 +19,9 @@ class CustomTextFIeld extends StatelessWidget {
     super.key,
     required this.lable,
     required this.icon,
-    required this.lines,
-    required this.color,
-   this.initialValue,
-     this.obscure = false,
+    this.lines = 1,
+    this.initialValue,
+    this.obscure = false,
     this.validator,
     this.suffixIcon,
     this.onPressedIcon,
@@ -38,33 +38,34 @@ class CustomTextFIeld extends StatelessWidget {
         initialValue: initialValue,
         maxLines: lines > 1 ? lines : 1,
         obscureText: obscure,
+
         decoration: InputDecoration(
-          prefix: Icon(icon, color: color),
+          prefix: Icon(icon, color: ThemeManager.secondaryColor),
           label: Text(lable),
-           
+          labelStyle: TextStyle(color: ThemeManager.primaryColor),
           suffixIcon: IconButton(
-            icon: Icon(suffixIcon, color: color),
+            icon: Icon(suffixIcon, color: ThemeManager.secondaryColor),
             onPressed: onPressedIcon,
           ),
           // labelStyle: TextStyle(color: color),
           focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: color),
+            borderSide: BorderSide(color: ThemeManager.primaryColor),
             borderRadius: BorderRadius.circular(13),
           ),
           disabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: color),
+            borderSide: BorderSide(color: ThemeManager.primaryColor),
             borderRadius: BorderRadius.circular(13),
           ),
           enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: color),
+            borderSide: BorderSide(color: ThemeManager.primaryColor),
             borderRadius: BorderRadius.circular(13),
           ),
           errorBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: color),
+            borderSide: BorderSide(color: Colors.red),
             borderRadius: BorderRadius.circular(13),
           ),
           focusedErrorBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: color),
+            borderSide: BorderSide(color: Colors.red),
             borderRadius: BorderRadius.circular(13),
           ),
         ),

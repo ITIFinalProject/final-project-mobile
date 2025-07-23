@@ -39,6 +39,7 @@ dependencies:
   cloud_firestore: ^5.6.11
   google_sign_in: ^7.0.0
   image_picker: ^1.1.2
+  curved_navigation_bar: ^1.0.6
   flutter_localizations:
     sdk: flutter
   intl: any
