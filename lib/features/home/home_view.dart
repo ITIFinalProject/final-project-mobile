@@ -1,3 +1,4 @@
+import 'package:eventify_app/core/routes.dart';
 import 'package:flutter/material.dart';
 
 class HomeView extends StatelessWidget {
@@ -7,7 +8,7 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
-      
+
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
@@ -20,9 +21,9 @@ class HomeView extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               Container(
-                 width: double.infinity,
-  padding: const EdgeInsets.all(20),
-              
+                width: double.infinity,
+                padding: const EdgeInsets.all(20),
+
                 decoration: BoxDecoration(
                   color: Colors.red.shade50,
                   borderRadius: BorderRadius.circular(12),
@@ -36,15 +37,19 @@ class HomeView extends StatelessWidget {
                     ),
                     const SizedBox(height: 25),
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushNamed(context, AppRoutes.addEvent);
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.red,
-                        padding: const EdgeInsets.symmetric(horizontal: 54, vertical: 15),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 54, vertical: 15),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
                       ),
-                      child: const Text('Plan an Event',style: TextStyle(color: Colors.white),),
+                      child: const Text('Plan an Event',
+                        style: TextStyle(color: Colors.white),),
                     )
                   ],
                 ),
