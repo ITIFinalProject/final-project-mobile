@@ -47,9 +47,9 @@ class _ProfileViewState extends State<ProfileView> {
               ),
             ),
 
-              const SizedBox(height: 12),
+            const SizedBox(height: 12),
 
-              // Name and Email
+            // Name and Email
             Text(
               "Dylan Thomas",
               style: TextStyle(
@@ -57,17 +57,17 @@ class _ProfileViewState extends State<ProfileView> {
                 fontWeight: FontWeight.bold,
                 color: ThemeManager.primaryColor,
               ),
-            )
-              const SizedBox(height: 4),
-              const Text(
-                "dylanthomas@server.com",
-                style: TextStyle(color: Colors.grey),
-              ),
+            ),
+            const SizedBox(height: 4),
+            const Text(
+              "dylanthomas@server.com",
+              style: TextStyle(color: Colors.grey),
+            ),
 
-              const SizedBox(height: 30),
+            const SizedBox(height: 30),
             _infoTile(
-              "Edit Profile",
-              Icons.person,
+                "Edit Profile",
+                Icons.person,
 
               (){
                 Navigator.pushNamed(context, AppRoutes.editProfile);
