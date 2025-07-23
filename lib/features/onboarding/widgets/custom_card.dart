@@ -1,3 +1,4 @@
+import 'package:eventify_app/core/theme.dart';
 import 'package:flutter/material.dart';
 
 class CustomCard extends StatelessWidget {
@@ -21,10 +22,10 @@ class CustomCard extends StatelessWidget {
       children: [
         Card(
           margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-          shadowColor: Colors.redAccent,
+          shadowColor: ThemeManager.lightPinkColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
-            side: BorderSide(color: Colors.redAccent, width: 1.5),
+            side: BorderSide(color: ThemeManager.secondaryColor, width: 1.5),
           ),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(20),
@@ -32,23 +33,23 @@ class CustomCard extends StatelessWidget {
               imagePath,
               fit: BoxFit.cover,
               width: size.width * 0.8,
-              height: size.height * 0.4,
+              height: size.height * 0.6,
             ),
           ),
         ),
         Text(
           title,
           style: TextStyle(
-            color: Colors.black,
+            color: ThemeManager.primaryColor,
             fontWeight: FontWeight.bold,
             fontSize: 25,
-            shadows: [BoxShadow(color: Colors.redAccent, blurRadius: 50)],
+            shadows: [BoxShadow(color: Colors.redAccent[100]!, blurRadius: 50)],
           ),
         ),
         Text(
           text,
           style: TextStyle(
-            color: Colors.black,
+            color: ThemeManager.secondaryColor,
             fontWeight: FontWeight.normal,
             fontSize: 20,
           ),
