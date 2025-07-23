@@ -12,6 +12,7 @@ class CustomTextFIeld extends StatelessWidget {
   Color color;
   bool obscure;
   TextEditingController textFieldController;
+  String? initialValue;
 
   CustomTextFIeld({
     super.key,
@@ -19,7 +20,8 @@ class CustomTextFIeld extends StatelessWidget {
     required this.icon,
     required this.lines,
     required this.color,
-    this.obscure = false,
+   this.initialValue,
+     this.obscure = false,
     this.validator,
     this.suffixIcon,
     this.onPressedIcon,
@@ -33,12 +35,13 @@ class CustomTextFIeld extends StatelessWidget {
       child: TextFormField(
         controller: textFieldController,
         minLines: lines,
-        // maxLines: 100,
+        initialValue: initialValue,
         maxLines: lines > 1 ? lines : 1,
         obscureText: obscure,
         decoration: InputDecoration(
           prefix: Icon(icon, color: color),
           label: Text(lable),
+           
           suffixIcon: IconButton(
             icon: Icon(suffixIcon, color: color),
             onPressed: onPressedIcon,

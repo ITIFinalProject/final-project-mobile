@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import '../home/home_view.dart';
 
 class LayoutView extends StatefulWidget {
-  LayoutView({super.key});
+  const LayoutView({super.key});
 
   @override
   State<LayoutView> createState() => _LayoutViewState();

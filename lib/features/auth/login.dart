@@ -98,7 +98,16 @@ Future<void> LoginUser(String email, String password) async{
                       setState(() {});
                     },
                     ),
-
+ Text("forget password ?",
+                    style: TextStyle(
+                      color: Color(0xFF42c5a5),
+                      fontWeight: FontWeight.bold,
+                    
+                    ),
+                    textAlign: TextAlign.center,
+                    
+                  ),
+              
                     SizedBox(height: 24),
 
                     CustomButton(
