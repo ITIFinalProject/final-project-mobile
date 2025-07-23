@@ -16,10 +16,9 @@ class _RegisterViewState extends State<RegisterView> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passController = TextEditingController();
   TextEditingController confirmPassController = TextEditingController();
-  TextEditingController fNameController = TextEditingController();
-  TextEditingController lNameController = TextEditingController();
+  TextEditingController NameController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
-
+ TextEditingController addressController = TextEditingController();
   final formKey = GlobalKey<FormState>();
   bool rememberMe = false;
   bool hidden = true;
@@ -91,7 +90,7 @@ class _RegisterViewState extends State<RegisterView> {
                     icon: Icons.person_add,
                     lines: 1,
                     color: Color(0xFF42c5a5),
-                    textFieldController: fNameController,
+                    textFieldController: NameController,
                   ),
                   CustomTextFIeld(
                     lable: "Phone",
@@ -143,54 +142,9 @@ class _RegisterViewState extends State<RegisterView> {
                       return null;
                     },
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 15, vertical: 10),
-                    child: DropdownButtonFormField<String>(
-                      decoration: InputDecoration(
-                        labelText: "Gender",
-                        prefixIcon: Icon(Icons.person_outline),
-                        enabled: true,
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Color(0xFF42c5a5)),
-                          borderRadius: BorderRadius.circular(13),
-                        ),
-                        disabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Color(0xFF42c5a5)),
-                          borderRadius: BorderRadius.circular(13),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Color(0xFF42c5a5)),
-                          borderRadius: BorderRadius.circular(13),
-                        ),
-                        errorBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Color(0xFF42c5a5)),
-                          borderRadius: BorderRadius.circular(13),
-                        ),
-                        focusedErrorBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Color(0xFF42c5a5)),
-                          borderRadius: BorderRadius.circular(13),
-                        ),
-                      ),
-                      borderRadius: BorderRadius.circular(13),
-                      items:
-                      ["Male", "Female"].map((value) {
-                        return DropdownMenuItem(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                      onChanged: (val) {
-                        setState(() => selectedGender = val);
-                      },
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'please select your gender';
-                        }
-                        return null;
-                      },
-                    ),
-                  ),
+              
+                  CustomTextFIeld(lable: "address", icon:Icons.location_on, lines: 1, color:Color(0xFF42c5a5) , textFieldController: addressController,),
+             
                   CustomButton(
                     onPressed: () async {
                       registerUser(emailController.text, passController.text);
@@ -215,7 +169,7 @@ class _RegisterViewState extends State<RegisterView> {
                         style: TextStyle(color: Colors.red),
                       ),
                     ),
-
+  
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
