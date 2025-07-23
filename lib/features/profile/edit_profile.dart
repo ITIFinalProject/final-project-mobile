@@ -94,7 +94,7 @@ class _EditProfileState extends State<EditProfile> {
                       profileImage == null
                           ? const Text(
                             "DT",
-                            style: TextStyle(
+                            ststyle: TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.bold,
                               color: ThemeManager.primaryColor,
@@ -114,7 +114,6 @@ class _EditProfileState extends State<EditProfile> {
                   ),
                 ),
               ],
-            )
             ),
             const SizedBox(height: 20),
             CustomTextFIeld(
@@ -134,15 +133,14 @@ class _EditProfileState extends State<EditProfile> {
             ),
             CustomTextFIeld(
               lable: "Password",
-              icon: Icons.password,
-              textFieldController: passController,
+              icon: Icons.password,xtFieldController: passController,
             ),
             CustomTextFIeld(
               lable: "Address",
               icon: Icons.location_on,
               textFieldController: addressController,
             ),
-            CustomElevatedButton(title: 'Save Changes', onPressed: () {})
+            CustomElevatedButton(title: 'Save Changes', onPressed: () {}),
           ],
         ),
       ),
