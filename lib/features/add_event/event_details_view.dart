@@ -1,3 +1,4 @@
+import 'package:eventify_app/core/routes.dart';
 import 'package:eventify_app/features/add_event/widgets/custom_text.dart';
 import 'package:eventify_app/features/add_event/widgets/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
@@ -65,12 +66,12 @@ class _EventDetailsViewState extends State<EventDetailsView> {
                     hintText: 'Select event type',
                   ),
                   items:
-                      eventTypes.map((value) {
-                        return DropdownMenuItem(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
+                  eventTypes.map((value) {
+                    return DropdownMenuItem(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
                   onChanged: (val) {},
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -211,7 +212,9 @@ class _EventDetailsViewState extends State<EventDetailsView> {
                   return null;
                 },
               ),
-              ElevatedButton(onPressed: () {}, child: Text('Next: Preview')),
+              ElevatedButton(onPressed: () {
+                Navigator.pushNamed(context, AppRoutes.createContacts);
+              }, child: Text('Next: Preview')),
             ],
           ),
         ),
