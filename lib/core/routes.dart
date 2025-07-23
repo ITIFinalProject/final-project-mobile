@@ -21,10 +21,10 @@ class AppRoutes {
 static const String editProfile = "/edit_profile";
   static final routes = <String, WidgetBuilder>{
     splash: (context) => SplashScreen(),
+    layout: (context) => LayoutView(),
     onBoarding: (context) => OnboardingScreen(),
     login: (context) => LoginView(),
     register: (context) => RegisterView(),
-    layout: (context) => LayoutView(),
     addEvent: (context) => AddEventView(),
     eventDetails: (context) => EventDetailsView(),
     createContacts: (context) => CreateContact(),

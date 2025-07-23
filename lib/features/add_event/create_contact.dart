@@ -1,3 +1,4 @@
+import 'package:eventify_app/core/theme.dart';
 import 'package:eventify_app/features/add_event/widgets/custom_text.dart';
 import 'package:eventify_app/features/add_event/widgets/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
@@ -9,12 +10,19 @@ class CreateContact extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery
+        .of(context)
+        .size;
     return Scaffold(
       appBar: AppBar(
         title: Text('Create Contact'),
         centerTitle: true,
-        leading: Icon(Icons.person_add_alt_rounded),
-        actions: [IconButton(onPressed: () {}, icon: Icon(Icons.clear))],
+        leading: Icon(
+          Icons.person_add_alt_rounded, color: ThemeManager.primaryColor,),
+        actions: [
+          IconButton(onPressed: () {},
+              icon: Icon(Icons.clear, color: ThemeManager.primaryColor,))
+        ],
       ),
       body: SingleChildScrollView(
         child: Form(
@@ -40,7 +48,7 @@ class CreateContact extends StatelessWidget {
                 validator: (val) {
                   if (val == null || val.isEmpty) {
                     return 'Please enter e-mail address';
-                  } else if (!RegExp(r'^[]').hasMatch(val)) {
+                  } else if (!RegExp(r"^[^@]+@[^@]+\.[^@]+").hasMatch(val)) {
                     return '';
                   }
                   return null;
@@ -53,18 +61,20 @@ class CreateContact extends StatelessWidget {
                 validator: (val) {
                   if (val == null || val.isEmpty) {
                     return 'Please enter phone';
+                  } else if (!RegExp(r"^01[0125]\d{8}").hasMatch(val)) {
+                    return 'Please enter a valid phone like 01012345678.';
                   }
                   return null;
                 },
               ),
-              Spacer(),
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.spaceAround,
-              //   children: [
-              //     ElevatedButton(onPressed: (){}, child: Text('Cancel')),
-              //     ElevatedButton(onPressed: (){}, child: Text('Save')),
-              //   ],
-              // )
+              SizedBox(height: size.height * 0.45,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  CustomElevatedButton(onPressed: () {}, title: ('Cancel')),
+                  CustomElevatedButton(onPressed: () {}, title: ('Save')),
+                ],
+              )
             ],
           ),
         ),

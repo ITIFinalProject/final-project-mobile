@@ -1,8 +1,11 @@
 import 'dart:io';
 
+import 'package:eventify_app/features/add_event/widgets/custom_text.dart';
 import 'package:eventify_app/features/auth/widgets/custom_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+
+import '../../core/theme.dart';
 
 class EditProfile extends StatefulWidget {
   const EditProfile({super.key});
@@ -72,14 +75,6 @@ class _EditProfileState extends State<EditProfile> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Edit Profile"),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.save),
-            onPressed: () {
-              // Save profile changes logic here
-            },
-          ),
-        ],
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(
@@ -88,11 +83,11 @@ class _EditProfileState extends State<EditProfile> {
         child: Column(
           children: [
             Stack(
-              alignment: Alignment.center,
+              ignment: Alignment.bottomRight,
               children: [
                 CircleAvatar(
                   radius: 45,
-                  backgroundColor: Colors.pink[100],
+                  backgroundColor: ThemeManager.darkPinkColor,
                   backgroundImage:
                       profileImage != null ? FileImage(profileImage!) : null,
                   child:
@@ -102,72 +97,52 @@ class _EditProfileState extends State<EditProfile> {
                             style: TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.bold,
-                              color: Colors.black,
+                              color: ThemeManager.primaryColor,
                             ),
                           )
                           : null,
                 ),
-
-                Positioned(
-                  bottom: 4,
-                  right: 8,
-                  child: GestureDetector(
-                    onTap: _pickImage,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(color: Colors.black26, blurRadius: 3),
-                        ],
-                      ),
-                      padding: const EdgeInsets.all(6),
-                      child: const Icon(
-                        Icons.camera_alt,
-                        size: 16,
-                        color: Colors.red,
-                      ),
+                GestureDetector(
+                  onTap: _pickImage,
+                  child: CircleAvatar(
+                    backgroundColor: ThemeManager.lightPinkColor,
+                    child: Icon(
+                      Icons.camera_alt,
+                      size: 20,
+                      color: ThemeManager.primaryColor,
                     ),
                   ),
                 ),
               ],
+            )
             ),
             const SizedBox(height: 20),
             CustomTextFIeld(
               lable: "Name",
               icon: Icons.person,
-              lines: 1,
-              color: Colors.cyanAccent,
               textFieldController: nameController,
             ),
             CustomTextFIeld(
               lable: "Email",
               icon: Icons.email,
-              lines: 1,
-              color: Colors.cyanAccent,
               textFieldController: emailController,
             ),
             CustomTextFIeld(
               lable: "Phone",
               icon: Icons.phone,
-              lines: 1,
-              color: Colors.cyanAccent,
               textFieldController: phoneController,
             ),
             CustomTextFIeld(
               lable: "Password",
               icon: Icons.password,
-              lines: 1,
-              color: Colors.cyanAccent,
               textFieldController: passController,
             ),
             CustomTextFIeld(
               lable: "Address",
               icon: Icons.location_on,
-              lines: 1,
-              color: Colors.cyanAccent,
               textFieldController: addressController,
             ),
+            CustomElevatedButton(title: 'Save Changes', onPressed: () {})
           ],
         ),
       ),
