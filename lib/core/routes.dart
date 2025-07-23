@@ -27,8 +27,7 @@ static const String editProfile = "/edit_profile";
     layout: (context) => LayoutView(),
     addEvent: (context) => AddEventView(),
     eventDetails: (context) => EventDetailsView(),
-    createContacts:(context)=>CreateContact()
-    layout: (context) => LayoutView(),
+    createContacts: (context) => CreateContact(),
     editProfile: (context) => EditProfile(),
   };
 }
