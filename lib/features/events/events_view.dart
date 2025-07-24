@@ -7,11 +7,11 @@ class EventsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade100,
+      backgroundColor: Colors.white,
       appBar: PreferredSize(
   preferredSize: const Size.fromHeight(70), 
   child: AppBar(
-    backgroundColor: Colors.white,
+    backgroundColor: Color(0xFF1B3C53),
    
     centerTitle: false,
     title: const Padding(
@@ -21,7 +21,7 @@ class EventsView extends StatelessWidget {
         style: TextStyle(
           fontSize: 28,
           fontWeight: FontWeight.bold,
-          color: Colors.black87,
+          color: Colors.white,
         ),
       ),
     ),
@@ -43,7 +43,7 @@ class EventsView extends StatelessWidget {
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
+                      color: Color(0xFF456882).withOpacity(0.2),
                       blurRadius: 6,
                       offset: const Offset(0, 2),
                     ),
@@ -61,11 +61,11 @@ class EventsView extends StatelessWidget {
                   ),
                   calendarStyle: const CalendarStyle(
                     todayDecoration: BoxDecoration(
-                      color: Colors.red,
+                      color: Color(0xFF1B3C53),
                       shape: BoxShape.circle,
                     ),
                     selectedDecoration: BoxDecoration(
-                      color: Colors.redAccent,
+                      color: Color(0xFF1B3C53),
                       shape: BoxShape.circle,
                     ),
                   ),
@@ -79,7 +79,7 @@ class EventsView extends StatelessWidget {
               const SizedBox(height: 32),
               const Text(
                 'This month',
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold,color: Color(0xFF1B3C53)),
               ),
               const SizedBox(height: 20),
               Padding(
@@ -88,8 +88,8 @@ class EventsView extends StatelessWidget {
                   children: [
                     CircleAvatar(
                       radius: 28,
-                      backgroundColor: Colors.red.shade50,
-                      child: const Icon(Icons.calendar_today, color: Colors.red, size: 30),
+                      backgroundColor: Color(0xFFF9F3EF),
+                      child: const Icon(Icons.calendar_today, color: Color(0xFF1B3C53), size: 30),
                     ),
                     const SizedBox(width: 50),
                     const Expanded(
@@ -98,12 +98,12 @@ class EventsView extends StatelessWidget {
                         children: [
                           Text(
                             'No Events',
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                            style: TextStyle(fontWeight: FontWeight.bold,color: Color(0xFF1B3C53)),
                           ),
                           SizedBox(height: 8),
                           Text(
                             "Create an event and make some memories.",
-                            style: TextStyle(fontSize: 13, color: Colors.black54),
+                            style: TextStyle(fontSize: 13, color: Color(0xFF456882)),
                           ),
                           
                         ],

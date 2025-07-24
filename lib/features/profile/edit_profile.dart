@@ -83,18 +83,18 @@ class _EditProfileState extends State<EditProfile> {
         child: Column(
           children: [
             Stack(
-              ignment: Alignment.bottomRight,
+              alignment: Alignment.bottomRight,
               children: [
                 CircleAvatar(
                   radius: 45,
                   backgroundColor: ThemeManager.darkPinkColor,
                   backgroundImage:
-                      profileImage != null ? FileImage(profileImage!) : null,
+                  profileImage != null ? FileImage(profileImage!) : null,
                   child:
-                      profileImage == null
-                          ? const Text(
-                            "DT",
-                            ststyle: TextStyle(
+                  profileImage == null
+                      ? const Text(
+                    "DT",
+                            style: TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.bold,
                               color: ThemeManager.primaryColor,
@@ -115,6 +115,7 @@ class _EditProfileState extends State<EditProfile> {
                 ),
               ],
             ),
+
             const SizedBox(height: 20),
             CustomTextFIeld(
               lable: "Name",
