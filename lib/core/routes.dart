@@ -9,6 +9,10 @@ import 'package:eventify_app/features/profile/edit_profile.dart';
 import 'package:eventify_app/features/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
 
+import '../features/add_event/add_guest.dart';
+import '../features/add_event/evevnt_preview.dart';
+import '../features/events/event_details.dart';
+
 class AppRoutes {
   static const String splash = "/";
   static const String onBoarding = "/on_boarding";
@@ -18,7 +22,10 @@ class AppRoutes {
   static const String addEvent = '/add_event';
   static const String eventDetails = '/event_details';
   static const String createContacts = '/create_contact';
-static const String editProfile = "/edit_profile";
+  static const String editProfile = "/edit_profile";
+  static const String EventPreview = "/event_preview";
+  static const String realEventDetails = "/real_event_details";
+  static const String addGuest = '/add_guest';
   static final routes = <String, WidgetBuilder>{
     splash: (context) => SplashScreen(),
     layout: (context) => LayoutView(),
@@ -29,5 +36,8 @@ static const String editProfile = "/edit_profile";
     eventDetails: (context) => EventDetailsView(),
     createContacts: (context) => CreateContact(),
     editProfile: (context) => EditProfile(),
+    addGuest: (context) => AddGuests(),
+    EventPreview: (context) => const EventPreviewPage(),
+    realEventDetails: (context) => const RealEventDetails(),
   };
 }

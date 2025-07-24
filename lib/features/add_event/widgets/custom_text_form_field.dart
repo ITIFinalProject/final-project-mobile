@@ -2,7 +2,7 @@ import 'package:eventify_app/core/theme.dart';
 import 'package:flutter/material.dart';
 
 typedef Validator = String? Function(String?);
-
+typedef Changed =Function(String)?;
 class CustomTextFormField extends StatelessWidget {
   final TextEditingController controller;
   final int lines;
@@ -10,6 +10,7 @@ class CustomTextFormField extends StatelessWidget {
   final Validator? validator;
   final String hint;
   final VoidCallback? onTapped;
+  final Changed? onChange;
 
   const CustomTextFormField({
     super.key,
@@ -19,6 +20,7 @@ class CustomTextFormField extends StatelessWidget {
     required this.controller,
     this.onTapped,
     this.lines = 1,
+    this.onChange
   });
 
   @override
@@ -30,6 +32,7 @@ class CustomTextFormField extends StatelessWidget {
         minLines: lines,
         maxLines: lines,
         onTap: onTapped,
+        onChanged: onChange,
         decoration: CustomInputDecoration.getDecoration(
           hintText: hint,
           icon: prefixIcon,

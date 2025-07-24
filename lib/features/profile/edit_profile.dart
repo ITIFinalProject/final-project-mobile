@@ -134,15 +134,14 @@ class _EditProfileState extends State<EditProfile> {
             ),
             CustomTextFIeld(
               lable: "Password",
-              icon: Icons.password,
-              textFieldController: passController,
+              icon: Icons.password,textFieldController: passController,
             ),
             CustomTextFIeld(
               lable: "Address",
               icon: Icons.location_on,
               textFieldController: addressController,
             ),
-            CustomElevatedButton(title: 'Save Changes', onPressed: () {})
+            CustomElevatedButton(title: 'Save Changes', onPressed: () {}),
           ],
         ),
       ),
