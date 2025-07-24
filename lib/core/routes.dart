@@ -1,6 +1,7 @@
 import 'package:eventify_app/features/add_event/add_event_view.dart';
 import 'package:eventify_app/features/add_event/create_contact.dart';
 import 'package:eventify_app/features/add_event/event_details_view.dart';
+import 'package:eventify_app/features/add_event/evevnt_preview.dart';
 import 'package:eventify_app/features/auth/login.dart';
 import 'package:eventify_app/features/auth/register.dart';
 import 'package:eventify_app/features/layout/layout.dart';
@@ -19,6 +20,7 @@ class AppRoutes {
   static const String eventDetails = '/event_details';
   static const String createContacts = '/create_contact';
 static const String editProfile = "/edit_profile";
+static const String EventPreview= "/event_preview";
   static final routes = <String, WidgetBuilder>{
     splash: (context) => SplashScreen(),
     layout: (context) => LayoutView(),
@@ -29,5 +31,6 @@ static const String editProfile = "/edit_profile";
     eventDetails: (context) => EventDetailsView(),
     createContacts: (context) => CreateContact(),
     editProfile: (context) => EditProfile(),
+    EventPreview: (context) => const EventPreviewPage(),
   };
 }

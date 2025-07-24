@@ -134,7 +134,7 @@ class _EditProfileState extends State<EditProfile> {
             ),
             CustomTextFIeld(
               lable: "Password",
-              icon: Icons.password,xtFieldController: passController,
+              icon: Icons.password,textFieldController: passController,
             ),
             CustomTextFIeld(
               lable: "Address",
