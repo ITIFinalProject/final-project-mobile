@@ -41,7 +41,9 @@ class HomeView extends StatelessWidget {
                     ),
                     const SizedBox(height: 25),
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushNamed(context, AppRoutes.realEventDetails);
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Color(0xFF1B3C53),
                         padding: const EdgeInsets.symmetric(
