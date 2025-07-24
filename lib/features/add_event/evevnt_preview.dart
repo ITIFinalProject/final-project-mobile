@@ -417,7 +417,7 @@ class EventPreviewPage extends StatelessWidget {
                      width: double.infinity,
                       child: ElevatedButton.icon(
                         onPressed: () {
-                          Navigator.pushNamed(context, AppRoutes.createContacts);
+                          Navigator.pushNamed(context, AppRoutes.addGuest);
                         },
                         icon: const Icon(Icons.group_add, color: ThemeManager.lightPinkColor),
                         label: const Text("Invite Guests"),
