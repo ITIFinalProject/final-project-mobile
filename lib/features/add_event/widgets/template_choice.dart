@@ -17,7 +17,7 @@ class TemplateChoice extends StatelessWidget {
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         crossAxisSpacing: 10,
-        mainAxisSpacing: 10,
+        mainAxisSpacing: 5,
       ),
       itemBuilder: (context, index) {
         return GestureDetector(
@@ -25,11 +25,13 @@ class TemplateChoice extends StatelessWidget {
             selectTemplate(index + 1);
           },
           child: Column(
+            mainAxisSize: MainAxisSize.min,
+            key: ValueKey(2),
             children: [
               Image.asset(
                 'assets/images/template${index + 1}.jpg',
                 width: size.width * 0.4,
-                height: size.height * 0.2,
+                height: size.height * 0.15,
               ),
               Text('Template ${index + 1}'),
             ],

@@ -221,7 +221,7 @@ class _EventDetailsViewState extends State<EventDetailsView> {
               Padding(
                 padding: const EdgeInsets.all(15),
                 child: CustomElevatedButton(onPressed: () {
-                  Navigator.pushNamed(context, AppRoutes.createContacts);
+                  Navigator.pushNamed(context, AppRoutes.addGuest);
                 }, title: ('Next: Preview')),
               ),
             ],

@@ -20,7 +20,9 @@ class CreateContact extends StatelessWidget {
         leading: Icon(
           Icons.person_add_alt_rounded, color: ThemeManager.primaryColor,),
         actions: [
-          IconButton(onPressed: () {},
+          IconButton(onPressed: () {
+            Navigator.pop(context);
+          },
               icon: Icon(Icons.clear, color: ThemeManager.primaryColor,))
         ],
       ),
