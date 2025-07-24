@@ -1,5 +1,4 @@
 import 'package:eventify_app/features/add_event/add_event_view.dart';
-import 'package:eventify_app/features/add_event/add_guest.dart';
 import 'package:eventify_app/features/add_event/create_contact.dart';
 import 'package:eventify_app/features/add_event/event_details_view.dart';
 import 'package:eventify_app/features/auth/login.dart';
@@ -19,6 +18,9 @@ class AppRoutes {
   static const String addEvent = '/add_event';
   static const String eventDetails = '/event_details';
   static const String createContacts = '/create_contact';
+static const String editProfile = "/edit_profile";
+static const String EventPreview= "/event_preview";
+static const String realEventDetails= "/real_event_details";
   static const String editProfile = "/edit_profile";
   static const String addGuest = '/add_guest';
   static final routes = <String, WidgetBuilder>{
@@ -32,5 +34,7 @@ class AppRoutes {
     createContacts: (context) => CreateContact(),
     editProfile: (context) => EditProfile(),
     addGuest: (context) => AddGuests(),
+    EventPreview: (context) => const EventPreviewPage(),
+    realEventDetails :(context) => const RealEventDetails(),
   };
 }
