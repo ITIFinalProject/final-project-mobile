@@ -1,11 +1,11 @@
 import 'dart:io';
 
 import 'package:eventify_app/features/add_event/widgets/custom_text.dart';
-import 'package:eventify_app/features/auth/widgets/custom_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../core/theme.dart';
+import '../auth/view/widgets/custom_text_field.dart';
 
 class EditProfile extends StatefulWidget {
   const EditProfile({super.key});
