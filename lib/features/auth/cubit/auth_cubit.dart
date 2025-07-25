@@ -3,6 +3,7 @@ import 'package:eventify_app/features/auth/cubit/auth_state.dart';
 import 'package:eventify_app/features/auth/models/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthCubit extends Cubit<AuthState> {
@@ -85,6 +86,17 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
+  // Future<void> checkUserLoggedIn() async {
+  //   emit(AuthLoading());
+  //   final user = FirebaseAuth.instance.currentUser;
+  //
+  //   if (user != null) {
+  //     emit();
+  //   } else {
+  //     emit();
+  //   }
+  // }
+
   Future<void> signInWithGoogle() async {
     emit(AuthLoading());
     try {
@@ -122,4 +134,41 @@ class AuthCubit extends Cubit<AuthState> {
       emit(AuthFailure(e.toString()));
     }
   }
+
+  Future<void> signInWithFacebook() async {
+    emit(AuthLoading());
+    try {
+      final LoginResult result = await FacebookAuth.instance.login();
+
+      if (result.status == LoginStatus.success) {
+        final accessToken = result.accessToken;
+
+        final facebookAuthCredential =
+        FacebookAuthProvider.credential(accessToken!.tokenString);
+
+        final userCredential = await FirebaseAuth.instance
+            .signInWithCredential(facebookAuthCredential);
+
+        final user = userCredential.user;
+
+        final userModel = UserModel(
+          name: user?.displayName ?? '',
+          email: user?.email ?? '',
+        );
+
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user!.uid)
+            .set(userModel.toFireStore(), SetOptions(merge: true));
+
+        emit(AuthSuccess(userModel));
+      } else {
+        emit(AuthFailure(result.message ?? "Facebook sign-in failed."));
+      }
+    } catch (e) {
+      emit(AuthFailure(e.toString()));
+    }
+  }
+
+
 }

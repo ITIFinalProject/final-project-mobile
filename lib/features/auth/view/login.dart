@@ -159,6 +159,9 @@ class _LoginViewState extends State<LoginView> {
                             ),
                           ),
                           GestureDetector(
+                            onTap: () {
+                              context.read<AuthCubit>().signInWithFacebook();
+                            },
                             child: CircleAvatar(
                               backgroundColor: ThemeManager.primaryColor,
                               radius: 28,

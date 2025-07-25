@@ -178,6 +178,9 @@ class _RegisterViewState extends State<RegisterView> {
                             ),
                           ),
                           GestureDetector(
+                            onTap: () {
+                              context.read<AuthCubit>().signInWithFacebook();
+                            },
                             child: CircleAvatar(
                               backgroundColor: ThemeManager.primaryColor,
                               radius: 28,
