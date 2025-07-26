@@ -1,5 +1,7 @@
 import 'package:eventify_app/core/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:eventify_app/features/floating_button/chatscreen.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -63,7 +65,11 @@ class HomeView extends StatelessWidget {
               const SizedBox(height: 60),
               const Text(
                 'Invitations',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF1B3C53),),
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF1B3C53),
+                ),
               ),
               const SizedBox(height: 35),
               Padding(
@@ -86,7 +92,10 @@ class HomeView extends StatelessWidget {
                         children: [
                           Text(
                             'No Invitations',
-                            style: TextStyle(fontWeight: FontWeight.bold,color: Color(0xFF1B3C53)),
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF1B3C53),
+                            ),
                           ),
                           SizedBox(height: 8),
                           Text(
@@ -105,7 +114,11 @@ class HomeView extends StatelessWidget {
               const SizedBox(height: 60),
               const Text(
                 'Upcoming Events',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF1B3C53),),
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF1B3C53),
+                ),
               ),
               const SizedBox(height: 35),
               Padding(
@@ -128,7 +141,10 @@ class HomeView extends StatelessWidget {
                         children: [
                           Text(
                             'No Events',
-                            style: TextStyle(fontWeight: FontWeight.bold,color: Color(0xFF1B3C53)),
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF1B3C53),
+                            ),
                           ),
                           SizedBox(height: 4),
                           Text(
@@ -149,7 +165,29 @@ class HomeView extends StatelessWidget {
           ),
         ),
       ),
+
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const ChatScreen()),
+          );
+        },
+        backgroundColor: const Color(0xFF1B3C53),
+        elevation: 6,
+        shape: const CircleBorder(),
+        child: SvgPicture.asset(
+          'assets/images/ChatGPT-Logo.svg',
+          width: 32,
+          height: 32,
+
+          colorFilter: const ColorFilter.mode(
+            Colors.white,
+            BlendMode.srcIn,
+          ),
+        ),
+
+      ),
     );
   }
 }
-
