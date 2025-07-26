@@ -64,7 +64,7 @@ class _EventDetailsViewState extends State<EventDetailsView> {
    return BlocListener<CreateEventCubit, CreateEventState>(
       listener: (context, state) {
         if (state is CreateEventSuccess) {
-          Navigator.pushNamed(context, AppRoutes.EventPreview);
+          Navigator.pushNamed(context, AppRoutes.eventPreview);
         } else if (state is CreateEventError) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text("Failed to create event")),
