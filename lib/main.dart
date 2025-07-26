@@ -1,7 +1,9 @@
 import 'package:eventify_app/core/routes.dart';
 import 'package:eventify_app/core/theme.dart';
+import 'package:eventify_app/features/add_event/logic/cubit/create_event_cubit.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -15,20 +17,28 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      routes: AppRoutes.routes,
-      initialRoute: AppRoutes.splash,
-      theme: ThemeManager.lightTheme,
-      darkTheme: ThemeManager.darkTheme,
-      locale: Locale('en'),
-      supportedLocales: AppLocalizations.supportedLocales,
-      localizationsDelegates: [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
+    return MultiBlocProvider(   // ✅ نغلف التطبيق كله هنا
+      providers: [
+        BlocProvider(
+          create: (context) => CreateEventCubit(), 
+        ),
+      
       ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        routes: AppRoutes.routes,
+        initialRoute: AppRoutes.splash,
+        theme: ThemeManager.lightTheme,
+        darkTheme: ThemeManager.darkTheme,
+        locale: Locale('en'),
+        supportedLocales: AppLocalizations.supportedLocales,
+        localizationsDelegates: [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+      ),
     );
   }
 }
