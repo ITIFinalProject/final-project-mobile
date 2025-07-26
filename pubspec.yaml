@@ -41,10 +41,12 @@ dependencies:
   firebase_core: ^3.14.0
   firebase_auth: ^5.6.0
   cloud_firestore: ^5.6.11
-  google_sign_in: ^7.0.0
+  google_sign_in: ^6.3.0
   image_picker: ^1.1.2
   curved_navigation_bar: ^1.0.6
   flutter_contacts: ^1.1.9+2
+  flutter_bloc: ^9.1.1
+  flutter_facebook_auth: ^7.1.1
   flutter_localizations:
     sdk: flutter
   intl: any
