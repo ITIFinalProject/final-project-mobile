@@ -1,32 +1,52 @@
+import 'package:eventify_app/core/theme.dart';
+import 'package:eventify_app/features/events/widgets/event_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-class EventsView extends StatelessWidget {
+import 'event_cubit/event_cubit.dart';
+import 'event_cubit/event_state.dart';
+
+class EventsView extends StatefulWidget {
   const EventsView({super.key});
+
+  @override
+  State<EventsView> createState() => _EventsViewState();
+}
+
+class _EventsViewState extends State<EventsView> {
+  DateTime? selectedDate = DateTime.now();
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<EventCubit>().fetchEvents();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: PreferredSize(
-  preferredSize: const Size.fromHeight(70), 
-  child: AppBar(
-    backgroundColor: Color(0xFF1B3C53),
-   
-    centerTitle: false,
-    title: const Padding(
-      padding: EdgeInsets.only(top: 20), 
-      child: Text(
-        'Events',
-        style: TextStyle(
-          fontSize: 28,
-          fontWeight: FontWeight.bold,
-          color: Colors.white,
+        preferredSize: const Size.fromHeight(70),
+        child: AppBar(
+          backgroundColor: Color(0xFF1B3C53),
+
+          centerTitle: false,
+          title: const Padding(
+            padding: EdgeInsets.only(top: 20),
+            child: Text(
+              'Events',
+              style: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+          ),
         ),
       ),
-    ),
-  ),
-),
 
       body: SafeArea(
         child: SingleChildScrollView(
@@ -34,7 +54,6 @@ class EventsView extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              
               const SizedBox(height: 16),
               Container(
                 padding: const EdgeInsets.all(12),
@@ -61,7 +80,7 @@ class EventsView extends StatelessWidget {
                   ),
                   calendarStyle: const CalendarStyle(
                     todayDecoration: BoxDecoration(
-                      color: Color(0xFF1B3C53),
+                      color: ThemeManager.darkPinkColor,
                       shape: BoxShape.circle,
                     ),
                     selectedDecoration: BoxDecoration(
@@ -74,52 +93,114 @@ class EventsView extends StatelessWidget {
                     weekdayStyle: TextStyle(color: Colors.black87),
                   ),
                   availableGestures: AvailableGestures.all,
+                  onDaySelected: (selectedDay, focusedDay) {
+                    setState(() {
+                      selectedDate = selectedDay;
+                    });
+                  },
+                  selectedDayPredicate: (day) {
+                    return isSameDay(selectedDate, day);
+                  },
                 ),
               ),
-              const SizedBox(height: 32),
-              const Text(
-                'This month',
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold,color: Color(0xFF1B3C53)),
-              ),
-              const SizedBox(height: 20),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Row(
-                  children: [
-                    CircleAvatar(
-                      radius: 28,
-                      backgroundColor: Color(0xFFF9F3EF),
-                      child: const Icon(Icons.calendar_today, color: Color(0xFF1B3C53), size: 30),
-                    ),
-                    const SizedBox(width: 50),
-                    const Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'No Events',
-                            style: TextStyle(fontWeight: FontWeight.bold,color: Color(0xFF1B3C53)),
-                          ),
-                          SizedBox(height: 8),
-                          Text(
-                            "Create an event and make some memories.",
-                            style: TextStyle(fontSize: 13, color: Color(0xFF456882)),
-                          ),
-                          
-                        ],
-                      ),
 
-                    ),
-                    
-                  ],
-                ),
+              const SizedBox(height: 20),
+              BlocBuilder<EventCubit, EventState>(
+                builder: (context, state) {
+                  if (state is EventLoading) {
+                    return Center(
+                      child: CircularProgressIndicator(
+                        color: ThemeManager.primaryColor,
+                      ),
+                    );
+                  } else if (state is EventLoaded) {
+                    final filteredEvents =
+                    selectedDate == null
+                        ? state.events
+                        : state.events.where((event) {
+                      try {
+                        final parts = event.date.split(' - ');
+                        final eventDate = DateFormat('dd/MM/yyyy').parse(
+                            parts[0]);
+                        return eventDate.year == selectedDate!.year &&
+                            eventDate.month == selectedDate!.month &&
+                            eventDate.day == selectedDate!.day;
+                      } catch (e) {
+                        return false; // Skip invalid dates
+                      }
+                    }).toList();
+                    if (filteredEvents.isEmpty) {
+                      return showNoEvents();
+                    }
+                    return Column(
+                      children:
+                      filteredEvents.map((event) {
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 12),
+                          child: CardEvent(event: event),
+                        );
+                      }).toList(),
+                    );
+                  } else if (state is EventError) {
+                    return Center(child: Text(state.message));
+                  }
+
+                  return const SizedBox.shrink();
+                },
               ),
-              SizedBox(height: 70),
+
+              const SizedBox(height: 70),
             ],
           ),
         ),
       ),
     );
   }
-}
 
+  showNoEvents() {
+    return Card(
+      color: ThemeManager.lightPinkColor,
+      margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15),
+        side: BorderSide(color: ThemeManager.secondaryColor),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        child: Row(
+          children: [
+            CircleAvatar(
+              radius: 28,
+              backgroundColor: Color(0xFFF9F3EF),
+              child: const Icon(
+                Icons.calendar_today,
+                color: Color(0xFF1B3C53),
+                size: 30,
+              ),
+            ),
+            const SizedBox(width: 50),
+            const Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'No Events',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF1B3C53),
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    "Create an event and make some memories.",
+                    style: TextStyle(fontSize: 13, color: Color(0xFF456882)),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

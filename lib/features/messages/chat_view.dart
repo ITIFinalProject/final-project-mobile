@@ -2,7 +2,9 @@ import 'package:eventify_app/core/theme.dart';
 import 'package:flutter/material.dart';
 
 class ChatPage extends StatefulWidget {
-  const ChatPage({super.key});
+  final String eventId;
+
+  const ChatPage({super.key, required this.eventId});
 
   @override
   State<ChatPage> createState() => _ChatPageState();

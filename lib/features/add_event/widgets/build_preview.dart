@@ -11,6 +11,7 @@ class BuildPreview extends StatelessWidget {
   VoidCallback pickImage;
   VoidCallback toggleShownTemplates;
   VoidCallback onEdit;
+  
 
   BuildPreview({
     super.key,
@@ -76,15 +77,18 @@ class BuildPreview extends StatelessWidget {
           children: [
             Padding(
                 padding: const EdgeInsets.all(10),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(15),
-                  child:
-                  (selectedImage == null)
-                      ? Image.asset(
-                    'assets/images/template$selectedTemplate.jpg',
-                    height: size.height * 0.6,
-                  )
-                      : Image.file(selectedImage!),
+                child: Center(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(15),
+                    child:
+                    (selectedImage == null)
+                        ? Image.asset(
+                      'assets/images/template$selectedTemplate.jpg',
+                      height: size.height * 0.6,
+                    )
+                        : Image.file(selectedImage!, height: size.height * 0.6,
+                      fit: BoxFit.cover,),
+                  ),
                 )),
             Padding(
               padding: const EdgeInsets.all(15),
@@ -103,7 +107,12 @@ class BuildPreview extends StatelessWidget {
         ),
         CustomElevatedButton(
           onPressed: () {
-            Navigator.pushNamed(context, AppRoutes.eventDetails);
+
+            Navigator.pushNamed(context, AppRoutes.eventDetails,arguments: {
+              'selectedImage':selectedImage,
+              'selectedTemplate': selectedTemplate,
+            });
+            
           },
           title: ('Next: Event Details'),
         ),
