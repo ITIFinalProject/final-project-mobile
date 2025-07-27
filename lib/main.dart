@@ -1,9 +1,10 @@
 import 'package:eventify_app/core/routes.dart';
 import 'package:eventify_app/core/theme.dart';
+import 'package:eventify_app/l10n/app_localizations.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main()async{
