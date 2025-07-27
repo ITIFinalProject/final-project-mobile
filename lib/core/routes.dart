@@ -12,8 +12,8 @@ import 'package:eventify_app/features/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../features/add_event/add_guest.dart';
-import '../features/add_event/evevnt_preview.dart';
 import '../features/events/event_details.dart';
+import '../features/events/evevnt_preview.dart';
 
 class AppRoutes {
   static const String splash = "/";

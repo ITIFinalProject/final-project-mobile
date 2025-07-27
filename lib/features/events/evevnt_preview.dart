@@ -235,15 +235,31 @@
 
 import 'package:eventify_app/core/routes.dart';
 import 'package:eventify_app/core/theme.dart';
+import 'package:eventify_app/features/auth/cubit/auth_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../models.dart/event_model.dart';
+import '../auth/cubit/auth_state.dart';
+import 'event_cubit/event_cubit.dart';
+import 'event_cubit/event_state.dart';
 
 class EventPreviewPage extends StatelessWidget {
   const EventPreviewPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    var event = ModalRoute
+        .of(context)!
+        .settings
+        .arguments as EventModel;
+    var size = MediaQuery
+        .of(context)
+        .size;
+    String? imageUrl = event.image;
     return Scaffold(
       backgroundColor: Colors.white,
+      appBar: AppBar(backgroundColor: ThemeManager.primaryColor),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -253,10 +269,30 @@ class EventPreviewPage extends StatelessWidget {
                 bottomLeft: Radius.circular(24),
                 bottomRight: Radius.circular(24),
               ),
-              child: Image.asset(
-                'assets/images/page2.jpg',
-                height: 400,
-                width: double.infinity,
+              child:
+              imageUrl != null && imageUrl.isNotEmpty
+                  ? Image.network(
+                imageUrl,
+                width: size.width,
+                height: size.height * 0.4,
+                fit: BoxFit.cover,
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+
+                  return Center(
+                    child: CircularProgressIndicator(
+                      color: ThemeManager.primaryColor,
+                    ),
+                  );
+                },
+                errorBuilder: (context, error, stackTrace) {
+                  return Icon(Icons.error, color: Colors.red);
+                },
+              )
+                  : Image.asset(
+                'assets/images/template${event.templateIndex}.jpg',
+                width: size.width,
+                height: size.height * 0.4,
                 fit: BoxFit.cover,
               ),
             ),
@@ -282,61 +318,34 @@ class EventPreviewPage extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text(
-                          "Family Get-Together",
+                        Text(
+                          event.title,
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
                             color: Color(0xff1b3c53),
                           ),
                         ),
-                        ElevatedButton.icon(
-                          onPressed: () {
-                            Navigator.pushNamed(context, AppRoutes.eventDetails);
-                          },
-                          icon: const Icon(
-                            Icons.edit,
-                            color: ThemeManager.primaryColor,
-                          ),
-                          label: const Text(
-                            "Edit Details",
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: ThemeManager.primaryColor,
-                            ),
-                          ),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: ThemeManager.darkPinkColor,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                        ),
                       ],
                     ),
-                
+
                     const SizedBox(height: 16),
-                
+
+                    _InfoBox(icon: Icons.date_range, label: event.date),
+                    const SizedBox(height: 16),
+                    _InfoBox(icon: Icons.access_time, label: event.time),
+
+                    const SizedBox(height: 16),
+
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                         _InfoBox(icon: Icons.date_range, label: "(Monday)Dec 28 |Dec 30 "),
-                        _InfoBox(icon: Icons.access_time, label: "8:45pm | 11pm"),
-                       
-                      ],
-                    ),
-                
-                    const SizedBox(height: 16),
-                
-                      Row(
-                      children: const [
                         Icon(
                           Icons.location_on_outlined,
                           color: ThemeManager.secondaryColor,
                         ),
                         SizedBox(width: 8),
                         Text(
-                          "El-Gezira Club, Zamalek",
+                          event.location,
                           style: TextStyle(
                             fontSize: 14,
                             color: Color(0xff1b3c53),
@@ -344,14 +353,16 @@ class EventPreviewPage extends StatelessWidget {
                         ),
                       ],
                     ),
-                
-                    
-                
+
                     const SizedBox(height: 24),
-                
-                  TextButton.icon(
+
+                    TextButton.icon(
                       onPressed: () {},
-                      icon: const Icon(Icons.calendar_today_outlined, size: 18,color: ThemeManager.primaryColor,),
+                      icon: const Icon(
+                        Icons.calendar_today_outlined,
+                        size: 18,
+                        color: ThemeManager.primaryColor,
+                      ),
                       label: const Text("Add to calendar"),
                       style: TextButton.styleFrom(
                         foregroundColor: ThemeManager.primaryColor,
@@ -365,74 +376,125 @@ class EventPreviewPage extends StatelessWidget {
                         ),
                       ),
                     ),
-                
+
                     const SizedBox(height: 24),
-                
+
                     const Text(
                       "Hosted by:",
-                      style: TextStyle(fontWeight: FontWeight.bold,color: ThemeManager.primaryColor),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: ThemeManager.primaryColor,
+                      ),
                     ),
                     const SizedBox(height: 8),
-                    const Text("Asmaa Mousa",style: TextStyle(color: ThemeManager.secondaryColor),),
-                
+                    Text(
+                      event.hostName,
+                      style: TextStyle(color: ThemeManager.secondaryColor),
+                    ),
+
                     const SizedBox(height: 24),
-                
+
                     const Text(
                       "Event Description:",
-                      style: TextStyle(fontWeight: FontWeight.bold, color: ThemeManager.primaryColor),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: ThemeManager.primaryColor,
+                      ),
                     ),
                     const SizedBox(height: 8),
-                    const Text(
-                      "Join us for an unforgettable evening with friends and family. Enjoy good food, great company, and lasting memories!",
-                      style: TextStyle(fontSize: 14,
-                      color: ThemeManager.secondaryColor
+                    Text(
+                      event.description,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: ThemeManager.secondaryColor,
                       ),
                     ),
-                
+
                     const SizedBox(height: 24),
-                
-                    const Text(
-                      "Guest List:",
-                      style: TextStyle(fontWeight: FontWeight.bold,
-                      color: ThemeManager.primaryColor
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                
-                    Row(
-                      children: const [
-                        CircleAvatar(child: Text("A")),
-                        SizedBox(width: 8),
-                        CircleAvatar(child: Text("B")),
-                        SizedBox(width: 8),
-                        CircleAvatar(child: Text("C")),
-                        SizedBox(width: 8),
-                        CircleAvatar(child: Text("+9")),
-                      ],
-                    ),
-                
-                    const SizedBox(height: 32),
-                
-                    SizedBox(
-                     width: double.infinity,
-                      child: ElevatedButton.icon(
-                        onPressed: () {
-                          Navigator.pushNamed(context, AppRoutes.addGuest);
-                        },
-                        icon: const Icon(Icons.group_add, color: ThemeManager.lightPinkColor),
-                        label: const Text("Invite Guests"),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: ThemeManager.primaryColor,
-                          foregroundColor:ThemeManager.lightPinkColor ,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
-                            
-                          ),
-                          
-                        
-                        ),
-                      ),
-                    ),
+
+                    BlocBuilder<AuthCubit, AuthState>(
+                      builder: (context, state) {
+                        if (state is AuthSuccess) {
+                          final currentUser = state.user;
+                          if (event.hostName.trim().toLowerCase() ==
+                              currentUser.name?.split(' ')[0].toLowerCase()) {
+                            return SizedBox(
+                              width: double.infinity,
+                              child: ElevatedButton.icon(
+                                onPressed: () {
+                                  Navigator.pushNamed(
+                                      context, AppRoutes.addGuest);
+                                },
+                                icon: const Icon(
+                                  Icons.group_add,
+                                  color: ThemeManager.lightPinkColor,
+                                ),
+                                label: const Text("Invite Guests"),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: ThemeManager.primaryColor,
+                                  foregroundColor: ThemeManager.lightPinkColor,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(30),
+                                  ),
+                                ),
+                              ),
+                            );
+                          } else {
+                            return BlocConsumer<EventCubit, EventState>(
+                              listener: (context, state) {
+                                if (state is EventJoinSuccess) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        content: Text("Joined Successfully")),
+                                  );
+                                } else if (state is EventJoinError) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(content: Text(state.message)),
+                                  );
+                                }
+                              },
+                              builder: (context, state) {
+                                return SizedBox(
+                                  width: double.infinity,
+                                  child: ElevatedButton.icon(
+                                    onPressed: () {
+                                      context.read<EventCubit>().joinEvent(
+                                          event);
+                                    },
+                                    icon: const Icon(
+                                      Icons.event_available,
+                                      color: ThemeManager.lightPinkColor,
+                                    ),
+                                    label: state is EventJoinLoading
+                                        ? const SizedBox(
+                                      height: 20,
+                                      width: 20,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                        color: ThemeManager.lightPinkColor,
+                                      ),
+                                    ) : const Text("Join Event"),
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: ThemeManager
+                                          .secondaryColor,
+                                      foregroundColor: ThemeManager
+                                          .lightPinkColor,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(30),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            );
+                          }
+                        } else {
+                          return SizedBox();
+                        }
+                      },
+                    )
+
+
                   ],
                 ),
               ),
@@ -455,9 +517,9 @@ Widget _InfoBox({required IconData icon, required String label}) {
     ),
     child: Row(
       children: [
-        Icon(icon, size: 16, color:ThemeManager.primaryColor),
+        Icon(icon, size: 16, color: ThemeManager.primaryColor),
         const SizedBox(width: 4),
-        Text(label, style: const TextStyle(color:ThemeManager.primaryColor)),
+        Text(label, style: const TextStyle(color: ThemeManager.primaryColor)),
       ],
     ),
   );

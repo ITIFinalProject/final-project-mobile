@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:eventify_app/core/routes.dart';
-import 'package:eventify_app/features/add_event/logic/cubit/create_event_cubit.dart';
 import 'package:eventify_app/features/add_event/widgets/custom_text.dart';
 import 'package:eventify_app/features/add_event/widgets/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
@@ -9,9 +8,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 import '../../core/theme.dart';
+import 'logic/create_event_cubit/create_event_cubit.dart';
 
 class EventDetailsView extends StatefulWidget {
-  EventDetailsView({super.key});
+  const EventDetailsView({super.key});
 
   @override
   State<EventDetailsView> createState() => _EventDetailsViewState();

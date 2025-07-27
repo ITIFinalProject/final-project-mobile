@@ -100,6 +100,7 @@ class AuthCubit extends Cubit<AuthState> {
   Future<void> signInWithGoogle() async {
     emit(AuthLoading());
     try {
+      await GoogleSignIn().signOut();
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
       if (googleUser == null) {
         emit(AuthFailure("Google sign-in aborted."));
@@ -107,7 +108,7 @@ class AuthCubit extends Cubit<AuthState> {
       }
 
       final GoogleSignInAuthentication googleAuth =
-          await googleUser.authentication;
+      await googleUser.authentication;
 
       final credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
