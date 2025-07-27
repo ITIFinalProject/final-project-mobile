@@ -11,6 +11,8 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'features/add_event/logic/create_event_cubit/create_event_cubit.dart';
 import 'features/events/event_cubit/event_cubit.dart';
 
+final RouteObserver<ModalRoute> routeObserver = RouteObserver<ModalRoute>();
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -37,6 +39,7 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (context) => EventCubit()),
         ],
         child: MaterialApp(
+          navigatorObservers: [routeObserver],
           debugShowCheckedModeBanner: false,
           routes: AppRoutes.routes,
           initialRoute: AppRoutes.splash,

@@ -11,21 +11,6 @@ class AuthCubit extends Cubit<AuthState> {
 
   AuthCubit() : super(AuthInitial());
 
-  // Future<void> signIn(String email, String password) async {
-  //   emit(AuthLoading());
-  //   try {
-  //     final result = await _auth.signInWithEmailAndPassword(
-  //       email: email,
-  //       password: password,
-  //     );
-  //     UserModel user = UserModel(name: result.user!.displayName, email: email);
-  //     emit(AuthSuccess(user));
-  //   } on FirebaseAuthException catch (e) {
-  //     emit(AuthFailure(e.message ?? "Unknown error"));
-  //   } catch (e) {
-  //     emit(AuthFailure(e.toString()));
-  //   }
-  // }
  
    Future<void> signIn(String email, String password) async {
   emit(AuthLoading());
@@ -34,8 +19,6 @@ class AuthCubit extends Cubit<AuthState> {
       email: email,
       password: password,
     );
-
-    //  user doc من Firestore
     final doc = await FirebaseFirestore.instance
         .collection('users')
         .doc(result.user!.uid)
@@ -46,7 +29,6 @@ class AuthCubit extends Cubit<AuthState> {
       return;
     }
 
-    //  حو,ل الـ data لـ UserModel
     UserModel user = UserModel.fromFireStore(doc.data()!);
 
     emit(AuthSuccess(user));
@@ -94,6 +76,7 @@ class AuthCubit extends Cubit<AuthState> {
     emit(AuthLoading());
     try {
       await _auth.signOut();
+      await GoogleSignIn().signOut();
       emit(AuthLoggedOut());
     } catch (e) {
       emit(AuthFailure(e.toString()));
@@ -133,7 +116,7 @@ class AuthCubit extends Cubit<AuthState> {
   Future<void> signInWithGoogle() async {
     emit(AuthLoading());
     try {
-      await GoogleSignIn().signOut();
+
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
       if (googleUser == null) {
         emit(AuthFailure("Google sign-in aborted."));
@@ -228,10 +211,9 @@ Future<void> updateUserProfile({
   if (newPassword != null && newPassword.isNotEmpty) {
       await user.updatePassword(newPassword);
     }
-    //  تحديث البيانات محليًا
     UserModel updatedUser = UserModel(
       name: name,
-      email: user.email, // الإيميل مش بيتغير
+      email: user.email,
       phone: phone,
       address: address,
     );
@@ -249,8 +231,6 @@ Future<bool> verifyPassword(String password) async {
       emit(AuthFailure("No user is logged in"));
       return false;
     }
-
-    // نعمل إعادة مصادقة للمستخدم بالباسورد الحالي
     AuthCredential credential = EmailAuthProvider.credential(
       email: user.email!,
       password: password,
@@ -277,10 +257,9 @@ Future<bool> verifyPassword(String password) async {
     }
       emit(AuthSuccess(UserModel(
         name: user!.displayName,
-        email: user!.email,
-        phone: user!.phoneNumber,
+        email: user.email,
+        phone: user.phoneNumber,
       )));
-    //  تحديث البيانات محليًا
     } on FirebaseAuthException catch (e) {
       emit(
         AuthFailure(

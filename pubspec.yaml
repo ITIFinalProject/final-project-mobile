@@ -49,6 +49,8 @@ dependencies:
   supabase_flutter: ^2.9.0
   google_maps_flutter: ^2.12.2
   geocoding: ^3.0.0
+  awesome_dialog: ^3.2.1
+  quickalert: ^1.1.0
   flutter_localizations:
     sdk: flutter
   intl: any

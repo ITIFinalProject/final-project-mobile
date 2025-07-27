@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+import '../../main.dart';
 import 'event_cubit/event_cubit.dart';
 import 'event_cubit/event_state.dart';
 
@@ -15,7 +16,7 @@ class EventsView extends StatefulWidget {
   State<EventsView> createState() => _EventsViewState();
 }
 
-class _EventsViewState extends State<EventsView> {
+class _EventsViewState extends State<EventsView> with RouteAware {
   DateTime? selectedDate = DateTime.now();
 
   @override
@@ -157,6 +158,23 @@ class _EventsViewState extends State<EventsView> {
     );
   }
 
+  @override
+  void didPopNext() {
+    context.read<EventCubit>().fetchEvents();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    routeObserver.subscribe(this, ModalRoute.of(context)!);
+  }
+
+  @override
+  void dispose() {
+    routeObserver.unsubscribe(this);
+    super.dispose();
+  }
+
   showNoEvents() {
     return Card(
       color: ThemeManager.lightPinkColor,
@@ -203,4 +221,5 @@ class _EventsViewState extends State<EventsView> {
       ),
     );
   }
+
 }
