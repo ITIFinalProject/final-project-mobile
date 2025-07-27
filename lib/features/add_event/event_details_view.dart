@@ -12,7 +12,7 @@ import 'package:intl/intl.dart';
 import '../../core/theme.dart';
 
 class EventDetailsView extends StatefulWidget {
-  EventDetailsView({super.key});
+  const EventDetailsView({super.key});
 
   @override
   State<EventDetailsView> createState() => _EventDetailsViewState();
@@ -303,13 +303,13 @@ class _EventDetailsViewState extends State<EventDetailsView> {
   var selectedStartDate;
 
   void clickStartDate() async {
-    DateTime? _date = await showDatePicker(
+    DateTime? date = await showDatePicker(
       context: context,
       firstDate: DateTime.now(),
       lastDate: DateTime(2026),
     );
-    if (_date != null) {
-      startDateController.text = DateFormat('dd/MM/yyyy').format(_date);
+    if (date != null) {
+      startDateController.text = DateFormat('dd/MM/yyyy').format(date);
       setState(() {});
     }
   }
@@ -317,13 +317,13 @@ class _EventDetailsViewState extends State<EventDetailsView> {
   var selectedEndDate;
 
   void clickEndDate() async {
-    DateTime? _date = await showDatePicker(
+    DateTime? date = await showDatePicker(
       context: context,
       firstDate: DateTime.now(),
       lastDate: DateTime(2026),
     );
-    if (_date != null) {
-      endDateController.text = DateFormat('dd/MM/yyyy').format(_date);
+    if (date != null) {
+      endDateController.text = DateFormat('dd/MM/yyyy').format(date);
       setState(() {});
     }
   }

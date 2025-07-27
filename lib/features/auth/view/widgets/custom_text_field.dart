@@ -14,6 +14,7 @@ class CustomTextFIeld extends StatelessWidget {
   bool obscure;
   TextEditingController textFieldController;
   String? initialValue;
+  bool enable;
 
   CustomTextFIeld({
     super.key,
@@ -22,9 +23,11 @@ class CustomTextFIeld extends StatelessWidget {
     this.lines = 1,
     this.initialValue,
     this.obscure = false,
+    this.enable = true,
     this.validator,
     this.suffixIcon,
     this.onPressedIcon,
+
     required this.textFieldController,
   });
 
@@ -38,7 +41,7 @@ class CustomTextFIeld extends StatelessWidget {
         initialValue: initialValue,
         maxLines: lines > 1 ? lines : 1,
         obscureText: obscure,
-
+  enabled: enable,
         decoration: InputDecoration(
           prefix: Icon(icon, color: ThemeManager.secondaryColor),
           label: Text(lable),
@@ -46,6 +49,7 @@ class CustomTextFIeld extends StatelessWidget {
           suffixIcon: IconButton(
             icon: Icon(suffixIcon, color: ThemeManager.secondaryColor),
             onPressed: onPressedIcon,
+            
           ),
           // labelStyle: TextStyle(color: color),
           focusedBorder: OutlineInputBorder(

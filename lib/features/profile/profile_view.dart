@@ -1,7 +1,6 @@
-
-
 import 'package:eventify_app/core/routes.dart';
 import 'package:eventify_app/core/theme.dart';
+import 'package:eventify_app/features/profile/widgets/info_tile.dart';
 import 'package:flutter/material.dart';
 
 class ProfileView extends StatefulWidget {
@@ -17,10 +16,7 @@ class _ProfileViewState extends State<ProfileView> {
   String? token;
   String? imagePath;
 
-  @override
-  void initState() {
-   
-  }
+
 
 
  
@@ -65,35 +61,20 @@ class _ProfileViewState extends State<ProfileView> {
             ),
 
             const SizedBox(height: 30),
-            _infoTile(
-                "Edit Profile",
-                Icons.person,
-
-              (){
-                Navigator.pushNamed(context, AppRoutes.editProfile);
-              }
-            ),
             
-            _infoTile("Notification", Icons.notifications,(){}),
-            _infoTile("Contact Us", Icons.contact_page,(){}),
-            _infoTile("Sign Out", Icons.logout,(){}),
+            InfoTile(title: "Edit Profile", icon: Icons.person, ontap: (){
+                Navigator.pushNamed(context, AppRoutes.editProfile);
+              }),
+                InfoTile(title:  "Change Password",icon: Icons.lock,ontap: (){
+                  Navigator.pushNamed(context,AppRoutes.verifyOldPassword);
+                }),
+            InfoTile(title: "Notification", icon: Icons.notifications, ontap: (){}),
+            InfoTile(title: "Contact Us", icon: Icons.contact_page, ontap: (){}),
+            InfoTile(title: "Sign Out", icon: Icons.logout, ontap: (){}),
            
       
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _infoTile(String title,  IconData icon, ontap ) {
-    return GestureDetector(
-      onTap: ontap
-    ,
-      child: ListTile(
-        leading: Icon(icon, color: ThemeManager.primaryColor),
-        title: Text(title, style: TextStyle(color: ThemeManager.primaryColor),),
-        trailing: Icon(
-          Icons.arrow_forward_ios, color: ThemeManager.primaryColor,),
       ),
     );
   }
