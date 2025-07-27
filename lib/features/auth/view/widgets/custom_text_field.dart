@@ -1,6 +1,7 @@
 // custom textfield******
-import 'package:eventify_app/core/theme.dart';
 import 'package:flutter/material.dart';
+
+import '../../../../core/theme.dart';
 
 typedef Validator = String? Function(String?);
 
@@ -49,7 +50,6 @@ class CustomTextFIeld extends StatelessWidget {
           suffixIcon: IconButton(
             icon: Icon(suffixIcon, color: ThemeManager.secondaryColor),
             onPressed: onPressedIcon,
-            
           ),
           // labelStyle: TextStyle(color: color),
           focusedBorder: OutlineInputBorder(

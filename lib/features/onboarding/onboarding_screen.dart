@@ -58,7 +58,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               children: [
                 TextButton(
                   onPressed: () {
-                    Navigator.pushReplacementNamed(context, AppRoutes.login);
+                    Navigator.pushReplacementNamed(context, AppRoutes.layout);
                   },
                   child: Text(
                     'Skip', style: TextStyle(color: ThemeManager.primaryColor,

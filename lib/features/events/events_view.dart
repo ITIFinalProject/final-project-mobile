@@ -24,12 +24,12 @@ class _EventsViewState extends State<EventsView> with RouteAware {
     super.initState();
     context.read<EventCubit>().fetchEvents();
   }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: PreferredSize(
+
+
         preferredSize: const Size.fromHeight(70),
         child: AppBar(
           backgroundColor: Color(0xFF1B3C53),
@@ -82,6 +82,7 @@ class _EventsViewState extends State<EventsView> with RouteAware {
                   calendarStyle: const CalendarStyle(
                     todayDecoration: BoxDecoration(
                       color: ThemeManager.darkPinkColor,
+
                       shape: BoxShape.circle,
                     ),
                     selectedDecoration: BoxDecoration(
@@ -151,13 +152,13 @@ class _EventsViewState extends State<EventsView> with RouteAware {
               ),
 
               const SizedBox(height: 70),
+
             ],
           ),
         ),
       ),
     );
   }
-
   @override
   void didPopNext() {
     context.read<EventCubit>().fetchEvents();
@@ -223,3 +224,4 @@ class _EventsViewState extends State<EventsView> with RouteAware {
   }
 
 }
+

@@ -3,6 +3,9 @@ import 'package:eventify_app/features/auth/cubit/auth_cubit.dart';
 import 'package:eventify_app/features/auth/cubit/auth_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
+
+import '../floating_button/chatscreen.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -12,8 +15,8 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  String name="";
-    void initState() {
+  String name = "";
+  void initState() {
     super.initState();
     final authState = context.read<AuthCubit>().state;
     if (authState is AuthSuccess) {
@@ -22,7 +25,6 @@ class _HomeViewState extends State<HomeView> {
     }
   }
   @override
-
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
@@ -82,9 +84,13 @@ class _HomeViewState extends State<HomeView> {
               ),
               const SizedBox(height: 60),
               const Text(
+                (
                 'Invitations',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF1B3C53),),
-              ),
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF1B3C53),
+                )),
               const SizedBox(height: 35),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -106,7 +112,10 @@ class _HomeViewState extends State<HomeView> {
                         children: [
                           Text(
                             'No Invitations',
-                            style: TextStyle(fontWeight: FontWeight.bold,color: Color(0xFF1B3C53)),
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF1B3C53),
+                            ),
                           ),
                           SizedBox(height: 8),
                           Text(
@@ -125,7 +134,11 @@ class _HomeViewState extends State<HomeView> {
               const SizedBox(height: 60),
               const Text(
                 'Upcoming Events',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF1B3C53),),
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF1B3C53),
+                ),
               ),
               const SizedBox(height: 35),
               Padding(
@@ -148,7 +161,10 @@ class _HomeViewState extends State<HomeView> {
                         children: [
                           Text(
                             'No Events',
-                            style: TextStyle(fontWeight: FontWeight.bold,color: Color(0xFF1B3C53)),
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF1B3C53),
+                            ),
                           ),
                           SizedBox(height: 4),
                           Text(
@@ -168,6 +184,29 @@ class _HomeViewState extends State<HomeView> {
             ],
           ),
         ),
+      ),
+
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const ChatScreen()),
+          );
+        },
+        backgroundColor: const Color(0xFF1B3C53),
+        elevation: 6,
+        shape: const CircleBorder(),
+        child: SvgPicture.asset(
+          'assets/images/ChatGPT-Logo.svg',
+          width: 32,
+          height: 32,
+
+          colorFilter: const ColorFilter.mode(
+            Colors.white,
+            BlendMode.srcIn,
+          ),
+        ),
+
       ),
     );
   }

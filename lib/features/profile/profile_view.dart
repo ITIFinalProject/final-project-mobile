@@ -1,3 +1,4 @@
+
 import 'package:eventify_app/core/routes.dart';
 import 'package:eventify_app/core/theme.dart';
 import 'package:eventify_app/features/auth/cubit/auth_cubit.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../core/alet_utils.dart';
 import '../auth/cubit/auth_state.dart';
+
 
 class ProfileView extends StatefulWidget {
   const ProfileView({super.key});
@@ -112,12 +114,10 @@ class _ProfileViewState extends State<ProfileView> {
                 ),
               ],
             );
-          },
-        ),
-      ),
-    );
+          }
+        )
+      ));
   }
-
   showAlertDialog() {
     showWarningQuickAlert(
       context: context,
@@ -142,4 +142,16 @@ class _ProfileViewState extends State<ProfileView> {
   //     }
   //   ).show();
   // }
+  Widget _infoTile(String title, IconData icon, ontap) {
+    return GestureDetector(
+      onTap: ontap
+      ,
+      child: ListTile(
+        leading: Icon(icon, color: ThemeManager.primaryColor),
+        title: Text(title, style: TextStyle(color: ThemeManager.primaryColor),),
+        trailing: Icon(
+          Icons.arrow_forward_ios, color: ThemeManager.primaryColor,),
+      ),
+    );
+  }
 }

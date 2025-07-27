@@ -1,3 +1,4 @@
+
 import 'dart:io';
 
 import 'package:eventify_app/core/routes.dart';
@@ -9,7 +10,6 @@ import 'package:intl/intl.dart';
 
 import '../../core/theme.dart';
 import 'logic/create_event_cubit/create_event_cubit.dart';
-
 class EventDetailsView extends StatefulWidget {
   const EventDetailsView({super.key});
 
@@ -34,6 +34,7 @@ class _EventDetailsViewState extends State<EventDetailsView> {
   TextEditingController locationController = TextEditingController();
   TextEditingController hostNameController = TextEditingController();
   TextEditingController attendeesController = TextEditingController();
+
   final List<String> eventTypes = [
     "Entertainment",
     "Educational & Business",
@@ -284,11 +285,8 @@ class _EventDetailsViewState extends State<EventDetailsView> {
                       title: ('Next: Preview'),
                     ),
                   ),
-                ],
-              ),
-            ),
-          ),
-        );
+                ]))
+          ));
       },
     );
   }
@@ -353,7 +351,6 @@ class _EventDetailsViewState extends State<EventDetailsView> {
       setState(() {});
     }
   }
-
   void clickEndDate() async {
     DateTime? _date = await showDatePicker(
       context: context,
@@ -402,6 +399,7 @@ class _EventDetailsViewState extends State<EventDetailsView> {
     }
   }
 
+
   openMapToGetLocation() async {
     final result = await Navigator.pushNamed(context, AppRoutes.mapPicker);
 
@@ -409,4 +407,5 @@ class _EventDetailsViewState extends State<EventDetailsView> {
       locationController.text = result;
     }
   }
+
 }
