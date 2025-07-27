@@ -83,14 +83,12 @@ class _HomeViewState extends State<HomeView> {
                 ),
               ),
               const SizedBox(height: 60),
-              const Text(
-                (
-                'Invitations',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF1B3C53),
-                )),
+              const Text('Invitations',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF1B3C53),
+                  )),
               const SizedBox(height: 35),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
