@@ -1,10 +1,28 @@
 import 'package:eventify_app/core/routes.dart';
+import 'package:eventify_app/features/auth/cubit/auth_cubit.dart';
+import 'package:eventify_app/features/auth/cubit/auth_state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class HomeView extends StatelessWidget {
+class HomeView extends StatefulWidget {
   const HomeView({super.key});
 
   @override
+  State<HomeView> createState() => _HomeViewState();
+}
+
+class _HomeViewState extends State<HomeView> {
+  String name="";
+    void initState() {
+    super.initState();
+    final authState = context.read<AuthCubit>().state;
+    if (authState is AuthSuccess) {
+      name= authState.user.name ?? '';
+      
+    }
+  }
+  @override
+
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
@@ -15,8 +33,8 @@ class HomeView extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'Hello Dylan!',
+              Text(
+                name.isNotEmpty ? "Welcome, $name!" : "Welcome!",
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
