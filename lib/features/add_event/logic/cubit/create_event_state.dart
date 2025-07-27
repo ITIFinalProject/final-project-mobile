@@ -1,7 +1,6 @@
 part of 'create_event_cubit.dart';
 
 
-@immutable
 abstract class CreateEventState {}
 
 class CreateEventInitial extends CreateEventState {}

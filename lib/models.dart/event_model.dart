@@ -11,9 +11,10 @@ class EventModel extends Equatable {
   final int capacity;
   final String? image;
   final int? templateIndex;
-final String hosteName;
-  const EventModel(  {
-   required this.hosteName,
+  final String hostName;
+
+  const EventModel({
+    required this.hostName,
     required this.type,
     required this.id,
     required this.title,
@@ -22,7 +23,7 @@ final String hosteName;
     required this.time,
     required this.location,
     required this.capacity,
-     this.image,
+    this.image,
     this.templateIndex,
   });
 
@@ -37,7 +38,7 @@ final String hosteName;
     int? capacity,
     String? image,
     int? templateIndex,
-    String? hosteName
+    String? hostName
   }) {
     return EventModel(
       id: id ?? this.id,
@@ -48,7 +49,7 @@ final String hosteName;
       time: time ?? this.time,
       location: location ?? this.location,
       capacity: capacity ?? this.capacity,
-      hosteName: hosteName ?? this.hosteName
+        hostName: hostName ?? this.hostName
     );
 
 
@@ -66,7 +67,7 @@ final String hosteName;
       'capacity': capacity,
       'image': image,
       'templateIndex': templateIndex,
-      'hosteName': hosteName
+      'hostName': hostName
     };
   }
 
@@ -82,7 +83,7 @@ final String hosteName;
       capacity: map['capacity'],
       image: map['image'],
       templateIndex: map['templateIndex'],
-      hosteName: map['hosteName'] ?? 'Unknown Host',
+      hostName: map['hostName'] ?? 'Unknown Host',
     );
   }
 
@@ -98,6 +99,6 @@ final String hosteName;
         capacity,
         image,
         templateIndex,
-        hosteName
+    hostName
       ];
 }

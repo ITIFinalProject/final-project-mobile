@@ -1,6 +1,7 @@
 import 'package:eventify_app/features/add_event/add_event_view.dart';
 import 'package:eventify_app/features/add_event/create_contact.dart';
 import 'package:eventify_app/features/add_event/event_details_view.dart';
+import 'package:eventify_app/features/add_event/widgets/map_location.dart';
 import 'package:eventify_app/features/auth/view/login.dart';
 import 'package:eventify_app/features/auth/view/register.dart';
 import 'package:eventify_app/features/auth/view/widgets/forget_password_view.dart';
@@ -28,6 +29,7 @@ class AppRoutes {
   static const String realEventDetails = "/real_event_details";
   static const String addGuest = '/add_guest';
   static const String forgetPassword = '/forget_password';
+  static const String mapPicker = '/map_picker';
   static final routes = <String, WidgetBuilder>{
     splash: (context) => SplashScreen(),
     layout: (context) => LayoutView(),
@@ -42,5 +44,6 @@ class AppRoutes {
     eventPreview: (context) => const EventPreviewPage(),
     realEventDetails: (context) => const RealEventDetails(),
     forgetPassword: (context) => ForgetPasswordView(),
+    mapPicker: (context) => MapPickerScreen(),
   };
 }

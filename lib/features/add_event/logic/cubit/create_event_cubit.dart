@@ -1,13 +1,16 @@
 import 'dart:io';
-import 'package:bloc/bloc.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:eventify_app/models.dart/Event_model.dart' show EventModel;
-import 'package:meta/meta.dart';
+import 'package:eventify_app/models.dart/event_model.dart' show EventModel;
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:uuid/uuid.dart';
+
 part 'create_event_state.dart';
 
 class CreateEventCubit extends Cubit<CreateEventState> {
   CreateEventCubit() : super(CreateEventInitial());
+  final supabase = Supabase.instance.client;
 
   Future<void> createEvent({
     required String title,
@@ -18,8 +21,8 @@ class CreateEventCubit extends Cubit<CreateEventState> {
     required String location,
     required int capacity,
     File? imageFile,
-     int? templateIndex,
-    required String hosteName,
+    int? templateIndex,
+    required String hostName,
   }) async {
     emit(CreateEventLoading());
 
@@ -27,38 +30,39 @@ class CreateEventCubit extends Cubit<CreateEventState> {
       print('✅ Starting event creation...');
       final String eventId = const Uuid().v4();
 
-      // رفع الصورة لو تم اختيارها
-      // String imageUrl = '';
-      // if (imageFile != null) {
-      //   print('📤 Uploading image to Firebase Storage...');
-      //   final storageRef = FirebaseStorage.instance
-      //       .ref()
-      //       .child('events')
-      //       .child('$eventId.jpg');
 
-      //   await storageRef.putFile(imageFile);
-      //   imageUrl = await storageRef.getDownloadURL();
-      //   print('✅ Image uploaded successfully: $imageUrl');
-      // } else {
-      //   print('ℹ No image selected, continuing without image.');
-      // }
+      String? imageUrl;
+      if (imageFile != null) {
+        final fileExt = imageFile.path
+            .split('.')
+            .last;
+        final filePath = 'public/$eventId.$fileExt';
 
-      // تجهيز الموديل
+        final fileBytes = await imageFile.readAsBytes();
+
+        final storageResponse = await supabase.storage
+            .from('event-images')
+            .uploadBinary(filePath, fileBytes,
+            fileOptions: FileOptions(contentType: 'image/$fileExt'));
+
+        imageUrl = supabase.storage
+            .from('event-images')
+            .getPublicUrl(filePath);
+      }
       final newEvent = EventModel(
         id: eventId,
         title: title,
-        type: type, // ✅ هنا لازم نحط النوع اللي جاي من الفورم
+        type: type,
         description: description,
         date: date,
         time: time,
         location: location,
         capacity: capacity,
-        // image: imageUrl,
-        // templateIndex: templateIndex ?? 1,
-        hosteName: hosteName, // ✅ هنا نحط الـ host الحقيقي
+        image: imageUrl,
+        templateIndex: templateIndex,
+        hostName: hostName,
       );
 
-      print('📝 Saving event to Firestore...');
       await FirebaseFirestore.instance
           .collection('events')
           .doc(eventId)
