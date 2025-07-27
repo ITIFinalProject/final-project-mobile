@@ -18,6 +18,8 @@ class ResetPasswordSuccess extends AuthState {
   ResetPasswordSuccess(this.message);
 }
 
+class AuthLoggedOut extends AuthState {}
+
 class AuthFailure extends AuthState {
   final String error;
 

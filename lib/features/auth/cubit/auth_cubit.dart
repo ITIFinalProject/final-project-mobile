@@ -62,7 +62,7 @@ class AuthCubit extends Cubit<AuthState> {
     emit(AuthLoading());
     try {
       await _auth.signOut();
-      emit(AuthInitial());
+      emit(AuthLoggedOut());
     } catch (e) {
       emit(AuthFailure(e.toString()));
     }
@@ -86,16 +86,17 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  // Future<void> checkUserLoggedIn() async {
-  //   emit(AuthLoading());
-  //   final user = FirebaseAuth.instance.currentUser;
-  //
-  //   if (user != null) {
-  //     emit();
-  //   } else {
-  //     emit();
-  //   }
-  // }
+  void checkUserLoggedIn() async {
+    await Future.delayed(Duration(seconds: 2));
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      UserModel currentUser = UserModel(
+          name: user.displayName, email: user.email, phone: user.phoneNumber);
+      emit(AuthSuccess(currentUser));
+    } else {
+      emit(AuthLoggedOut());
+    }
+  }
 
   Future<void> signInWithGoogle() async {
     emit(AuthLoading());
