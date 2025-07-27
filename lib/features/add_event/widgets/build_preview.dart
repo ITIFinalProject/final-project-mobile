@@ -11,7 +11,7 @@ class BuildPreview extends StatelessWidget {
   VoidCallback pickImage;
   VoidCallback toggleShownTemplates;
   VoidCallback onEdit;
-  
+
 
   BuildPreview({
     super.key,
@@ -112,7 +112,6 @@ class BuildPreview extends StatelessWidget {
               'selectedImage':selectedImage,
               'selectedTemplate': selectedTemplate,
             });
-            
           },
           title: ('Next: Event Details'),
         ),

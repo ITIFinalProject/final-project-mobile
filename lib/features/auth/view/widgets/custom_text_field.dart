@@ -1,6 +1,7 @@
 // custom textfield******
-import 'package:eventify_app/core/theme.dart';
 import 'package:flutter/material.dart';
+
+import '../../../../core/theme.dart';
 
 typedef Validator = String? Function(String?);
 
@@ -14,6 +15,7 @@ class CustomTextFIeld extends StatelessWidget {
   bool obscure;
   TextEditingController textFieldController;
   String? initialValue;
+  bool enable;
 
   CustomTextFIeld({
     super.key,
@@ -22,9 +24,11 @@ class CustomTextFIeld extends StatelessWidget {
     this.lines = 1,
     this.initialValue,
     this.obscure = false,
+    this.enable = true,
     this.validator,
     this.suffixIcon,
     this.onPressedIcon,
+
     required this.textFieldController,
   });
 
@@ -38,7 +42,7 @@ class CustomTextFIeld extends StatelessWidget {
         initialValue: initialValue,
         maxLines: lines > 1 ? lines : 1,
         obscureText: obscure,
-
+  enabled: enable,
         decoration: InputDecoration(
           prefix: Icon(icon, color: ThemeManager.secondaryColor),
           label: Text(lable),

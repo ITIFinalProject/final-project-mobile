@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+import '../../main.dart';
 import 'event_cubit/event_cubit.dart';
 import 'event_cubit/event_state.dart';
 
@@ -15,7 +16,7 @@ class EventsView extends StatefulWidget {
   State<EventsView> createState() => _EventsViewState();
 }
 
-class _EventsViewState extends State<EventsView> {
+class _EventsViewState extends State<EventsView> with RouteAware {
   DateTime? selectedDate = DateTime.now();
 
   @override
@@ -23,12 +24,12 @@ class _EventsViewState extends State<EventsView> {
     super.initState();
     context.read<EventCubit>().fetchEvents();
   }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: PreferredSize(
+
+
         preferredSize: const Size.fromHeight(70),
         child: AppBar(
           backgroundColor: Color(0xFF1B3C53),
@@ -81,6 +82,7 @@ class _EventsViewState extends State<EventsView> {
                   calendarStyle: const CalendarStyle(
                     todayDecoration: BoxDecoration(
                       color: ThemeManager.darkPinkColor,
+
                       shape: BoxShape.circle,
                     ),
                     selectedDecoration: BoxDecoration(
@@ -150,11 +152,28 @@ class _EventsViewState extends State<EventsView> {
               ),
 
               const SizedBox(height: 70),
+
             ],
           ),
         ),
       ),
     );
+  }
+  @override
+  void didPopNext() {
+    context.read<EventCubit>().fetchEvents();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    routeObserver.subscribe(this, ModalRoute.of(context)!);
+  }
+
+  @override
+  void dispose() {
+    routeObserver.unsubscribe(this);
+    super.dispose();
   }
 
   showNoEvents() {
@@ -203,4 +222,6 @@ class _EventsViewState extends State<EventsView> {
       ),
     );
   }
+
 }
+
