@@ -280,23 +280,7 @@ class _EventDetailsViewState extends State<EventDetailsView> {
                           color: ThemeManager.primaryColor)) : Padding(
                     padding: const EdgeInsets.all(15),
                     child: CustomElevatedButton(
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          context.read<CreateEventCubit>().createEvent(
-                            title: titleController.text.trim(),
-                            type: selectedEventType ?? 'Workshop',
-                            description: descriptionController.text.trim(),
-                            date: startDateController.text,
-                            time: startTimeController.text,
-                            location: locationController.text.trim(),
-                            hostName: hostNameController.text.trim(),
-                            capacity:
-                            int.tryParse(attendeesController.text) ?? 50,
-                            imageFile: pickedImage,
-                            templateIndex: selectedTemplateIndex,
-                          );
-                        }
-                      },
+                      onPressed: createEvent,
                       title: ('Next: Preview'),
                     ),
                   ),
@@ -307,6 +291,55 @@ class _EventDetailsViewState extends State<EventDetailsView> {
         );
       },
     );
+  }
+
+  createEvent() {
+    if (_formKey.currentState!.validate()) {
+      if (!_isDateTimeRangeValid()) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content: Text("End date/time must be after start date/time")),
+        );
+        return;
+      }
+      String time = '${startTimeController.text} - ${endTimeController.text}';
+      String dateTime = '${startDateController.text} - ${endDateController
+          .text}';
+      context.read<CreateEventCubit>().createEvent(
+        title: titleController.text.trim(),
+        type: selectedEventType ?? '',
+        description: descriptionController.text.trim(),
+        date: dateTime,
+        time: time,
+        location: locationController.text.trim(),
+        hostName: hostNameController.text.trim(),
+        capacity:
+        int.tryParse(attendeesController.text) ?? 50,
+        imageFile: pickedImage,
+        templateIndex: selectedTemplateIndex,
+      );
+    }
+  }
+
+  bool _isDateTimeRangeValid() {
+    try {
+      final startDate = DateFormat('dd/MM/yyyy').parse(
+          startDateController.text);
+      final endDate = DateFormat('dd/MM/yyyy').parse(endDateController.text);
+      final startTime = DateFormat('hh:mm a').parse(startTimeController.text);
+      final endTime = DateFormat('hh:mm a').parse(endTimeController.text);
+
+      final start = DateTime(
+          startDate.year, startDate.month, startDate.day, startTime.hour,
+          startTime.minute);
+      final end = DateTime(
+          endDate.year, endDate.month, endDate.day, endTime.hour,
+          endTime.minute);
+
+      return end.isAfter(start);
+    } catch (_) {
+      return false;
+    }
   }
 
   void clickStartDate() async {
