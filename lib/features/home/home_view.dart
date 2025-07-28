@@ -1,7 +1,6 @@
-import 'package:eventify_app/core/routes.dart';
+import 'package:eventify_app/features/floating_button/chatscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:eventify_app/features/floating_button/chatscreen.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -19,15 +18,11 @@ class HomeView extends StatelessWidget {
             children: [
               Text(
                 'Hello Dylan!',
-                style:
-                    Theme.of(
-                      context,
-                    ).textTheme.titleLarge?.copyWith(fontSize: 24) ??
-                    TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).primaryColor,
-                    ),
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).primaryColor,
+                ),
               ),
               const SizedBox(height: 20),
               Container(
@@ -43,14 +38,10 @@ class HomeView extends StatelessWidget {
                   children: [
                     Text(
                       "Now that you are all set.\nLet's make your events extraordinary,\nstarting right here!",
-                      style:
-                          Theme.of(
-                            context,
-                          ).textTheme.bodyMedium?.copyWith(fontSize: 14) ??
-                          TextStyle(
-                            fontSize: 14,
-                            color: Theme.of(context).primaryColor,
-                          ),
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Theme.of(context).primaryColor,
+                      ),
                     ),
                     const SizedBox(height: 25),
                     ElevatedButton(

@@ -1,9 +1,11 @@
 import 'package:eventify_app/core/routes.dart';
 import 'package:eventify_app/core/theme.dart';
-import 'package:eventify_app/core/theme_cubit.dart';
-import 'package:eventify_app/core/language_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../generated/l10n.dart';
+import 'cubit/language_cubit.dart';
+import 'cubit/theme_cubit.dart';
 
 class ProfileView extends StatefulWidget {
   const ProfileView({super.key});
@@ -68,101 +70,76 @@ class _ProfileViewState extends State<ProfileView> {
 
             _infoTile("Notification", Icons.notifications, () {}),
             _infoTile("Contact Us", Icons.contact_page, () {}),
-
-            // Theme Switcher
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.brightness_6,
-                        color: ThemeManager.primaryColor,
-                      ),
-                      const SizedBox(width: 8),
-                      Text(
-                        'change theme',
-                        style: TextStyle(
-                          color: ThemeManager.primaryColor,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
+            BlocBuilder<ThemeCubit, ThemeMode>(
+              builder: (context, themeMode) {
+                final isDark = themeMode == ThemeMode.dark;
+                return ListTile(
+                  leading: Icon(
+                    Icons.brightness_6,
+                    color: ThemeManager.primaryColor,
                   ),
-                  Builder(
-                    builder: (context) {
-                      final isDark =
-                          Theme.of(context).brightness == Brightness.dark;
-                      return Switch(
-                        value: isDark,
-                        onChanged: (_) {
-                          final cubit = context.read<ThemeCubit>();
-                          cubit.toggleTheme();
-                        },
-                        activeColor: ThemeManager.primaryColor,
-                      );
+                  title: Text(
+                    'Change Theme',
+                    style: TextStyle(
+                      color: ThemeManager.primaryColor,
+                    ),
+                  ),
+                  trailing: Switch(
+                    value: isDark,
+                    onChanged: (_) {
+                      context.read<ThemeCubit>().toggleTheme();
                     },
+                    activeColor: ThemeManager.primaryColor,
                   ),
-                ],
-              ),
+                );
+              },
             ),
-
-            // Language Dropdown
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      Icon(Icons.language, color: ThemeManager.primaryColor),
-                      const SizedBox(width: 8),
-                      Text(
-                        'تغيير اللغة',
-                        style: TextStyle(
-                          color: ThemeManager.primaryColor,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+            BlocBuilder<LanguageCubit, Locale>(
+              builder: (context, locale) {
+                return ListTile(
+                  leading: Icon(
+                    Icons.language,
+                    color: ThemeManager.primaryColor,
+                  ),
+                  title: Text(
+                    S
+                        .of(context)
+                        .change_language,
+                    style: TextStyle(
+                      color: ThemeManager.primaryColor,
+                    ),
+                  ),
+                  trailing: DropdownButton<String>(
+                    value: locale.languageCode,
+                    items: const [
+                      DropdownMenuItem(value: 'en', child: Text('English')),
+                      DropdownMenuItem(value: 'ar', child: Text('العربية')),
                     ],
-                  ),
-                  Builder(
-                    builder: (context) {
-                      final locale =
-                          Localizations.localeOf(context).languageCode;
-                      return DropdownButton<String>(
-                        value: locale,
-                        items: const [
-                          DropdownMenuItem(value: 'en', child: Text('English')),
-                          DropdownMenuItem(value: 'ar', child: Text('العربية')),
-                        ],
-                        onChanged: (val) {
-                          if (val != null) {
-                            final cubit = context.read<LanguageCubit>();
-                            if (val == 'en') {
-                              cubit.setEnglish();
-                            } else {
-                              cubit.setArabic();
-                            }
-                          }
-                        },
-                        dropdownColor: Theme.of(context).cardColor,
-                        style: TextStyle(
-                          color: ThemeManager.primaryColor,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        underline: Container(),
-                        icon: Icon(
-                          Icons.arrow_drop_down,
-                          color: ThemeManager.primaryColor,
-                        ),
-                      );
+                    onChanged: (val) {
+                      if (val != null) {
+                        final cubit = context.read<LanguageCubit>();
+                        if (val == 'en') {
+                          cubit.setEnglish();
+                        } else {
+                          cubit.setArabic();
+                        }
+                      }
                     },
+                    dropdownColor: Theme
+                        .of(context)
+                        .cardColor,
+                    style: TextStyle(
+                      color: ThemeManager.primaryColor,
+
+                    ),
+                    underline: Container(),
+                    icon: Icon(
+                      Icons.arrow_drop_down,
+                      color: ThemeManager.primaryColor,
+                    ),
                   ),
-                ],
-              ),
+                );
+              },
             ),
 
             _infoTile("Sign Out", Icons.logout, () {}),

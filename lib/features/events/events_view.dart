@@ -18,16 +18,11 @@ class EventsView extends StatelessWidget {
             padding: const EdgeInsets.only(top: 20),
             child: Text(
               'Events',
-              style:
-                  Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontSize: 28,
-                    color: Theme.of(context).textTheme.bodyLarge?.color,
-                  ) ??
-                  TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).primaryColor,
-                  ),
+              style: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).primaryColor,
+              ),
             ),
           ),
         ),

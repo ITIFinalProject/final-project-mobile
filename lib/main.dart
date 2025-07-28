@@ -1,29 +1,32 @@
 import 'package:eventify_app/core/routes.dart';
 import 'package:eventify_app/core/theme.dart';
-import 'package:eventify_app/l10n/app_localizations.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:eventify_app/core/app_bloc_providers.dart';
-import 'package:eventify_app/core/theme_cubit.dart';
-import 'package:eventify_app/core/language_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+
+import 'features/profile/cubit/language_cubit.dart';
+import 'features/profile/cubit/theme_cubit.dart';
+import 'generated/l10n.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await dotenv.load(fileName: ".env");
-  runApp(const AppRoot());
+  runApp(const MyApp());
 }
 
-class AppRoot extends StatelessWidget {
-  const AppRoot({super.key});
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-      providers: appBlocProviders,
+      providers: [
+        BlocProvider(create: (context) => ThemeCubit()),
+        BlocProvider(create: (context) => LanguageCubit()),
+      ],
       child: BlocBuilder<LanguageCubit, Locale>(
         builder: (context, locale) {
           return BlocBuilder<ThemeCubit, ThemeMode>(
@@ -36,9 +39,9 @@ class AppRoot extends StatelessWidget {
                 darkTheme: ThemeManager.darkTheme,
                 themeMode: themeMode,
                 locale: locale,
-                supportedLocales: AppLocalizations.supportedLocales,
+                supportedLocales: S.delegate.supportedLocales,
                 localizationsDelegates: const [
-                  AppLocalizations.delegate,
+                  S.delegate,
                   GlobalMaterialLocalizations.delegate,
                   GlobalWidgetsLocalizations.delegate,
                   GlobalCupertinoLocalizations.delegate,
