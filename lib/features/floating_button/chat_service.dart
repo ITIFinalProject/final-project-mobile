@@ -1,16 +1,16 @@
 import 'dart:convert';
+
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
 class ChatService {
-  static final String? _apiKey =  dotenv.env['OPENAI_API_KEY']; // ← حطي مفتاحك هنا
+  static final String? _apiKey =
+      dotenv.env['OPENAI_API_KEY']; // ← حطي مفتاحك هنا
   static const String _url = 'https://api.openai.com/v1/chat/completions';
 
   static Future<String> sendMessage(String message) async {
     try {
-      
       final response = await http.post(
-        
         Uri.parse(_url),
         headers: {
           'Content-Type': 'application/json',
@@ -18,10 +18,9 @@ class ChatService {
         },
         body: jsonEncode({
           "model": "gpt-4o-mini",
-         
 
           "messages": [
-            {"role": "user", "content": message}
+            {"role": "user", "content": message},
           ],
         }),
       );

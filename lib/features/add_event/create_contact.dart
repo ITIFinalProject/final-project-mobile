@@ -8,6 +8,10 @@ class CreateContact extends StatelessWidget {
 
   TextEditingController nameController = TextEditingController();
 
+
+  CreateContact({super.key});
+
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery
@@ -20,7 +24,9 @@ class CreateContact extends StatelessWidget {
         leading: Icon(
           Icons.person_add_alt_rounded, color: ThemeManager.primaryColor,),
         actions: [
-          IconButton(onPressed: () {},
+          IconButton(onPressed: () {
+            Navigator.pop(context);
+          },
               icon: Icon(Icons.clear, color: ThemeManager.primaryColor,))
         ],
       ),

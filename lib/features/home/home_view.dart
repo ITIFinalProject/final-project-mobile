@@ -1,9 +1,29 @@
-import 'package:eventify_app/features/floating_button/chatscreen.dart';
+import 'package:eventify_app/core/routes.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 
-class HomeView extends StatelessWidget {
+import '../auth/cubit/auth_cubit.dart';
+import '../auth/cubit/auth_state.dart';
+import '../floating_button/chatscreen.dart';
+
+class HomeView extends StatefulWidget {
   const HomeView({super.key});
+
+  @override
+  State<HomeView> createState() => _HomeViewState();
+}
+
+class _HomeViewState extends State<HomeView> {
+  String name = "";
+
+  void initState() {
+    super.initState();
+    final authState = context.read<AuthCubit>().state;
+    if (authState is AuthSuccess) {
+      name = authState.user.name ?? '';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +37,7 @@ class HomeView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Hello Dylan!',
+                name.isNotEmpty ? "Welcome, $name!" : "Welcome!",
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
@@ -38,14 +58,16 @@ class HomeView extends StatelessWidget {
                   children: [
                     Text(
                       "Now that you are all set.\nLet's make your events extraordinary,\nstarting right here!",
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Theme.of(context).primaryColor,
-                      ),
+                      style: TextStyle(fontSize: 14, color: Color(0xFF456882)),
                     ),
                     const SizedBox(height: 25),
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushNamed(
+                          context,
+                          AppRoutes.realEventDetails,
+                        );
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Theme.of(context).primaryColor,
                         padding: const EdgeInsets.symmetric(
@@ -55,31 +77,22 @@ class HomeView extends StatelessWidget {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
-                      ),
-                      child: Text(
+                      )child: const Text(
                         'Plan an Event',
-                        style: TextStyle(
-                          color:
-                              Theme.of(context).textTheme.bodyLarge?.color ??
-                              Colors.white,
-                        ),
+                        style: TextStyle(color: Colors.white),
                       ),
                     ),
                   ],
                 ),
               ),
               const SizedBox(height: 60),
-              Text(
+              const Text(
                 'Invitations',
-                style:
-                    Theme.of(
-                      context,
-                    ).textTheme.titleLarge?.copyWith(fontSize: 18) ??
-                    TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).primaryColor,
-                    ),
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF1B3C53),
+                ),
               ),
               const SizedBox(height: 35),
               Padding(
@@ -96,30 +109,24 @@ class HomeView extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 50),
-                    Expanded(
+                    const Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             'No Invitations',
-                            style:
-                                Theme.of(context).textTheme.titleLarge
-                                    ?.copyWith(fontWeight: FontWeight.bold) ??
-                                TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Theme.of(context).primaryColor,
-                                ),
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF1B3C53),
+                            ),
                           ),
                           SizedBox(height: 8),
                           Text(
                             "No invitations received? Take charge and plan your own event with EventJoy. It's easy and fun!",
-                            style:
-                                Theme.of(context).textTheme.bodyMedium
-                                    ?.copyWith(fontSize: 13) ??
-                                TextStyle(
-                                  fontSize: 13,
-                                  color: Theme.of(context).primaryColor,
-                                ),
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: Color(0xFF456882),
+                            ),
                           ),
                         ],
                       ),
@@ -128,17 +135,13 @@ class HomeView extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 60),
-              Text(
+              const Text(
                 'Upcoming Events',
-                style:
-                    Theme.of(
-                      context,
-                    ).textTheme.titleLarge?.copyWith(fontSize: 18) ??
-                    TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).primaryColor,
-                    ),
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF1B3C53),
+                ),
               ),
               const SizedBox(height: 35),
               Padding(
@@ -201,8 +204,12 @@ class HomeView extends StatelessWidget {
           width: 32,
           height: 32,
 
-          colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+          colorFilter: const ColorFilter.mode(
+            Colors.white,
+            BlendMode.srcIn,
+          ),
         ),
+
       ),
     );
   }

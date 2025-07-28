@@ -1,5 +1,4 @@
 import 'package:eventify_app/features/floating_button/chat_service.dart';
-
 import 'package:flutter/material.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -13,33 +12,36 @@ class _ChatScreenState extends State<ChatScreen> {
   final List<String> messages = ["Ask Ai about anything!"];
   final TextEditingController _controller = TextEditingController();
 
-  
   void sendMessage() async {
-  final text = _controller.text.trim();
-  if (text.isEmpty) return;
+    final text = _controller.text.trim();
+    if (text.isEmpty) return;
 
-  setState(() {
-    messages.add(text); 
-    messages.add("..."); 
-  });
+    setState(() {
+      messages.add(text);
+      messages.add("...");
+    });
 
-  _controller.clear();
+    _controller.clear();
 
-  final reply = await ChatService.sendMessage(text);
+    final reply = await ChatService.sendMessage(text);
 
-  setState(() {
-    messages.removeLast(); 
-    messages.add(reply);   
-  });
-}
-
+    setState(() {
+      messages.removeLast();
+      messages.add(reply);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("AI Chat",
-          style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+        title: const Text(
+          "AI Chat",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         backgroundColor: const Color(0xFF1B3C53),
       ),
@@ -51,16 +53,12 @@ class _ChatScreenState extends State<ChatScreen> {
               itemCount: messages.length,
               itemBuilder: (context, index) {
                 final message = messages[index];
-                final isUser = index % 2 != 0; 
+                final isUser = index % 2 != 0;
 
                 return Align(
-                  alignment: isUser
-                      ? Alignment.centerRight
-                      : Alignment.centerLeft,
-                  child: ChatBubble(
-                    text: message,
-                    isUser: isUser,
-                  ),
+                  alignment:
+                      isUser ? Alignment.centerRight : Alignment.centerLeft,
+                  child: ChatBubble(text: message, isUser: isUser),
                 );
               },
             ),
@@ -71,34 +69,40 @@ class _ChatScreenState extends State<ChatScreen> {
               children: [
                 Expanded(
                   child: TextField(
-  controller: _controller,
-  decoration: const InputDecoration(
-    hintText: "Write your message here...",
-    filled: true,
-    fillColor: Color(0xFFF5F5F5), // لون خلفية الصندوق (اختياري)
-    contentPadding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-    border: OutlineInputBorder(
-      borderRadius: BorderRadius.all(Radius.circular(24)), // مستدير أكثر
-      borderSide: BorderSide(color: Colors.grey),
-    ),
-    enabledBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.all(Radius.circular(24)),
-      borderSide: BorderSide(color: Colors.grey),
-    ),
-    focusedBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.all(Radius.circular(24)),
-      borderSide: BorderSide(color: Color(0xFF1B3C53), width: 2), // عند التركيز
-    ),
-  ),
-),
-
-              
+                    controller: _controller,
+                    decoration: const InputDecoration(
+                      hintText: "Write your message here...",
+                      filled: true,
+                      fillColor: Color(0xFFF5F5F5),
+                      // لون خلفية الصندوق (اختياري)
+                      contentPadding: EdgeInsets.symmetric(
+                        vertical: 12,
+                        horizontal: 16,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(24)),
+                        // مستدير أكثر
+                        borderSide: BorderSide(color: Colors.grey),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(24)),
+                        borderSide: BorderSide(color: Colors.grey),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(24)),
+                        borderSide: BorderSide(
+                          color: Color(0xFF1B3C53),
+                          width: 2,
+                        ), // عند التركيز
+                      ),
+                    ),
+                  ),
                 ),
                 const SizedBox(width: 8),
                 IconButton(
                   onPressed: sendMessage,
                   icon: const Icon(Icons.send, color: Color(0xFF1B3C53)),
-                )
+                ),
               ],
             ),
           ),
@@ -112,11 +116,7 @@ class ChatBubble extends StatelessWidget {
   final String text;
   final bool isUser;
 
-  const ChatBubble({
-    super.key,
-    required this.text,
-    required this.isUser,
-  });
+  const ChatBubble({super.key, required this.text, required this.isUser});
 
   @override
   Widget build(BuildContext context) {
@@ -134,9 +134,7 @@ class ChatBubble extends StatelessWidget {
       ),
       child: Text(
         text,
-        style: TextStyle(
-          color: isUser ? Colors.white : Colors.black87,
-        ),
+        style: TextStyle(color: isUser ? Colors.white : Colors.black87),
       ),
     );
   }
