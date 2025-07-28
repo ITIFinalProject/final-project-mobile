@@ -69,7 +69,9 @@ class _HomeViewState extends State<HomeView> {
                         );
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Theme.of(context).primaryColor,
+                        backgroundColor: Theme
+                            .of(context)
+                            .primaryColor,
                         padding: const EdgeInsets.symmetric(
                           horizontal: 54,
                           vertical: 15,
@@ -77,10 +79,10 @@ class _HomeViewState extends State<HomeView> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
-                      )child: const Text(
-                        'Plan an Event',
-                        style: TextStyle(color: Colors.white),
-                      ),
+                      ), child: const Text(
+                      'Plan an Event',
+                      style: TextStyle(color: Colors.white),
+                    ),
                     ),
                   ],
                 ),
