@@ -18,7 +18,19 @@ class AuthCubit extends Cubit<AuthState> {
         email: email,
         password: password,
       );
-      UserModel user = UserModel(name: result.user!.displayName, email: email);
+      final doc =
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(result.user!.uid)
+              .get();
+
+      if (!doc.exists) {
+        emit(AuthFailure("User data not found in Firestore"));
+        return;
+      }
+
+      UserModel user = UserModel.fromFireStore(doc.data()!);
+
       emit(AuthSuccess(user));
     } on FirebaseAuthException catch (e) {
       emit(AuthFailure(e.message ?? "Unknown error"));
@@ -62,6 +74,7 @@ class AuthCubit extends Cubit<AuthState> {
     emit(AuthLoading());
     try {
       await _auth.signOut();
+      await GoogleSignIn().signOut();
       emit(AuthLoggedOut());
     } catch (e) {
       emit(AuthFailure(e.toString()));
@@ -91,7 +104,10 @@ class AuthCubit extends Cubit<AuthState> {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       UserModel currentUser = UserModel(
-          name: user.displayName, email: user.email, phone: user.phoneNumber);
+        name: user.displayName,
+        email: user.email,
+        phone: user.phoneNumber,
+      );
       emit(AuthSuccess(currentUser));
     } else {
       emit(AuthLoggedOut());
@@ -101,7 +117,6 @@ class AuthCubit extends Cubit<AuthState> {
   Future<void> signInWithGoogle() async {
     emit(AuthLoading());
     try {
-      await GoogleSignIn().signOut();
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
       if (googleUser == null) {
         emit(AuthFailure("Google sign-in aborted."));
@@ -109,7 +124,7 @@ class AuthCubit extends Cubit<AuthState> {
       }
 
       final GoogleSignInAuthentication googleAuth =
-      await googleUser.authentication;
+          await googleUser.authentication;
 
       final credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
@@ -145,11 +160,13 @@ class AuthCubit extends Cubit<AuthState> {
       if (result.status == LoginStatus.success) {
         final accessToken = result.accessToken;
 
-        final facebookAuthCredential =
-        FacebookAuthProvider.credential(accessToken!.tokenString);
+        final facebookAuthCredential = FacebookAuthProvider.credential(
+          accessToken!.tokenString,
+        );
 
-        final userCredential = await FirebaseAuth.instance
-            .signInWithCredential(facebookAuthCredential);
+        final userCredential = await FirebaseAuth.instance.signInWithCredential(
+          facebookAuthCredential,
+        );
 
         final user = userCredential.user;
 
@@ -172,5 +189,85 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
+  Future<void> updateUserProfile({
+    required String name,
+    required String phone,
+    required String address,
+    String? newPassword,
+  }) async {
+    emit(AuthLoading());
+    try {
+      final user = FirebaseAuth.instance.currentUser;
 
+      if (user == null) {
+        emit(AuthFailure("No user is logged in"));
+        return;
+      }
+
+      await FirebaseFirestore.instance.collection('users').doc(user.uid).update(
+        {'name': name, 'phone': phone, 'address': address},
+      );
+      if (newPassword != null && newPassword.isNotEmpty) {
+        await user.updatePassword(newPassword);
+      }
+      UserModel updatedUser = UserModel(
+        name: name,
+        email: user.email,
+        phone: phone,
+        address: address,
+      );
+
+      emit(AuthSuccess(updatedUser));
+    } catch (e) {
+      emit(AuthFailure(e.toString()));
+    }
+  }
+
+  Future<bool> verifyPassword(String password) async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null || user.email == null) {
+        emit(AuthFailure("No user is logged in"));
+        return false;
+      }
+      AuthCredential credential = EmailAuthProvider.credential(
+        email: user.email!,
+        password: password,
+      );
+
+      await user.reauthenticateWithCredential(credential);
+      return true;
+    } on FirebaseAuthException catch (e) {
+      emit(AuthFailure(e.message ?? "Wrong password"));
+      return false;
+    } catch (e) {
+      emit(AuthFailure(e.toString()));
+      return false;
+    }
+  }
+
+  Future<void> updatePassword(String password) async {
+    emit(AuthLoading());
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (password != null && password.isNotEmpty) {
+        await user!.updatePassword(password);
+      }
+      emit(
+        AuthSuccess(
+          UserModel(
+            name: user!.displayName,
+            email: user.email,
+            phone: user.phoneNumber,
+          ),
+        ),
+      );
+    } on FirebaseAuthException catch (e) {
+      emit(
+        AuthFailure(e.message ?? 'An error occurred while updating password.'),
+      );
+    } catch (e) {
+      emit(AuthFailure(e.toString()));
+    }
+  }
 }

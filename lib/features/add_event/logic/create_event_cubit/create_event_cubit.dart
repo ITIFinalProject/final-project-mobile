@@ -30,24 +30,22 @@ class CreateEventCubit extends Cubit<CreateEventState> {
       print('✅ Starting event creation...');
       final String eventId = const Uuid().v4();
 
-
       String? imageUrl;
       if (imageFile != null) {
-        final fileExt = imageFile.path
-            .split('.')
-            .last;
+        final fileExt = imageFile.path.split('.').last;
         final filePath = 'public/$eventId.$fileExt';
 
         final fileBytes = await imageFile.readAsBytes();
 
         final storageResponse = await supabase.storage
             .from('event-images')
-            .uploadBinary(filePath, fileBytes,
-            fileOptions: FileOptions(contentType: 'image/$fileExt'));
+            .uploadBinary(
+              filePath,
+              fileBytes,
+              fileOptions: FileOptions(contentType: 'image/$fileExt'),
+            );
 
-        imageUrl = supabase.storage
-            .from('event-images')
-            .getPublicUrl(filePath);
+        imageUrl = supabase.storage.from('event-images').getPublicUrl(filePath);
       }
       final newEvent = EventModel(
         id: eventId,

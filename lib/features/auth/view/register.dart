@@ -75,7 +75,7 @@ class _RegisterViewState extends State<RegisterView> {
                         textFieldController: passController,
                         obscure: hidden,
                         suffixIcon:
-                        hidden ? Icons.visibility_off : Icons.visibility,
+                            hidden ? Icons.visibility_off : Icons.visibility,
                         onPressedIcon: () {
                           hidden = !hidden;
                           setState(() {});
@@ -87,9 +87,9 @@ class _RegisterViewState extends State<RegisterView> {
                         textFieldController: confirmPassController,
                         obscure: hiddenConfirm,
                         suffixIcon:
-                        hiddenConfirm
-                            ? Icons.visibility_off
-                            : Icons.visibility,
+                            hiddenConfirm
+                                ? Icons.visibility_off
+                                : Icons.visibility,
                         onPressedIcon: () {
                           hiddenConfirm = !hiddenConfirm;
                           setState(() {});
@@ -123,11 +123,11 @@ class _RegisterViewState extends State<RegisterView> {
                           }
                         },
                         buttonChild:
-                        isLoading
-                            ? const CircularProgressIndicator(
-                          color: ThemeManager.lightPinkColor,
-                        )
-                            : buttonText(text: 'Sign Up'),
+                            isLoading
+                                ? const CircularProgressIndicator(
+                                  color: ThemeManager.lightPinkColor,
+                                )
+                                : buttonText(text: 'Sign Up'),
 
                         buttonColor: ThemeManager.primaryColor,
 
@@ -144,20 +144,35 @@ class _RegisterViewState extends State<RegisterView> {
                         ),
                       Padding(
                         padding: const EdgeInsets.symmetric(
-                            vertical: 16, horizontal: 15),
+                          vertical: 16,
+                          horizontal: 15,
+                        ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            Expanded(child: Divider(thickness: 1,
-                                color: ThemeManager.secondaryColor)),
+                            Expanded(
+                              child: Divider(
+                                thickness: 1,
+                                color: ThemeManager.secondaryColor,
+                              ),
+                            ),
                             Padding(
                               padding: const EdgeInsets.symmetric(
-                                  horizontal: 8),
-                              child: Text('or', style: TextStyle(
-                                  color: ThemeManager.primaryColor)),
+                                horizontal: 8,
+                              ),
+                              child: Text(
+                                'or',
+                                style: TextStyle(
+                                  color: ThemeManager.primaryColor,
+                                ),
+                              ),
                             ),
-                            Expanded(child: Divider(thickness: 1,
-                                color: ThemeManager.secondaryColor)),
+                            Expanded(
+                              child: Divider(
+                                thickness: 1,
+                                color: ThemeManager.secondaryColor,
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -174,7 +189,8 @@ class _RegisterViewState extends State<RegisterView> {
                               backgroundColor: ThemeManager.primaryColor,
                               radius: 28,
                               backgroundImage: AssetImage(
-                                  'assets/images/google_logo.png'),
+                                'assets/images/google_logo.png',
+                              ),
                             ),
                           ),
                           GestureDetector(
@@ -185,7 +201,8 @@ class _RegisterViewState extends State<RegisterView> {
                               backgroundColor: ThemeManager.primaryColor,
                               radius: 28,
                               backgroundImage: AssetImage(
-                                  'assets/images/facebook_logo.jpg'),
+                                'assets/images/facebook_logo.jpg',
+                              ),
                             ),
                           ),
                         ],
@@ -218,8 +235,6 @@ class _RegisterViewState extends State<RegisterView> {
                           ),
                         ],
                       ),
-
-
                     ],
                   ),
                 ),

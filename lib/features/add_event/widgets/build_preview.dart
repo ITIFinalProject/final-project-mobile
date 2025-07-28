@@ -11,7 +11,7 @@ class BuildPreview extends StatelessWidget {
   VoidCallback pickImage;
   VoidCallback toggleShownTemplates;
   VoidCallback onEdit;
-  
+
 
   BuildPreview({
     super.key,
@@ -107,12 +107,10 @@ class BuildPreview extends StatelessWidget {
         ),
         CustomElevatedButton(
           onPressed: () {
-
-            Navigator.pushNamed(context, AppRoutes.eventDetails,arguments: {
-              'selectedImage':selectedImage,
+            Navigator.pushNamed(context, AppRoutes.eventDetails, arguments: {
+              'selectedImage': selectedImage,
               'selectedTemplate': selectedTemplate,
             });
-            
           },
           title: ('Next: Event Details'),
         ),

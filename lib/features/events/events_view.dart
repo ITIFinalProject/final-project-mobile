@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+import '../../main.dart';
 import 'event_cubit/event_cubit.dart';
 import 'event_cubit/event_state.dart';
 
@@ -15,7 +16,7 @@ class EventsView extends StatefulWidget {
   State<EventsView> createState() => _EventsViewState();
 }
 
-class _EventsViewState extends State<EventsView> {
+class _EventsViewState extends State<EventsView> with RouteAware {
   DateTime? selectedDate = DateTime.now();
 
   @override
@@ -24,24 +25,27 @@ class _EventsViewState extends State<EventsView> {
     context.read<EventCubit>().fetchEvents();
   }
 
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme
+          .of(context)
+          .scaffoldBackgroundColor,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(70),
         child: AppBar(
-          backgroundColor: Color(0xFF1B3C53),
+          backgroundColor: Theme
+              .of(context)
+              .primaryColor,
 
           centerTitle: false,
-          title: const Padding(
-            padding: EdgeInsets.only(top: 20),
+          title: Padding(
+            padding: const EdgeInsets.only(top: 20),
             child: Text(
               'Events',
               style: TextStyle(
                 fontSize: 28,
                 fontWeight: FontWeight.bold,
-                color: Colors.white,
+                color: Theme.of(context).primaryColor,
               ),
             ),
           ),
@@ -54,6 +58,7 @@ class _EventsViewState extends State<EventsView> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+
               const SizedBox(height: 16),
               Container(
                 padding: const EdgeInsets.all(12),
@@ -80,7 +85,7 @@ class _EventsViewState extends State<EventsView> {
                   ),
                   calendarStyle: const CalendarStyle(
                     todayDecoration: BoxDecoration(
-                      color: ThemeManager.darkPinkColor,
+                      color: Color(0xFF1B3C53),
                       shape: BoxShape.circle,
                     ),
                     selectedDecoration: BoxDecoration(
@@ -150,11 +155,29 @@ class _EventsViewState extends State<EventsView> {
               ),
 
               const SizedBox(height: 70),
+
             ],
           ),
         ),
       ),
     );
+  }
+
+  @override
+  void didPopNext() {
+    context.read<EventCubit>().fetchEvents();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    routeObserver.subscribe(this, ModalRoute.of(context)!);
+  }
+
+  @override
+  void dispose() {
+    routeObserver.unsubscribe(this);
+    super.dispose();
   }
 
   showNoEvents() {
@@ -203,4 +226,6 @@ class _EventsViewState extends State<EventsView> {
       ),
     );
   }
+
 }
+

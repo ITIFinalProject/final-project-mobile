@@ -22,7 +22,30 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+    "change_language": MessageLookupByLibrary.simpleMessage("تغيير اللغة"),
+    "change_theme": MessageLookupByLibrary.simpleMessage("تغيير الثيم"),
+    "contact_us": MessageLookupByLibrary.simpleMessage("تواصل معنا"),
+    "edit_profile": MessageLookupByLibrary.simpleMessage("تعديل الملف الشخصي"),
+    "hello": MessageLookupByLibrary.simpleMessage("مرحباً ديلان!"),
+    "invitations": MessageLookupByLibrary.simpleMessage("الدعوات"),
     "login": MessageLookupByLibrary.simpleMessage("تسجيل دخول"),
+    "no_events": MessageLookupByLibrary.simpleMessage("لا توجد فعاليات"),
+    "no_events_desc": MessageLookupByLibrary.simpleMessage(
+      "تقويم فعالياتك فارغ. استخدم EventJoy لملئه بلحظات لا تُنسى.",
+    ),
+    "no_invitations": MessageLookupByLibrary.simpleMessage("لا توجد دعوات"),
+    "no_invitations_desc": MessageLookupByLibrary.simpleMessage(
+      "لم تستلم أي دعوة؟ بادر وأنشئ فعاليتك الخاصة مع EventJoy. الأمر سهل وممتع!",
+    ),
+    "notification": MessageLookupByLibrary.simpleMessage("الإشعارات"),
+    "now_set": MessageLookupByLibrary.simpleMessage(
+      "الآن كل شيء جاهز.\nلنصنع فعالياتك استثنائية،\nابدأ من هنا!",
+    ),
+    "plan_event": MessageLookupByLibrary.simpleMessage("أنشئ فعالية"),
     "register": MessageLookupByLibrary.simpleMessage("انشاء حساب"),
+    "sign_out": MessageLookupByLibrary.simpleMessage("تسجيل الخروج"),
+    "upcoming_events": MessageLookupByLibrary.simpleMessage(
+      "الفعاليات القادمة",
+    ),
   };
 }

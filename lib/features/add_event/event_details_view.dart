@@ -9,7 +9,6 @@ import 'package:intl/intl.dart';
 
 import '../../core/theme.dart';
 import 'logic/create_event_cubit/create_event_cubit.dart';
-
 class EventDetailsView extends StatefulWidget {
   const EventDetailsView({super.key});
 
@@ -34,6 +33,7 @@ class _EventDetailsViewState extends State<EventDetailsView> {
   TextEditingController locationController = TextEditingController();
   TextEditingController hostNameController = TextEditingController();
   TextEditingController attendeesController = TextEditingController();
+
   final List<String> eventTypes = [
     "Entertainment",
     "Educational & Business",
@@ -75,220 +75,217 @@ class _EventDetailsViewState extends State<EventDetailsView> {
       },
       builder: (BuildContext context, CreateEventState state) {
         return Scaffold(
-          appBar: AppBar(
-            title: Text('2 of 5: Event Details'),
-            centerTitle: true,
-          ),
-          body: SingleChildScrollView(
-            child: Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  CustomText(title: 'Event Title'),
-                  CustomTextFormField(
-                    controller: titleController,
-                    hint: 'Enter event title',
-                    validator: (val) {
-                      if (val == null || val.isEmpty) {
-                        return 'Please enter your event title';
-                      }
-                      return null;
-                    },
-                  ),
-                  CustomText(title: 'Event Type'),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25),
-                    child: DropdownButtonFormField<String>(
-                      value: selectedEventType,
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: ThemeManager.primaryColor,
-                      ),
-                      borderRadius: BorderRadius.circular(15),
-                      decoration: CustomInputDecoration.getDecoration(
-                        hintText: 'Select event type',
-                      ),
-
-                      items:
-                      eventTypes.map((value) {
-                        return DropdownMenuItem(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                      onChanged: (val) {
-                        setState(() {
-                          selectedEventType = val;
-                        });
-                      },
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'please select your event type';
-                        }
-                        return null;
-                      },
-                    ),
-                  ),
-                  CustomText(title: 'Event Description'),
-                  CustomTextFormField(
-                    controller: descriptionController,
-                    lines: 2,
-                    hint: 'Write your event description',
-                    validator: (val) {
-                      if (val == null || val.isEmpty) {
-                        return 'Please enter your event description';
-                      }
-                      return null;
-                    },
-                  ),
-                  CustomText(title: 'Event Timing'),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Flexible(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            CustomText(title: 'Start Date'),
-                            CustomTextFormField(
-                              validator: (val) {
-                                if (val == null || val.isEmpty) {
-                                  return 'please enter your start date';
-                                }
-                                return null;
-                              },
-                              hint: 'DD/MM/YY',
-                              controller: startDateController,
-                              onTapped: clickStartDate,
-                              prefixIcon: Icons.calendar_month,
-                            ),
-                          ],
-                        ),
-                      ),
-                      Flexible(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            CustomText(title: 'Start Time'),
-                            CustomTextFormField(
-                              validator: (val) {
-                                if (val == null || val.isEmpty) {
-                                  return 'please enter your start time';
-                                }
-                                return null;
-                              },
-                              hint: '12:00 AM',
-                              controller: startTimeController,
-                              onTapped: clickStartTime,
-                              prefixIcon: Icons.access_time,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Flexible(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            CustomText(title: 'End Date'),
-                            CustomTextFormField(
-                              validator: (val) {
-                                if (val == null || val.isEmpty) {
-                                  return 'please enter your end date';
-                                }
-                                return null;
-                              },
-                              hint: 'DD/MM/YY',
-                              controller: endDateController,
-                              onTapped: clickEndDate,
-                              prefixIcon: Icons.calendar_month,
-                            ),
-                          ],
-                        ),
-                      ),
-                      Flexible(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            CustomText(title: 'End Time'),
-                            CustomTextFormField(
-                              validator: (val) {
-                                if (val == null || val.isEmpty) {
-                                  return 'please enter your end time';
-                                }
-                                return null;
-                              },
-                              hint: '12:00 AM',
-                              controller: endTimeController,
-                              onTapped: clickEndTime,
-                              prefixIcon: Icons.access_time,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  CustomText(title: 'Location'),
-                  CustomTextFormField(
-                    validator: (val) {
-                      if (val == null || val.isEmpty) {
-                        return 'Please enter your event location';
-                      }
-                      return null;
-                    },
-                    hint: 'Location',
-                    controller: locationController,
-                    prefixIcon: Icons.location_on,
-                  ),
-                  CustomElevatedButton(
-                    title: 'Open Google maps',
-                    onPressed: openMapToGetLocation,
-                  ),
-                  CustomText(title: 'Attendees'),
-                  CustomTextFormField(
-                    controller: attendeesController,
-                    hint: 'Enter number of attendees',
-                    validator: (val) {
-                      if (val == null || val.isEmpty) {
-                        return 'Please enter number of attendees';
-                      }
-                      return null;
-                    },
-                  ),
-                  CustomText(title: 'Hosted By'),
-                  CustomTextFormField(
-                    controller: hostNameController,
-                    hint: 'Enter host name',
-                    validator: (val) {
-                      if (val == null || val.isEmpty) {
-                        return 'Please enter your host name';
-                      }
-                      return null;
-                    },
-                  ),
-                  state is CreateEventLoading ? Center(
-                      child: CircularProgressIndicator(
-                          color: ThemeManager.primaryColor)) : Padding(
-                    padding: const EdgeInsets.all(15),
-                    child: CustomElevatedButton(
-                      onPressed: createEvent,
-                      title: ('Next: Preview'),
-                    ),
-                  ),
-                ],
-              ),
+            appBar: AppBar(
+              title: Text('2 of 5: Event Details'),
+              centerTitle: true,
             ),
-          ),
-        );
+            body: SingleChildScrollView(
+                child: Form(
+                    key: _formKey,
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          CustomText(title: 'Event Title'),
+                          CustomTextFormField(
+                            controller: titleController,
+                            hint: 'Enter event title',
+                            validator: (val) {
+                              if (val == null || val.isEmpty) {
+                                return 'Please enter your event title';
+                              }
+                              return null;
+                            },
+                          ),
+                          CustomText(title: 'Event Type'),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 25),
+                            child: DropdownButtonFormField<String>(
+                              value: selectedEventType,
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: ThemeManager.primaryColor,
+                              ),
+                              borderRadius: BorderRadius.circular(15),
+                              decoration: CustomInputDecoration.getDecoration(
+                                hintText: 'Select event type',
+                              ),
+
+                              items:
+                              eventTypes.map((value) {
+                                return DropdownMenuItem(
+                                  value: value,
+                                  child: Text(value),
+                                );
+                              }).toList(),
+                              onChanged: (val) {
+                                setState(() {
+                                  selectedEventType = val;
+                                });
+                              },
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'please select your event type';
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                          CustomText(title: 'Event Description'),
+                          CustomTextFormField(
+                            controller: descriptionController,
+                            lines: 2,
+                            hint: 'Write your event description',
+                            validator: (val) {
+                              if (val == null || val.isEmpty) {
+                                return 'Please enter your event description';
+                              }
+                              return null;
+                            },
+                          ),
+                          CustomText(title: 'Event Timing'),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Flexible(
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    CustomText(title: 'Start Date'),
+                                    CustomTextFormField(
+                                      validator: (val) {
+                                        if (val == null || val.isEmpty) {
+                                          return 'please enter your start date';
+                                        }
+                                        return null;
+                                      },
+                                      hint: 'DD/MM/YY',
+                                      controller: startDateController,
+                                      onTapped: clickStartDate,
+                                      prefixIcon: Icons.calendar_month,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Flexible(
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    CustomText(title: 'Start Time'),
+                                    CustomTextFormField(
+                                      validator: (val) {
+                                        if (val == null || val.isEmpty) {
+                                          return 'please enter your start time';
+                                        }
+                                        return null;
+                                      },
+                                      hint: '12:00 AM',
+                                      controller: startTimeController,
+                                      onTapped: clickStartTime,
+                                      prefixIcon: Icons.access_time,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Flexible(
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    CustomText(title: 'End Date'),
+                                    CustomTextFormField(
+                                      validator: (val) {
+                                        if (val == null || val.isEmpty) {
+                                          return 'please enter your end date';
+                                        }
+                                        return null;
+                                      },
+                                      hint: 'DD/MM/YY',
+                                      controller: endDateController,
+                                      onTapped: clickEndDate,
+                                      prefixIcon: Icons.calendar_month,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Flexible(
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    CustomText(title: 'End Time'),
+                                    CustomTextFormField(
+                                      validator: (val) {
+                                        if (val == null || val.isEmpty) {
+                                          return 'please enter your end time';
+                                        }
+                                        return null;
+                                      },
+                                      hint: '12:00 AM',
+                                      controller: endTimeController,
+                                      onTapped: clickEndTime,
+                                      prefixIcon: Icons.access_time,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          CustomText(title: 'Location'),
+                          CustomTextFormField(
+                            validator: (val) {
+                              if (val == null || val.isEmpty) {
+                                return 'Please enter your event location';
+                              }
+                              return null;
+                            },
+                            hint: 'Location',
+                            controller: locationController,
+                            prefixIcon: Icons.location_on,
+                          ),
+                          CustomElevatedButton(
+                            title: 'Open Google maps',
+                            onPressed: openMapToGetLocation,
+                          ),
+                          CustomText(title: 'Attendees'),
+                          CustomTextFormField(
+                            controller: attendeesController,
+                            hint: 'Enter number of attendees',
+                            validator: (val) {
+                              if (val == null || val.isEmpty) {
+                                return 'Please enter number of attendees';
+                              }
+                              return null;
+                            },
+                          ),
+                          CustomText(title: 'Hosted By'),
+                          CustomTextFormField(
+                            controller: hostNameController,
+                            hint: 'Enter host name',
+                            validator: (val) {
+                              if (val == null || val.isEmpty) {
+                                return 'Please enter your host name';
+                              }
+                              return null;
+                            },
+                          ),
+                          state is CreateEventLoading ? Center(
+                              child: CircularProgressIndicator(
+                                  color: ThemeManager.primaryColor)) : Padding(
+                            padding: const EdgeInsets.all(15),
+                            child: CustomElevatedButton(
+                              onPressed: createEvent,
+                              title: ('Next: Preview'),
+                            ),
+                          ),
+                        ]))
+            ));
       },
     );
   }
@@ -402,6 +399,7 @@ class _EventDetailsViewState extends State<EventDetailsView> {
     }
   }
 
+
   openMapToGetLocation() async {
     final result = await Navigator.pushNamed(context, AppRoutes.mapPicker);
 
@@ -409,4 +407,5 @@ class _EventDetailsViewState extends State<EventDetailsView> {
       locationController.text = result;
     }
   }
+
 }
