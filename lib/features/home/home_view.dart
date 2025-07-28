@@ -9,7 +9,7 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
 
       body: SafeArea(
         child: SingleChildScrollView(
@@ -17,13 +17,17 @@ class HomeView extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
+              Text(
                 'Hello Dylan!',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF1B3C53),
-                ),
+                style:
+                    Theme.of(
+                      context,
+                    ).textTheme.titleLarge?.copyWith(fontSize: 24) ??
+                    TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).primaryColor,
+                    ),
               ),
               const SizedBox(height: 20),
               Container(
@@ -31,21 +35,28 @@ class HomeView extends StatelessWidget {
                 padding: const EdgeInsets.all(20),
 
                 decoration: BoxDecoration(
-                  color: Color(0xFFF9F3EF),
+                  color: Theme.of(context).cardColor,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       "Now that you are all set.\nLet's make your events extraordinary,\nstarting right here!",
-                      style: TextStyle(fontSize: 14, color: Color(0xFF456882)),
+                      style:
+                          Theme.of(
+                            context,
+                          ).textTheme.bodyMedium?.copyWith(fontSize: 14) ??
+                          TextStyle(
+                            fontSize: 14,
+                            color: Theme.of(context).primaryColor,
+                          ),
                     ),
                     const SizedBox(height: 25),
                     ElevatedButton(
                       onPressed: () {},
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xFF1B3C53),
+                        backgroundColor: Theme.of(context).primaryColor,
                         padding: const EdgeInsets.symmetric(
                           horizontal: 54,
                           vertical: 15,
@@ -54,22 +65,30 @@ class HomeView extends StatelessWidget {
                           borderRadius: BorderRadius.circular(8),
                         ),
                       ),
-                      child: const Text(
+                      child: Text(
                         'Plan an Event',
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(
+                          color:
+                              Theme.of(context).textTheme.bodyLarge?.color ??
+                              Colors.white,
+                        ),
                       ),
                     ),
                   ],
                 ),
               ),
               const SizedBox(height: 60),
-              const Text(
+              Text(
                 'Invitations',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF1B3C53),
-                ),
+                style:
+                    Theme.of(
+                      context,
+                    ).textTheme.titleLarge?.copyWith(fontSize: 18) ??
+                    TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).primaryColor,
+                    ),
               ),
               const SizedBox(height: 35),
               Padding(
@@ -78,32 +97,38 @@ class HomeView extends StatelessWidget {
                   children: [
                     CircleAvatar(
                       radius: 28,
-                      backgroundColor: Color(0xFFF9F3EF),
-                      child: const Icon(
+                      backgroundColor: Theme.of(context).cardColor,
+                      child: Icon(
                         Icons.mail_outline,
-                        color: Color(0xFF1B3C53),
+                        color: Theme.of(context).primaryColor,
                         size: 30,
                       ),
                     ),
                     const SizedBox(width: 50),
-                    const Expanded(
+                    Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             'No Invitations',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xFF1B3C53),
-                            ),
+                            style:
+                                Theme.of(context).textTheme.titleLarge
+                                    ?.copyWith(fontWeight: FontWeight.bold) ??
+                                TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Theme.of(context).primaryColor,
+                                ),
                           ),
                           SizedBox(height: 8),
                           Text(
                             "No invitations received? Take charge and plan your own event with EventJoy. It's easy and fun!",
-                            style: TextStyle(
-                              fontSize: 13,
-                              color: Color(0xFF456882),
-                            ),
+                            style:
+                                Theme.of(context).textTheme.bodyMedium
+                                    ?.copyWith(fontSize: 13) ??
+                                TextStyle(
+                                  fontSize: 13,
+                                  color: Theme.of(context).primaryColor,
+                                ),
                           ),
                         ],
                       ),
@@ -112,13 +137,17 @@ class HomeView extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 60),
-              const Text(
+              Text(
                 'Upcoming Events',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF1B3C53),
-                ),
+                style:
+                    Theme.of(
+                      context,
+                    ).textTheme.titleLarge?.copyWith(fontSize: 18) ??
+                    TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).primaryColor,
+                    ),
               ),
               const SizedBox(height: 35),
               Padding(
@@ -181,12 +210,8 @@ class HomeView extends StatelessWidget {
           width: 32,
           height: 32,
 
-          colorFilter: const ColorFilter.mode(
-            Colors.white,
-            BlendMode.srcIn,
-          ),
+          colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
         ),
-
       ),
     );
   }
