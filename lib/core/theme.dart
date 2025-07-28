@@ -26,5 +26,38 @@ class ThemeManager{
         showUnselectedLabels: false,
       )
   );
-  static ThemeData darkTheme = ThemeData();
+  static ThemeData darkTheme = ThemeData(
+    brightness: Brightness.dark,
+    primaryColor: primaryColor,
+    scaffoldBackgroundColor: Colors.black,
+    appBarTheme: AppBarTheme(
+      backgroundColor: primaryColor,
+      centerTitle: true,
+      titleTextStyle: TextStyle(
+        fontSize: 18,
+        fontWeight: FontWeight.w600,
+        color: lightPinkColor,
+      ),
+      iconTheme: IconThemeData(color: lightPinkColor),
+    ),
+    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+      type: BottomNavigationBarType.fixed,
+      backgroundColor: primaryColor,
+      unselectedIconTheme: IconThemeData(
+        color: darkPinkColor,
+        size: 24,
+      ),
+      selectedItemColor: lightPinkColor,
+      showSelectedLabels: true,
+      showUnselectedLabels: false,
+    ),
+    textTheme: TextTheme(
+      bodyLarge: TextStyle(color: lightPinkColor),
+      bodyMedium: TextStyle(color: lightPinkColor),
+      bodySmall: TextStyle(color: darkPinkColor),
+      titleLarge: TextStyle(color: lightPinkColor, fontWeight: FontWeight.bold),
+    ),
+    iconTheme: IconThemeData(color: lightPinkColor),
+    cardColor: secondaryColor,
+  );
 }

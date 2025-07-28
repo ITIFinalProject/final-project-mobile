@@ -1,10 +1,10 @@
 import 'package:eventify_app/core/routes.dart';
-import 'package:eventify_app/features/auth/cubit/auth_cubit.dart';
-import 'package:eventify_app/features/auth/cubit/auth_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 
+import '../auth/cubit/auth_cubit.dart';
+import '../auth/cubit/auth_state.dart';
 import '../floating_button/chatscreen.dart';
 
 class HomeView extends StatefulWidget {
@@ -16,18 +16,19 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   String name = "";
+
   void initState() {
     super.initState();
     final authState = context.read<AuthCubit>().state;
     if (authState is AuthSuccess) {
-      name= authState.user.name ?? '';
-      
+      name = authState.user.name ?? '';
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
 
       body: SafeArea(
         child: SingleChildScrollView(
@@ -40,7 +41,7 @@ class _HomeViewState extends State<HomeView> {
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF1B3C53),
+                  color: Theme.of(context).primaryColor,
                 ),
               ),
               const SizedBox(height: 20),
@@ -49,23 +50,28 @@ class _HomeViewState extends State<HomeView> {
                 padding: const EdgeInsets.all(20),
 
                 decoration: BoxDecoration(
-                  color: Color(0xFFF9F3EF),
+                  color: Theme.of(context).cardColor,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       "Now that you are all set.\nLet's make your events extraordinary,\nstarting right here!",
                       style: TextStyle(fontSize: 14, color: Color(0xFF456882)),
                     ),
                     const SizedBox(height: 25),
                     ElevatedButton(
                       onPressed: () {
-                        Navigator.pushNamed(context, AppRoutes.realEventDetails);
+                        Navigator.pushNamed(
+                          context,
+                          AppRoutes.realEventDetails,
+                        );
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xFF1B3C53),
+                        backgroundColor: Theme
+                            .of(context)
+                            .primaryColor,
                         padding: const EdgeInsets.symmetric(
                           horizontal: 54,
                           vertical: 15,
@@ -73,22 +79,23 @@ class _HomeViewState extends State<HomeView> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
-                      ),
-                      child: const Text(
-                        'Plan an Event',
-                        style: TextStyle(color: Colors.white),
-                      ),
+                      ), child: const Text(
+                      'Plan an Event',
+                      style: TextStyle(color: Colors.white),
+                    ),
                     ),
                   ],
                 ),
               ),
               const SizedBox(height: 60),
-              const Text('Invitations',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF1B3C53),
-                  )),
+              const Text(
+                'Invitations',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF1B3C53),
+                ),
+              ),
               const SizedBox(height: 35),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -96,10 +103,10 @@ class _HomeViewState extends State<HomeView> {
                   children: [
                     CircleAvatar(
                       radius: 28,
-                      backgroundColor: Color(0xFFF9F3EF),
-                      child: const Icon(
+                      backgroundColor: Theme.of(context).cardColor,
+                      child: Icon(
                         Icons.mail_outline,
-                        color: Color(0xFF1B3C53),
+                        color: Theme.of(context).primaryColor,
                         size: 30,
                       ),
                     ),
@@ -209,4 +216,3 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 }
-

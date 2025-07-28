@@ -107,9 +107,8 @@ class BuildPreview extends StatelessWidget {
         ),
         CustomElevatedButton(
           onPressed: () {
-
-            Navigator.pushNamed(context, AppRoutes.eventDetails,arguments: {
-              'selectedImage':selectedImage,
+            Navigator.pushNamed(context, AppRoutes.eventDetails, arguments: {
+              'selectedImage': selectedImage,
               'selectedTemplate': selectedTemplate,
             });
           },

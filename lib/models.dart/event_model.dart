@@ -38,7 +38,7 @@ class EventModel extends Equatable {
     int? capacity,
     String? image,
     int? templateIndex,
-    String? hostName
+    String? hostName,
   }) {
     return EventModel(
       id: id ?? this.id,
@@ -49,10 +49,8 @@ class EventModel extends Equatable {
       time: time ?? this.time,
       location: location ?? this.location,
       capacity: capacity ?? this.capacity,
-        hostName: hostName ?? this.hostName
+      hostName: hostName ?? this.hostName,
     );
-
-
   }
 
   Map<String, dynamic> toMap() {
@@ -67,7 +65,7 @@ class EventModel extends Equatable {
       'capacity': capacity,
       'image': image,
       'templateIndex': templateIndex,
-      'hostName': hostName
+      'hostName': hostName,
     };
   }
 
@@ -89,16 +87,16 @@ class EventModel extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        type,
-        title,
-        description,
-        date,
-        time,
-        location,
-        capacity,
-        image,
-        templateIndex,
-    hostName
-      ];
+    id,
+    type,
+    title,
+    description,
+    date,
+    time,
+    location,
+    capacity,
+    image,
+    templateIndex,
+    hostName,
+  ];
 }

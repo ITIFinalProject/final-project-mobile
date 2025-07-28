@@ -1,14 +1,15 @@
-
 import 'package:eventify_app/core/routes.dart';
 import 'package:eventify_app/core/theme.dart';
 import 'package:eventify_app/features/auth/cubit/auth_cubit.dart';
-import 'package:eventify_app/features/profile/widgets/info_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../core/alet_utils.dart';
 import '../auth/cubit/auth_state.dart';
 
+import '../../generated/l10n.dart';
+import 'cubit/language_cubit.dart';
+import 'cubit/theme_cubit.dart';
 
 class ProfileView extends StatefulWidget {
   const ProfileView({super.key});
@@ -77,47 +78,89 @@ class _ProfileViewState extends State<ProfileView> {
                 ),
 
                 const SizedBox(height: 30),
+                _infoTile("Edit Profile", Icons.person, () {
+                  Navigator.pushNamed(context, AppRoutes.editProfile);
+                }),
+                _infoTile("Change Password", Icons.lock, () {
+                  Navigator.pushNamed(context, AppRoutes.verifyOldPassword);
+                }),
+                _infoTile("Notification", Icons.notifications, () {}),
+                _infoTile("Contact Us", Icons.contact_page, () {}),
+                BlocBuilder<ThemeCubit, ThemeMode>(
+                  builder: (context, themeMode) {
+                    final isDark = themeMode == ThemeMode.dark;
+                    return ListTile(
+                      leading: Icon(
+                        Icons.brightness_6,
+                        color: ThemeManager.primaryColor,
+                      ),
+                      title: Text(
+                        'Change Theme',
+                        style: TextStyle(color: ThemeManager.primaryColor),
+                      ),
+                      trailing: Switch(
+                        value: isDark,
+                        onChanged: (_) {
+                          context.read<ThemeCubit>().toggleTheme();
+                        },
+                        activeColor: ThemeManager.primaryColor,
+                      ),
+                    );
+                  },
+                ),
+                BlocBuilder<LanguageCubit, Locale>(
+                  builder: (context, locale) {
+                    return ListTile(
+                      leading: Icon(
+                        Icons.language,
+                        color: ThemeManager.primaryColor,
+                      ),
+                      title: Text(
+                        S.of(context).change_language,
+                        style: TextStyle(color: ThemeManager.primaryColor),
+                      ),
+                      trailing: DropdownButton<String>(
+                        value: locale.languageCode,
+                        items: const [
+                          DropdownMenuItem(value: 'en', child: Text('English')),
+                          DropdownMenuItem(value: 'ar', child: Text('العربية')),
+                        ],
+                        onChanged: (val) {
+                          if (val != null) {
+                            final cubit = context.read<LanguageCubit>();
+                            if (val == 'en') {
+                              cubit.setEnglish();
+                            } else {
+                              cubit.setArabic();
+                            }
+                          }
+                        },
+                        dropdownColor: Theme.of(context).cardColor,
+                        style: TextStyle(color: ThemeManager.primaryColor),
+                        underline: Container(),
+                        icon: Icon(
+                          Icons.arrow_drop_down,
+                          color: ThemeManager.primaryColor,
+                        ),
+                      ),
+                    );
+                  },
+                ),
 
-                InfoTile(
-                  title: "Edit Profile",
-                  icon: Icons.person,
-                  ontap: () {
-                    Navigator.pushNamed(context, AppRoutes.editProfile);
-                  },
-                ),
-                InfoTile(
-                  title: "Change Password",
-                  icon: Icons.lock,
-                  ontap: () {
-                    Navigator.pushNamed(context, AppRoutes.verifyOldPassword);
-                  },
-                ),
-                InfoTile(
-                  title: "Notification",
-                  icon: Icons.notifications,
-                  ontap: () {},
-                ),
-                InfoTile(
-                  title: "Contact Us",
-                  icon: Icons.contact_page,
-                  ontap: () {},
-                ),
                 if (state is AuthLoading)
                   Center(child: CircularProgressIndicator()),
 
-                InfoTile(
-                  title: "Sign Out",
-                  icon: Icons.logout,
-                  ontap: () {
-                    Future.microtask(() => showAlertDialog());
-                  },
-                ),
+                _infoTile("Sign Out", Icons.logout, () {
+                  Future.microtask(() => showAlertDialog());
+                }),
               ],
             );
-          }
-        )
-      ));
+          },
+        ),
+      ),
+    );
   }
+
   showAlertDialog() {
     showWarningQuickAlert(
       context: context,
@@ -144,13 +187,14 @@ class _ProfileViewState extends State<ProfileView> {
   // }
   Widget _infoTile(String title, IconData icon, ontap) {
     return GestureDetector(
-      onTap: ontap
-      ,
+      onTap: ontap,
       child: ListTile(
         leading: Icon(icon, color: ThemeManager.primaryColor),
-        title: Text(title, style: TextStyle(color: ThemeManager.primaryColor),),
+        title: Text(title, style: TextStyle(color: ThemeManager.primaryColor)),
         trailing: Icon(
-          Icons.arrow_forward_ios, color: ThemeManager.primaryColor,),
+          Icons.arrow_forward_ios,
+          color: ThemeManager.primaryColor,
+        ),
       ),
     );
   }

@@ -46,7 +46,7 @@ class RealEventDetails extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
                               "Anoas Wedding Ceremony",
@@ -56,7 +56,13 @@ class RealEventDetails extends StatelessWidget {
                                 color: ThemeManager.primaryColor,
                               ),
                             ),
-                            Icon(Icons.favorite_border_outlined,   color: Color.alphaBlend(Colors.black.withOpacity(0.2), ThemeManager.darkPinkColor),),
+                            Icon(
+                              Icons.favorite_border_outlined,
+                              color: Color.alphaBlend(
+                                Colors.black.withOpacity(0.2),
+                                ThemeManager.darkPinkColor,
+                              ),
+                            ),
                           ],
                         ),
                         const SizedBox(height: 8),
@@ -64,14 +70,20 @@ class RealEventDetails extends StatelessWidget {
                           children: [
                             Icon(
                               Icons.location_on_rounded,
-                              color: Color.alphaBlend(Colors.black.withOpacity(0.2), ThemeManager.darkPinkColor),
-                              
+                              color: Color.alphaBlend(
+                                Colors.black.withOpacity(0.2),
+                                ThemeManager.darkPinkColor,
+                              ),
+
                               size: 16,
                             ),
-                             Text(
+                            Text(
                               "Penny Street, London     •    2 seats left",
                               style: TextStyle(
-                              color: Color.alphaBlend(Colors.black.withOpacity(0.2), ThemeManager.darkPinkColor),
+                                color: Color.alphaBlend(
+                                  Colors.black.withOpacity(0.2),
+                                  ThemeManager.darkPinkColor,
+                                ),
                               ),
                             ),
                           ],
@@ -149,8 +161,9 @@ class RealEventDetails extends StatelessWidget {
                         const SizedBox(height: 16),
                         const Text(
                           "Description",
-                          style: TextStyle(fontWeight: FontWeight.bold,
-                          color: ThemeManager.primaryColor,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: ThemeManager.primaryColor,
                           ),
                         ),
                         const SizedBox(height: 4),
@@ -184,7 +197,10 @@ class RealEventDetails extends StatelessWidget {
                                 ),
                               ),
                               label: const Text("Remind Me"),
-                                icon: const Icon(Icons.notifications,color: ThemeManager.lightPinkColor,),
+                              icon: const Icon(
+                                Icons.notifications,
+                                color: ThemeManager.lightPinkColor,
+                              ),
                             ),
                           ],
                         ),

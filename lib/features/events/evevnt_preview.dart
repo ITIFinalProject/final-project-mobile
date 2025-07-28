@@ -249,13 +249,8 @@ class EventPreviewPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var event = ModalRoute
-        .of(context)!
-        .settings
-        .arguments as EventModel;
-    var size = MediaQuery
-        .of(context)
-        .size;
+    var event = ModalRoute.of(context)!.settings.arguments as EventModel;
+    var size = MediaQuery.of(context).size;
     String? imageUrl = event.image;
     return Scaffold(
       backgroundColor: Colors.white,
@@ -270,31 +265,31 @@ class EventPreviewPage extends StatelessWidget {
                 bottomRight: Radius.circular(24),
               ),
               child:
-              imageUrl != null && imageUrl.isNotEmpty
-                  ? Image.network(
-                imageUrl,
-                width: size.width,
-                height: size.height * 0.4,
-                fit: BoxFit.cover,
-                loadingBuilder: (context, child, loadingProgress) {
-                  if (loadingProgress == null) return child;
+                  imageUrl != null && imageUrl.isNotEmpty
+                      ? Image.network(
+                        imageUrl,
+                        width: size.width,
+                        height: size.height * 0.4,
+                        fit: BoxFit.cover,
+                        loadingBuilder: (context, child, loadingProgress) {
+                          if (loadingProgress == null) return child;
 
-                  return Center(
-                    child: CircularProgressIndicator(
-                      color: ThemeManager.primaryColor,
-                    ),
-                  );
-                },
-                errorBuilder: (context, error, stackTrace) {
-                  return Icon(Icons.error, color: Colors.red);
-                },
-              )
-                  : Image.asset(
-                'assets/images/template${event.templateIndex}.jpg',
-                width: size.width,
-                height: size.height * 0.4,
-                fit: BoxFit.cover,
-              ),
+                          return Center(
+                            child: CircularProgressIndicator(
+                              color: ThemeManager.primaryColor,
+                            ),
+                          );
+                        },
+                        errorBuilder: (context, error, stackTrace) {
+                          return Icon(Icons.error, color: Colors.red);
+                        },
+                      )
+                      : Image.asset(
+                        'assets/images/template${event.templateIndex}.jpg',
+                        width: size.width,
+                        height: size.height * 0.4,
+                        fit: BoxFit.cover,
+                      ),
             ),
 
             Container(
@@ -423,7 +418,9 @@ class EventPreviewPage extends StatelessWidget {
                               child: ElevatedButton.icon(
                                 onPressed: () {
                                   Navigator.pushNamed(
-                                      context, AppRoutes.addGuest);
+                                    context,
+                                    AppRoutes.addGuest,
+                                  );
                                 },
                                 icon: const Icon(
                                   Icons.group_add,
@@ -445,7 +442,8 @@ class EventPreviewPage extends StatelessWidget {
                                 if (state is EventJoinSuccess) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
-                                        content: Text("Joined Successfully")),
+                                      content: Text("Joined Successfully"),
+                                    ),
                                   );
                                 } else if (state is EventJoinError) {
                                   ScaffoldMessenger.of(context).showSnackBar(
@@ -459,26 +457,30 @@ class EventPreviewPage extends StatelessWidget {
                                   child: ElevatedButton.icon(
                                     onPressed: () {
                                       context.read<EventCubit>().joinEvent(
-                                          event);
+                                        event,
+                                      );
                                     },
                                     icon: const Icon(
                                       Icons.event_available,
                                       color: ThemeManager.lightPinkColor,
                                     ),
-                                    label: state is EventJoinLoading
-                                        ? const SizedBox(
-                                      height: 20,
-                                      width: 20,
-                                      child: CircularProgressIndicator(
-                                        strokeWidth: 2,
-                                        color: ThemeManager.lightPinkColor,
-                                      ),
-                                    ) : const Text("Join Event"),
+                                    label:
+                                        state is EventJoinLoading
+                                            ? const SizedBox(
+                                              height: 20,
+                                              width: 20,
+                                              child: CircularProgressIndicator(
+                                                strokeWidth: 2,
+                                                color:
+                                                    ThemeManager.lightPinkColor,
+                                              ),
+                                            )
+                                            : const Text("Join Event"),
                                     style: ElevatedButton.styleFrom(
-                                      backgroundColor: ThemeManager
-                                          .secondaryColor,
-                                      foregroundColor: ThemeManager
-                                          .lightPinkColor,
+                                      backgroundColor:
+                                          ThemeManager.secondaryColor,
+                                      foregroundColor:
+                                          ThemeManager.lightPinkColor,
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(30),
                                       ),
@@ -492,9 +494,7 @@ class EventPreviewPage extends StatelessWidget {
                           return SizedBox();
                         }
                       },
-                    )
-
-
+                    ),
                   ],
                 ),
               ),

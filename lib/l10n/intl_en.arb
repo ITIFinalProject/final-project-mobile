@@ -1,4 +1,19 @@
 {
-"login":"Login",
-"register":"Register"
+  "login": "Login",
+  "register": "Register",
+  "hello": "Hello Dylan!",
+  "now_set": "Now that you are all set.\nLet's make your events extraordinary,\nstarting right here!",
+  "plan_event": "Plan an Event",
+  "invitations": "Invitations",
+  "no_invitations": "No Invitations",
+  "no_invitations_desc": "No invitations received? Take charge and plan your own event with EventJoy. It's easy and fun!",
+  "upcoming_events": "Upcoming Events",
+  "no_events": "No Events",
+  "no_events_desc": "Your event calendar is a blank canvas. Use EventJoy to paint it with memorable moments.",
+  "change_theme": "Change Theme",
+  "change_language": "Change Language",
+  "edit_profile": "Edit Profile",
+  "notification": "Notification",
+  "contact_us": "Contact Us",
+  "sign_out": "Sign Out"
 }

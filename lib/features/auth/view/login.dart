@@ -23,7 +23,6 @@ class _LoginViewState extends State<LoginView> {
   String errorMessage = '';
   bool hidden = true;
 
-
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AuthCubit, AuthState>(
@@ -65,7 +64,7 @@ class _LoginViewState extends State<LoginView> {
                         textFieldController: passController,
                         obscure: hidden,
                         suffixIcon:
-                        hidden ? Icons.visibility_off : Icons.visibility,
+                            hidden ? Icons.visibility_off : Icons.visibility,
                         onPressedIcon: () {
                           hidden = !hidden;
                           setState(() {});
@@ -74,7 +73,9 @@ class _LoginViewState extends State<LoginView> {
                       GestureDetector(
                         onTap: () {
                           Navigator.pushNamed(
-                              context, AppRoutes.forgetPassword);
+                            context,
+                            AppRoutes.forgetPassword,
+                          );
                         },
                         child: Text(
                           "forget password ?",
@@ -100,11 +101,11 @@ class _LoginViewState extends State<LoginView> {
                             }
                           },
                           buttonChild:
-                          isLoading
-                              ? CircularProgressIndicator(
-                            color: ThemeManager.lightPinkColor,
-                          )
-                              : buttonText(text: "LOGIN"),
+                              isLoading
+                                  ? CircularProgressIndicator(
+                                    color: ThemeManager.lightPinkColor,
+                                  )
+                                  : buttonText(text: "LOGIN"),
 
                           buttonColor: ThemeManager.primaryColor,
 
@@ -126,20 +127,35 @@ class _LoginViewState extends State<LoginView> {
                         ),
                       Padding(
                         padding: const EdgeInsets.symmetric(
-                            vertical: 16, horizontal: 15),
+                          vertical: 16,
+                          horizontal: 15,
+                        ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            Expanded(child: Divider(thickness: 1,
-                                color: ThemeManager.secondaryColor)),
+                            Expanded(
+                              child: Divider(
+                                thickness: 1,
+                                color: ThemeManager.secondaryColor,
+                              ),
+                            ),
                             Padding(
                               padding: const EdgeInsets.symmetric(
-                                  horizontal: 8),
-                              child: Text('or', style: TextStyle(
-                                  color: ThemeManager.primaryColor)),
+                                horizontal: 8,
+                              ),
+                              child: Text(
+                                'or',
+                                style: TextStyle(
+                                  color: ThemeManager.primaryColor,
+                                ),
+                              ),
                             ),
-                            Expanded(child: Divider(thickness: 1,
-                                color: ThemeManager.secondaryColor)),
+                            Expanded(
+                              child: Divider(
+                                thickness: 1,
+                                color: ThemeManager.secondaryColor,
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -155,7 +171,8 @@ class _LoginViewState extends State<LoginView> {
                               backgroundColor: ThemeManager.primaryColor,
                               radius: 28,
                               backgroundImage: AssetImage(
-                                  'assets/images/google_logo.png'),
+                                'assets/images/google_logo.png',
+                              ),
                             ),
                           ),
                           GestureDetector(
@@ -166,7 +183,8 @@ class _LoginViewState extends State<LoginView> {
                               backgroundColor: ThemeManager.primaryColor,
                               radius: 28,
                               backgroundImage: AssetImage(
-                                  'assets/images/facebook_logo.jpg'),
+                                'assets/images/facebook_logo.jpg',
+                              ),
                             ),
                           ),
                         ],

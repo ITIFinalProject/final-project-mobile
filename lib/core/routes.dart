@@ -33,7 +33,7 @@ class AppRoutes {
   static const String forgetPassword = '/forget_password';
   static const String mapPicker = '/map_picker';
   static const String verifyOldPassword = '/verify_old_password';
-    static const String profileView = '/profile_view';
+  static const String profileView = '/profile_view';
   static final routes = <String, WidgetBuilder>{
     splash: (context) => SplashScreen(),
     layout: (context) => LayoutView(),
@@ -52,5 +52,4 @@ class AppRoutes {
     verifyOldPassword: (context) => VerifyOldPass(),
     profileView: (context) => ProfileView(),
   };
-
 }

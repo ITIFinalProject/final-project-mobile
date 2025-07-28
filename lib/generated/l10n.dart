@@ -1,7 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
 import 'intl/messages_all.dart';
 
 // **************************************************************************
@@ -64,6 +63,131 @@ class S {
   /// `Register`
   String get register {
     return Intl.message('Register', name: 'register', desc: '', args: []);
+  }
+
+  /// `Hello Dylan!`
+  String get hello {
+    return Intl.message('Hello Dylan!', name: 'hello', desc: '', args: []);
+  }
+
+  /// `Now that you are all set.\nLet's make your events extraordinary,\nstarting right here!`
+  String get now_set {
+    return Intl.message(
+      'Now that you are all set.\nLet\'s make your events extraordinary,\nstarting right here!',
+      name: 'now_set',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Plan an Event`
+  String get plan_event {
+    return Intl.message(
+      'Plan an Event',
+      name: 'plan_event',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Invitations`
+  String get invitations {
+    return Intl.message('Invitations', name: 'invitations', desc: '', args: []);
+  }
+
+  /// `No Invitations`
+  String get no_invitations {
+    return Intl.message(
+      'No Invitations',
+      name: 'no_invitations',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No invitations received? Take charge and plan your own event with EventJoy. It's easy and fun!`
+  String get no_invitations_desc {
+    return Intl.message(
+      'No invitations received? Take charge and plan your own event with EventJoy. It\'s easy and fun!',
+      name: 'no_invitations_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Upcoming Events`
+  String get upcoming_events {
+    return Intl.message(
+      'Upcoming Events',
+      name: 'upcoming_events',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No Events`
+  String get no_events {
+    return Intl.message('No Events', name: 'no_events', desc: '', args: []);
+  }
+
+  /// `Your event calendar is a blank canvas. Use EventJoy to paint it with memorable moments.`
+  String get no_events_desc {
+    return Intl.message(
+      'Your event calendar is a blank canvas. Use EventJoy to paint it with memorable moments.',
+      name: 'no_events_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Change Theme`
+  String get change_theme {
+    return Intl.message(
+      'Change Theme',
+      name: 'change_theme',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Change Language`
+  String get change_language {
+    return Intl.message(
+      'Change Language',
+      name: 'change_language',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Edit Profile`
+  String get edit_profile {
+    return Intl.message(
+      'Edit Profile',
+      name: 'edit_profile',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Notification`
+  String get notification {
+    return Intl.message(
+      'Notification',
+      name: 'notification',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Contact Us`
+  String get contact_us {
+    return Intl.message('Contact Us', name: 'contact_us', desc: '', args: []);
+  }
+
+  /// `Sign Out`
+  String get sign_out {
+    return Intl.message('Sign Out', name: 'sign_out', desc: '', args: []);
   }
 }
 

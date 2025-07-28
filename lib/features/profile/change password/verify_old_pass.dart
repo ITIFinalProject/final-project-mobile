@@ -13,43 +13,48 @@ class VerifyOldPass extends StatefulWidget {
 }
 
 class _VerifyOldPassState extends State<VerifyOldPass> {
-  TextEditingController passController=TextEditingController();
+  TextEditingController passController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Verify Password"),
-      ),
+      appBar: AppBar(title: const Text("Verify Password")),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8,
-        vertical:70
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 70),
         child: Column(
           children: [
-            
-          CustomTextFormField(validator: (val) {
-                    if (val == null || val.isEmpty) {
-                      return 'Please enter your old password';
-                    }
-                    return null;
-                  },  hint: "Enter Old Password", controller:passController ),
-        CustomElevatedButton(title: "Verify", onPressed: ()async{
-          final authCubit = context.read<AuthCubit>();
+            CustomTextFormField(
+              validator: (val) {
+                if (val == null || val.isEmpty) {
+                  return 'Please enter your old password';
+                }
+                return null;
+              },
+              hint: "Enter Old Password",
+              controller: passController,
+            ),
+            CustomElevatedButton(
+              title: "Verify",
+              onPressed: () async {
+                final authCubit = context.read<AuthCubit>();
 
-    bool isCorrect = await authCubit.verifyPassword(passController.text);
+                bool isCorrect = await authCubit.verifyPassword(
+                  passController.text,
+                );
 
-    if (isCorrect) {
-      // روح لصفحة تغيير الباسورد
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (_) => ChangePass()),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Wrong password. Try again.")),
-      );
-    }
-        })
+                if (isCorrect) {
+                  // روح لصفحة تغيير الباسورد
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => ChangePass()),
+                  );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("Wrong password. Try again.")),
+                  );
+                }
+              },
+            ),
           ],
         ),
       ),

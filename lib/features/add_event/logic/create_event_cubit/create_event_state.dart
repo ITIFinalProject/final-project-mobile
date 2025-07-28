@@ -1,6 +1,5 @@
 part of 'create_event_cubit.dart';
 
-
 abstract class CreateEventState {}
 
 class CreateEventInitial extends CreateEventState {}

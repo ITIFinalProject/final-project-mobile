@@ -42,7 +42,7 @@ class CustomTextFIeld extends StatelessWidget {
         initialValue: initialValue,
         maxLines: lines > 1 ? lines : 1,
         obscureText: obscure,
-  enabled: enable,
+        enabled: enable,
         decoration: InputDecoration(
           prefix: Icon(icon, color: ThemeManager.secondaryColor),
           label: Text(lable),

@@ -24,25 +24,28 @@ class _EventsViewState extends State<EventsView> with RouteAware {
     super.initState();
     context.read<EventCubit>().fetchEvents();
   }
+
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme
+          .of(context)
+          .scaffoldBackgroundColor,
       appBar: PreferredSize(
-
-
         preferredSize: const Size.fromHeight(70),
         child: AppBar(
-          backgroundColor: Color(0xFF1B3C53),
+          backgroundColor: Theme
+              .of(context)
+              .primaryColor,
 
           centerTitle: false,
-          title: const Padding(
-            padding: EdgeInsets.only(top: 20),
+          title: Padding(
+            padding: const EdgeInsets.only(top: 20),
             child: Text(
               'Events',
               style: TextStyle(
                 fontSize: 28,
                 fontWeight: FontWeight.bold,
-                color: Colors.white,
+                color: Theme.of(context).primaryColor,
               ),
             ),
           ),
@@ -55,6 +58,7 @@ class _EventsViewState extends State<EventsView> with RouteAware {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+
               const SizedBox(height: 16),
               Container(
                 padding: const EdgeInsets.all(12),
@@ -81,8 +85,7 @@ class _EventsViewState extends State<EventsView> with RouteAware {
                   ),
                   calendarStyle: const CalendarStyle(
                     todayDecoration: BoxDecoration(
-                      color: ThemeManager.darkPinkColor,
-
+                      color: Color(0xFF1B3C53),
                       shape: BoxShape.circle,
                     ),
                     selectedDecoration: BoxDecoration(
@@ -159,6 +162,7 @@ class _EventsViewState extends State<EventsView> with RouteAware {
       ),
     );
   }
+
   @override
   void didPopNext() {
     context.read<EventCubit>().fetchEvents();

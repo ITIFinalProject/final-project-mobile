@@ -76,7 +76,9 @@ class _ChangePassState extends State<ChangePass> {
                         ),
                       );
                       Navigator.pushReplacementNamed(
-                          context, AppRoutes.profileView);
+                        context,
+                        AppRoutes.profileView,
+                      );
                     }
                   },
                 ),

@@ -22,7 +22,28 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+    "change_language": MessageLookupByLibrary.simpleMessage("Change Language"),
+    "change_theme": MessageLookupByLibrary.simpleMessage("Change Theme"),
+    "contact_us": MessageLookupByLibrary.simpleMessage("Contact Us"),
+    "edit_profile": MessageLookupByLibrary.simpleMessage("Edit Profile"),
+    "hello": MessageLookupByLibrary.simpleMessage("Hello Dylan!"),
+    "invitations": MessageLookupByLibrary.simpleMessage("Invitations"),
     "login": MessageLookupByLibrary.simpleMessage("Login"),
+    "no_events": MessageLookupByLibrary.simpleMessage("No Events"),
+    "no_events_desc": MessageLookupByLibrary.simpleMessage(
+      "Your event calendar is a blank canvas. Use EventJoy to paint it with memorable moments.",
+    ),
+    "no_invitations": MessageLookupByLibrary.simpleMessage("No Invitations"),
+    "no_invitations_desc": MessageLookupByLibrary.simpleMessage(
+      "No invitations received? Take charge and plan your own event with EventJoy. It\'s easy and fun!",
+    ),
+    "notification": MessageLookupByLibrary.simpleMessage("Notification"),
+    "now_set": MessageLookupByLibrary.simpleMessage(
+      "Now that you are all set.\nLet\'s make your events extraordinary,\nstarting right here!",
+    ),
+    "plan_event": MessageLookupByLibrary.simpleMessage("Plan an Event"),
     "register": MessageLookupByLibrary.simpleMessage("Register"),
+    "sign_out": MessageLookupByLibrary.simpleMessage("Sign Out"),
+    "upcoming_events": MessageLookupByLibrary.simpleMessage("Upcoming Events"),
   };
 }

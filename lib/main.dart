@@ -11,8 +11,12 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'features/add_event/logic/create_event_cubit/create_event_cubit.dart';
 import 'features/events/event_cubit/event_cubit.dart';
+import 'features/profile/cubit/language_cubit.dart';
+import 'features/profile/cubit/theme_cubit.dart';
+import 'generated/l10n.dart';
 
 final RouteObserver<ModalRoute> routeObserver = RouteObserver<ModalRoute>();
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,7 +27,7 @@ void main() async {
   );
 
   await dotenv.load(fileName: ".env");
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -32,29 +36,41 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-        providers: [
-          BlocProvider(
-            create: (context) => AuthCubit(),),
-          BlocProvider(
-            create: (context) => CreateEventCubit(),
-          ),
-          BlocProvider(create: (context) => EventCubit()),
-        ],
-        child: MaterialApp(
-          navigatorObservers: [routeObserver],
-          debugShowCheckedModeBanner: false,
-          routes: AppRoutes.routes,
-          initialRoute: AppRoutes.splash,
-          theme: ThemeManager.lightTheme,
-          darkTheme: ThemeManager.darkTheme,
-          locale: Locale('en'),
-          supportedLocales: AppLocalizations.supportedLocales,
-          localizationsDelegates: [
-            AppLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-        )  );
+      providers: [
+        BlocProvider(
+          create: (context) => AuthCubit(),),
+        BlocProvider(
+          create: (context) => CreateEventCubit(),
+        ),
+        BlocProvider(create: (context) => ThemeCubit()),
+        BlocProvider(create: (context) => LanguageCubit()),
+        BlocProvider(create: (context) => EventCubit()),
+      ],
+      child: BlocBuilder<LanguageCubit, Locale>(
+        builder: (context, locale) {
+          return BlocBuilder<ThemeCubit, ThemeMode>(
+            builder: (context, themeMode) {
+              return MaterialApp(
+                navigatorObservers: [routeObserver],
+                debugShowCheckedModeBanner: false,
+                routes: AppRoutes.routes,
+                initialRoute: AppRoutes.splash,
+                theme: ThemeManager.lightTheme,
+                darkTheme: ThemeManager.darkTheme,
+                themeMode: themeMode,
+                locale: locale,
+                supportedLocales: S.delegate.supportedLocales,
+                localizationsDelegates: const [
+                  S.delegate,
+                  GlobalMaterialLocalizations.delegate,
+                  GlobalWidgetsLocalizations.delegate,
+                  GlobalCupertinoLocalizations.delegate,
+                ],
+              );
+            },
+          );
+        },
+      ),
+    );
   }
 }

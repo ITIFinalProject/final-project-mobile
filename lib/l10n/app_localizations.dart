@@ -109,6 +109,96 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'انشاء حساب'**
   String get register;
+
+  /// No description provided for @hello.
+  ///
+  /// In ar, this message translates to:
+  /// **'مرحباً ديلان!'**
+  String get hello;
+
+  /// No description provided for @now_set.
+  ///
+  /// In ar, this message translates to:
+  /// **'الآن كل شيء جاهز.\nلنصنع فعالياتك استثنائية،\nابدأ من هنا!'**
+  String get now_set;
+
+  /// No description provided for @plan_event.
+  ///
+  /// In ar, this message translates to:
+  /// **'أنشئ فعالية'**
+  String get plan_event;
+
+  /// No description provided for @invitations.
+  ///
+  /// In ar, this message translates to:
+  /// **'الدعوات'**
+  String get invitations;
+
+  /// No description provided for @no_invitations.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد دعوات'**
+  String get no_invitations;
+
+  /// No description provided for @no_invitations_desc.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم تستلم أي دعوة؟ بادر وأنشئ فعاليتك الخاصة مع EventJoy. الأمر سهل وممتع!'**
+  String get no_invitations_desc;
+
+  /// No description provided for @upcoming_events.
+  ///
+  /// In ar, this message translates to:
+  /// **'الفعاليات القادمة'**
+  String get upcoming_events;
+
+  /// No description provided for @no_events.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد فعاليات'**
+  String get no_events;
+
+  /// No description provided for @no_events_desc.
+  ///
+  /// In ar, this message translates to:
+  /// **'تقويم فعالياتك فارغ. استخدم EventJoy لملئه بلحظات لا تُنسى.'**
+  String get no_events_desc;
+
+  /// No description provided for @change_theme.
+  ///
+  /// In ar, this message translates to:
+  /// **'تغيير الثيم'**
+  String get change_theme;
+
+  /// No description provided for @change_language.
+  ///
+  /// In ar, this message translates to:
+  /// **'تغيير اللغة'**
+  String get change_language;
+
+  /// No description provided for @edit_profile.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعديل الملف الشخصي'**
+  String get edit_profile;
+
+  /// No description provided for @notification.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإشعارات'**
+  String get notification;
+
+  /// No description provided for @contact_us.
+  ///
+  /// In ar, this message translates to:
+  /// **'تواصل معنا'**
+  String get contact_us;
+
+  /// No description provided for @sign_out.
+  ///
+  /// In ar, this message translates to:
+  /// **'تسجيل الخروج'**
+  String get sign_out;
 }
 
 class _AppLocalizationsDelegate
