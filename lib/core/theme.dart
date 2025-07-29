@@ -8,14 +8,14 @@ class ThemeManager{
   static ThemeData lightTheme = ThemeData(
     scaffoldBackgroundColor: lightPinkColor,
     appBarTheme: AppBarTheme(
-      backgroundColor: primaryColor,
-      centerTitle: true,
-      iconTheme: IconThemeData(color: lightPinkColor),
-      titleTextStyle: TextStyle(
-        fontSize: 20,
-        fontWeight: FontWeight.w600,
-        color: lightPinkColor,
-      )),,
+        backgroundColor: primaryColor,
+        centerTitle: true,
+        iconTheme: IconThemeData(color: lightPinkColor),
+        titleTextStyle: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.w600,
+          color: lightPinkColor,
+        )),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       type: BottomNavigationBarType.fixed,
       backgroundColor: primaryColor,
