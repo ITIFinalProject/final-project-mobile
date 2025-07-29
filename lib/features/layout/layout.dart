@@ -78,8 +78,10 @@ import 'package:eventify_app/core/theme.dart';
 import 'package:eventify_app/features/add_event/add_event_view.dart';
 import 'package:eventify_app/features/events/events_view.dart';
 import 'package:eventify_app/features/messages/messages_view.dart';
+import 'package:eventify_app/features/profile/cubit/theme_cubit.dart';
 import 'package:eventify_app/features/profile/profile_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../home/home_view.dart';
 
@@ -105,59 +107,78 @@ class _LayoutViewState extends State<LayoutView> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: pages[currentIndex],
-      bottomNavigationBar: CurvedNavigationBar(
-        backgroundColor: Colors.transparent,
-        color: ThemeManager.primaryColor,
-        buttonBackgroundColor: ThemeManager.darkPinkColor.withAlpha(255),
-        index: currentIndex,
-        animationCurve: Curves.easeIn,
-        animationDuration: Duration(milliseconds: 300),
-        height: 60,
-        items: <Widget>[
-          Icon(
-            Icons.home_outlined,
+      bottomNavigationBar: BlocBuilder<ThemeCubit, ThemeMode>(
+        builder: (context, mode) {
+          final isDark = mode == ThemeMode.dark;
+          return CurvedNavigationBar(
+            backgroundColor: Colors.transparent,
             color:
-                currentIndex == 0
-                    ? ThemeManager.primaryColor
-                    : ThemeManager.darkPinkColor,
-            size: 30,
-          ),
-          Icon(
-            Icons.event_note_outlined,
-            color:
-                currentIndex == 1
-                    ? ThemeManager.primaryColor
-                    : ThemeManager.darkPinkColor,
-            size: 30,
-          ),
-          Icon(
-            Icons.add_circle_outline,
-            color:
-                currentIndex == 2
-                    ? ThemeManager.primaryColor
-                    : ThemeManager.darkPinkColor,
-            size: 30,
-          ),
-          Icon(
-            Icons.message_outlined,
-            color:
-                currentIndex == 3
-                    ? ThemeManager.primaryColor
-                    : ThemeManager.darkPinkColor,
-            size: 30,
-          ),
-          Icon(
-            Icons.person_outline,
-            color:
-                currentIndex == 4
-                    ? ThemeManager.primaryColor
-                    : ThemeManager.darkPinkColor,
-            size: 30,
-          ),
-        ],
-        onTap: (index) {
-          currentIndex = index;
-          setState(() {});
+                isDark ? ThemeManager.darkPinkColor : ThemeManager.primaryColor,
+            buttonBackgroundColor:
+                isDark
+                    ? ThemeManager.lightPinkColor
+                    : ThemeManager.darkPinkColor.withAlpha(255),
+            index: currentIndex,
+            animationCurve: Curves.easeIn,
+            animationDuration: Duration(milliseconds: 300),
+            height: 60,
+            items: <Widget>[
+              Icon(
+                Icons.home_outlined,
+                color:
+                    currentIndex == 0
+                        ? ThemeManager.primaryColor
+                        : isDark
+                        ? ThemeManager.secondaryColor
+                        : ThemeManager.darkPinkColor,
+                size: 30,
+              ),
+              Icon(
+                Icons.event_note_outlined,
+                color:
+                    currentIndex == 1
+                        ? ThemeManager.primaryColor
+                        : isDark
+                        ? ThemeManager.secondaryColor
+                        : ThemeManager.darkPinkColor,
+                size: 30,
+              ),
+              Icon(
+                Icons.add_circle_outline,
+                color:
+                    currentIndex == 2
+                        ? ThemeManager.primaryColor
+                        : isDark
+                        ? ThemeManager.secondaryColor
+                        : ThemeManager.darkPinkColor,
+                size: 30,
+              ),
+              Icon(
+                Icons.message_outlined,
+                color:
+                    currentIndex == 3
+                        ? ThemeManager.primaryColor
+                        : isDark
+                        ? ThemeManager.secondaryColor
+                        : ThemeManager.darkPinkColor,
+                size: 30,
+              ),
+              Icon(
+                Icons.settings,
+                color:
+                    currentIndex == 4
+                        ? ThemeManager.primaryColor
+                        : isDark
+                        ? ThemeManager.secondaryColor
+                        : ThemeManager.darkPinkColor,
+                size: 30,
+              ),
+            ],
+            onTap: (index) {
+              currentIndex = index;
+              setState(() {});
+            },
+          );
         },
       ),
     );

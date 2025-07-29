@@ -27,26 +27,13 @@ class _EventsViewState extends State<EventsView> with RouteAware {
 
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme
-          .of(context)
-          .scaffoldBackgroundColor,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(70),
         child: AppBar(
-          backgroundColor: Theme
-              .of(context)
-              .primaryColor,
-
-          centerTitle: false,
           title: Padding(
             padding: const EdgeInsets.only(top: 20),
             child: Text(
               'Events',
-              style: TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-                color: Theme.of(context).primaryColor,
-              ),
             ),
           ),
         ),
