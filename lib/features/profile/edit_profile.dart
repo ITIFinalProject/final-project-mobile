@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:eventify_app/features/add_event/widgets/custom_text.dart';
@@ -10,7 +11,6 @@ import 'package:image_picker/image_picker.dart';
 import '../../core/theme.dart';
 import '../auth/view/widgets/custom_text_field.dart';
 
-
 class EditProfile extends StatefulWidget {
   const EditProfile({super.key});
 
@@ -19,20 +19,12 @@ class EditProfile extends StatefulWidget {
 }
 
 class _EditProfileState extends State<EditProfile> {
-  TextEditingController emailController = TextEditingController(
-    text: "Dylan@gmail.com",
-  );
-  TextEditingController passController = TextEditingController(text: "123456");
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passController = TextEditingController();
   TextEditingController confirmPassController = TextEditingController();
-  TextEditingController nameController = TextEditingController(
-    text: "Dylan Thomas",
-  );
-  TextEditingController phoneController = TextEditingController(
-    text: "01012345678907",
-  );
-  TextEditingController addressController = TextEditingController(
-    text: "123 Main St, City, Country",
-  );
+  TextEditingController nameController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
 
   File? profileImage;
 
@@ -42,8 +34,7 @@ class _EditProfileState extends State<EditProfile> {
     showModalBottomSheet(
       context: context,
       builder:
-          (context) =>
-          SafeArea(
+          (context) => SafeArea(
             child: Wrap(
               children: [
                 ListTile(
@@ -81,9 +72,7 @@ class _EditProfileState extends State<EditProfile> {
   @override
   void initState() {
     super.initState();
-    final authState = context
-        .read<AuthCubit>()
-        .state;
+    final authState = context.read<AuthCubit>().state;
     if (authState is AuthSuccess) {
       nameController.text = authState.user.name ?? '';
       emailController.text = authState.user.email ?? '';
@@ -98,12 +87,14 @@ class _EditProfileState extends State<EditProfile> {
       listener: (context, state) {
         if (state is AuthSuccess) {
           ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(' Profile Updated Successfully')));
+            SnackBar(content: Text(' Profile Updated Successfully')),
+          );
           Navigator.pop(context);
         } else if (state is AuthFailure) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(' Error: ${state.error}')),
-          );
+          log('Error', name: state.error);
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(' Error: ${state.error}')));
         }
       },
       builder: (context, state) {
@@ -120,20 +111,32 @@ class _EditProfileState extends State<EditProfile> {
                       radius: 45,
                       backgroundColor: ThemeManager.darkPinkColor,
                       backgroundImage:
-                      profileImage != null
-                          ? FileImage(profileImage!)
-                          : null,
+                          profileImage != null
+                              ? FileImage(profileImage!)
+                              : (context.read<AuthCubit>().state
+                                      is AuthSuccess &&
+                                  (context.read<AuthCubit>().state
+                                              as AuthSuccess)
+                                          .user
+                                          .imagePath !=
+                                      null)
+                              ? NetworkImage(
+                                (context.read<AuthCubit>().state as AuthSuccess)
+                                    .user
+                                    .imagePath!,
+                              )
+                              : null,
                       child:
-                      profileImage == null
-                          ? const Text(
-                        "DT",
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: ThemeManager.primaryColor,
-                        ),
-                      )
-                          : null,
+                          profileImage == null &&
+                                  !(context.read<AuthCubit>().state
+                                          is AuthSuccess &&
+                                      (context.read<AuthCubit>().state
+                                                  as AuthSuccess)
+                                              .user
+                                              .imagePath !=
+                                          null)
+                              ? Text(nameController.text[0])
+                              : null,
                     ),
                     GestureDetector(
                       onTap: _pickImage,
@@ -160,7 +163,6 @@ class _EditProfileState extends State<EditProfile> {
                   icon: Icons.email,
                   textFieldController: emailController,
                   enable: false,
-
                 ),
                 CustomTextFIeld(
                   lable: "Phone",
@@ -174,27 +176,32 @@ class _EditProfileState extends State<EditProfile> {
                   textFieldController: addressController,
                 ),
 
-
-                CustomElevatedButton(
-                  title: 'Save Changes',
-                  onPressed: () {
-                    context.read<AuthCubit>().updateUserProfile(
-                      name: nameController.text.trim(),
-                      phone: phoneController.text.trim(),
-                      address: addressController.text.trim(),
-                      newPassword:
-                      passController.text
-                          .trim()
-                          .isNotEmpty
-                          ? passController.text.trim()
-                          : null,
-                    );
-                  },
-                ),
+                (state is AuthLoading)
+                    ? Center(child: CircularProgressIndicator())
+                    : CustomElevatedButton(
+                      title: 'Save Changes',
+                      onPressed: () {
+                        context.read<AuthCubit>().reauthenticateAndUpdateEmail(
+                          currentEmail: emailController.text,
+                          currentPassword: passController.text,
+                        );
+                        context.read<AuthCubit>().updateUserProfile(
+                          name: nameController.text.trim(),
+                          phone: phoneController.text.trim(),
+                          address: addressController.text.trim(),
+                          newPassword:
+                              passController.text.trim().isNotEmpty
+                                  ? passController.text.trim()
+                                  : null,
+                          imageFile: profileImage,
+                        );
+                      },
+                    ),
               ],
             ),
           ),
         );
-      },);
+      },
+    );
   }
 }

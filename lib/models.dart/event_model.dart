@@ -2,7 +2,8 @@ import 'package:equatable/equatable.dart';
 
 class EventModel extends Equatable {
   final String id;
-  final String type;
+
+  // final String category;
   final String title;
   final String description;
   final String date;
@@ -12,6 +13,8 @@ class EventModel extends Equatable {
   final String? image;
   final int? templateIndex;
   final String hostName;
+  final String? hostId;
+  final String type;
 
   const EventModel({
     required this.hostName,
@@ -23,35 +26,40 @@ class EventModel extends Equatable {
     required this.time,
     required this.location,
     required this.capacity,
+    required this.hostId,
+    // required this.category,
     this.image,
     this.templateIndex,
   });
 
-  EventModel copyWith({
-    String? id,
-    String? type,
-    String? title,
-    String? description,
-    String? date,
-    String? time,
-    String? location,
-    int? capacity,
-    String? image,
-    int? templateIndex,
-    String? hostName,
-  }) {
-    return EventModel(
-      id: id ?? this.id,
-      title: title ?? this.title,
-      type: type ?? this.type,
-      description: description ?? this.description,
-      date: date ?? this.date,
-      time: time ?? this.time,
-      location: location ?? this.location,
-      capacity: capacity ?? this.capacity,
-      hostName: hostName ?? this.hostName,
-    );
-  }
+  // EventModel copyWith({
+  //   String? id,
+  //   String? type,
+  //   String? title,
+  //   String? description,
+  //   String? date,
+  //   String? time,
+  //   String? location,
+  //   int? capacity,
+  //   String? image,
+  //   int? templateIndex,
+  //   String? hostName,
+  //   String? hostId,
+  //
+  // }) {
+  //   return EventModel(
+  //     id: id ?? this.id,
+  //     title: title ?? this.title,
+  //     type: type ?? this.type,
+  //     description: description ?? this.description,
+  //     date: date ?? this.date,
+  //     time: time ?? this.time,
+  //     location: location ?? this.location,
+  //     capacity: capacity ?? this.capacity,
+  //     hostName: hostName ?? this.hostName,
+  //     hostId: hostId ?? this.hostId,
+  //   );
+  // }
 
   Map<String, dynamic> toMap() {
     return {
@@ -66,6 +74,8 @@ class EventModel extends Equatable {
       'image': image,
       'templateIndex': templateIndex,
       'hostName': hostName,
+      'hostId': hostId,
+      // 'category': category,
     };
   }
 
@@ -82,6 +92,8 @@ class EventModel extends Equatable {
       image: map['image'],
       templateIndex: map['templateIndex'],
       hostName: map['hostName'] ?? 'Unknown Host',
+      hostId: map['hostId'] ?? '',
+      // category: map['category'],
     );
   }
 
@@ -98,5 +110,7 @@ class EventModel extends Equatable {
     image,
     templateIndex,
     hostName,
+    hostId,
+    // category
   ];
 }

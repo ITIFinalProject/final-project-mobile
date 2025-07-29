@@ -43,6 +43,7 @@ class _EventDetailsViewState extends State<EventDetailsView> {
     "Travel & Adventure",
   ];
   String? selectedEventType;
+  String? selectedEventCategory;
   File? pickedImage;
   int? selectedTemplateIndex;
 
@@ -96,6 +97,52 @@ class _EventDetailsViewState extends State<EventDetailsView> {
                               return null;
                             },
                           ),
+                          CustomText(title: 'Event Category'),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 25),
+                            child: DropdownButtonFormField<String>(
+                              value: selectedEventCategory,
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: ThemeManager.primaryColor,
+                              ),
+                              borderRadius: BorderRadius.circular(15),
+                              decoration: CustomInputDecoration.getDecoration(
+                                hintText: 'Select event category',
+                              ),
+
+                              items:
+                              eventTypes.map((value) {
+                                return DropdownMenuItem(
+                                  value: value,
+                                  child: Text(value),
+                                );
+                              }).toList(),
+                              onChanged: (val) {
+                                setState(() {
+                                  selectedEventCategory = val;
+                                });
+                              },
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'please select your event category';
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                          CustomText(title: 'Event Description'),
+                          CustomTextFormField(
+                            controller: descriptionController,
+                            lines: 2,
+                            hint: 'Write your event description',
+                            validator: (val) {
+                              if (val == null || val.isEmpty) {
+                                return 'Please enter your event description';
+                              }
+                              return null;
+                            },
+                          ),
                           CustomText(title: 'Event Type'),
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 25),
@@ -111,7 +158,7 @@ class _EventDetailsViewState extends State<EventDetailsView> {
                               ),
 
                               items:
-                              eventTypes.map((value) {
+                              ['Private', 'Public'].map((value) {
                                 return DropdownMenuItem(
                                   value: value,
                                   child: Text(value),
@@ -129,18 +176,6 @@ class _EventDetailsViewState extends State<EventDetailsView> {
                                 return null;
                               },
                             ),
-                          ),
-                          CustomText(title: 'Event Description'),
-                          CustomTextFormField(
-                            controller: descriptionController,
-                            lines: 2,
-                            hint: 'Write your event description',
-                            validator: (val) {
-                              if (val == null || val.isEmpty) {
-                                return 'Please enter your event description';
-                              }
-                              return null;
-                            },
                           ),
                           CustomText(title: 'Event Timing'),
                           Row(
@@ -314,6 +349,7 @@ class _EventDetailsViewState extends State<EventDetailsView> {
         int.tryParse(attendeesController.text) ?? 50,
         imageFile: pickedImage,
         templateIndex: selectedTemplateIndex,
+          category: selectedEventCategory ?? ''
       );
     }
   }

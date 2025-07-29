@@ -1,11 +1,11 @@
 import 'package:eventify_app/core/routes.dart';
 import 'package:eventify_app/core/theme.dart';
 import 'package:eventify_app/features/auth/cubit/auth_cubit.dart';
+import 'package:eventify_app/features/home/cubit/home_cubit.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -42,9 +42,12 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => CreateEventCubit(),
         ),
+        BlocProvider(create: (context) => HomeCubit()),
         BlocProvider(create: (context) => ThemeCubit()),
         BlocProvider(create: (context) => LanguageCubit()),
-        BlocProvider(create: (context) => EventCubit()),
+        BlocProvider(create: (context) =>
+        EventCubit()
+          ..fetchEvents()),
       ],
       child: BlocBuilder<LanguageCubit, Locale>(
         builder: (context, locale) {
