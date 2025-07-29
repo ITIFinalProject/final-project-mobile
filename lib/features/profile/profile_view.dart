@@ -51,18 +51,18 @@ class _ProfileViewState extends State<ProfileView> {
               return Column(
                 children: [
                   CircleAvatar(
-                    radius: 40,
+                    radius: 45,
                     backgroundColor: ThemeManager.darkPinkColor,
-                    child: Text(
-                      user.name != null && user.name!.isNotEmpty
-                          ? user.name![0].toUpperCase()
-                          : "U",
-                      style: const TextStyle(
-                        fontSize: 24,
-                        color: ThemeManager.primaryColor,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+                    backgroundImage: user.imagePath != null
+                        ? NetworkImage(user.imagePath!)
+                        : null,
+                    child: user.imagePath == null
+                        ? Text(
+                      user.name?.isNotEmpty == true ? user.name![0]
+                          .toUpperCase() : '',
+                      style: const TextStyle(fontSize: 24, color: Colors.white),
+                    )
+                        : null,
                   ),
                   const SizedBox(height: 12),
                   Text(

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eventify_app/features/auth/cubit/auth_state.dart';
 import 'package:eventify_app/features/auth/models/user_model.dart';
@@ -5,6 +7,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:supabase_flutter/supabase_flutter.dart' hide AuthState;
+import 'package:uuid/uuid.dart';
+
 
 class AuthCubit extends Cubit<AuthState> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -19,10 +24,10 @@ class AuthCubit extends Cubit<AuthState> {
         password: password,
       );
       final doc =
-          await FirebaseFirestore.instance
-              .collection('users')
-              .doc(result.user!.uid)
-              .get();
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(result.user!.uid)
+          .get();
 
       if (!doc.exists) {
         emit(AuthFailure("User data not found in Firestore"));
@@ -39,13 +44,11 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  Future<void> signUp(
-    String email,
-    String password,
-    String name,
-    String phone,
-    String address,
-  ) async {
+  Future<void> signUp(String email,
+      String password,
+      String name,
+      String phone,
+      String address,) async {
     emit(AuthLoading());
     try {
       final result = await _auth.createUserWithEmailAndPassword(
@@ -80,6 +83,7 @@ class AuthCubit extends Cubit<AuthState> {
       emit(AuthFailure(e.toString()));
     }
   }
+
   Future<void> resetPassword(String email) async {
     emit(AuthLoading());
     try {
@@ -103,10 +107,10 @@ class AuthCubit extends Cubit<AuthState> {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       final doc =
-          await FirebaseFirestore.instance
-              .collection('users')
-              .doc(user.uid)
-              .get();
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .get();
       UserModel currentUser = UserModel.fromFireStore(doc.data()!);
       emit(AuthSuccess(currentUser));
     } else {
@@ -124,7 +128,7 @@ class AuthCubit extends Cubit<AuthState> {
       }
 
       final GoogleSignInAuthentication googleAuth =
-          await googleUser.authentication;
+      await googleUser.authentication;
 
       final credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
@@ -194,6 +198,7 @@ class AuthCubit extends Cubit<AuthState> {
     required String phone,
     required String address,
     String? newPassword,
+    File? imageFile,
   }) async {
     emit(AuthLoading());
     try {
@@ -203,18 +208,45 @@ class AuthCubit extends Cubit<AuthState> {
         emit(AuthFailure("No user is logged in"));
         return;
       }
+      final supabase = Supabase.instance.client;
+      final String userId = const Uuid().v4();
 
+      String? imageUrl;
+      if (imageFile != null) {
+        final fileExt = imageFile.path
+            .split('.')
+            .last;
+        final filePath = 'public/$userId.$fileExt';
+
+        final fileBytes = await imageFile.readAsBytes();
+
+        final storageResponse = await supabase.storage
+            .from('event-images')
+            .uploadBinary(
+          filePath,
+          fileBytes,
+          fileOptions: FileOptions(contentType: 'image/$fileExt'),
+        );
+
+        imageUrl = supabase.storage.from('event-images').getPublicUrl(filePath);
+      }
       await FirebaseFirestore.instance.collection('users').doc(user.uid).update(
-        {'name': name, 'phone': phone, 'address': address},
+        {
+          'name': name,
+          'phone': phone,
+          'address': address,
+          'imagePath': imageUrl
+        },
       );
       if (newPassword != null && newPassword.isNotEmpty) {
         await user.updatePassword(newPassword);
       }
       UserModel updatedUser = UserModel(
-        name: name,
-        email: user.email,
-        phone: phone,
-        address: address,
+          name: name,
+          email: user.email,
+          phone: phone,
+          address: address,
+          imagePath: imageUrl
       );
 
       emit(AuthSuccess(updatedUser));
@@ -256,18 +288,39 @@ class AuthCubit extends Cubit<AuthState> {
       emit(
         AuthSuccess(
           UserModel(
-            name: user!.displayName,
-            email: user.email,
-            phone: user.phoneNumber,
+              name: user!.displayName,
+              email: user.email,
+              phone: user.phoneNumber,
+              imagePath: user.photoURL
           ),
         ),
       );
     } on FirebaseAuthException catch (e) {
+      print(e.message);
       emit(
         AuthFailure(e.message ?? 'An error occurred while updating password.'),
       );
     } catch (e) {
+      print(e);
       emit(AuthFailure(e.toString()));
     }
   }
+
+  Future<void> reauthenticateAndUpdateEmail({
+    required String currentEmail,
+    required String currentPassword,
+  }) async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      final credential = EmailAuthProvider.credential(
+        email: currentEmail,
+        password: currentPassword,
+      );
+
+      await user!.reauthenticateWithCredential(credential);
+    } on FirebaseAuthException catch (e) {
+      print("Error: ${e.code} - ${e.message}");
+    }
+  }
+
 }
