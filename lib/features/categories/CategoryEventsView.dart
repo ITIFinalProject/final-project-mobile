@@ -91,9 +91,11 @@ class CategoryEventsView extends StatelessWidget {
                             const SizedBox(height: 4),
                             Row(
                               children: [
-                                const Icon(Icons.location_on, size: 16, color: Colors.grey),
+                                const Icon(Icons.location_on, size: 16,
+                                    color: Colors.grey),
                                 const SizedBox(width: 4),
-                                Text(event.location),
+                                Flexible(child: Text(event.location,
+                                  overflow: TextOverflow.ellipsis,)),
                               ],
                             ),
                           ],

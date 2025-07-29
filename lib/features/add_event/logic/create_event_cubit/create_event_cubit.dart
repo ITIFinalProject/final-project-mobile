@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eventify_app/models.dart/event_model.dart' show EventModel;
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:uuid/uuid.dart';
@@ -23,6 +24,7 @@ class CreateEventCubit extends Cubit<CreateEventState> {
     File? imageFile,
     int? templateIndex,
     required String hostName,
+    required String category
   }) async {
     emit(CreateEventLoading());
 
@@ -59,6 +61,8 @@ class CreateEventCubit extends Cubit<CreateEventState> {
         image: imageUrl,
         templateIndex: templateIndex,
         hostName: hostName,
+        hostId: FirebaseAuth.instance.currentUser!.uid,
+        // category: category
       );
 
       await FirebaseFirestore.instance

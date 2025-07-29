@@ -1,14 +1,21 @@
 import 'package:eventify_app/core/routes.dart';
+import 'package:eventify_app/core/theme.dart';
 import 'package:eventify_app/features/events/event_cubit/event_cubit.dart';
 import 'package:eventify_app/features/events/event_cubit/event_state.dart';
+import 'package:eventify_app/features/home/widgets/event_categories.dart';
+import 'package:eventify_app/features/home/widgets/search_input_field.dart';
+import 'package:eventify_app/features/home/widgets/show_upcoming_events.dart';
 import 'package:eventify_app/models.dart/event_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../auth/cubit/auth_cubit.dart';
 import '../auth/cubit/auth_state.dart';
 import '../floating_button/chatscreen.dart';
+import 'cubit/home_cubit.dart';
+import 'cubit/home_state.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -18,375 +25,189 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+  String searchText = '';
+  List<EventModel> allEvents = [];
+  late String userId;
 
-
- List<EventModel> getUpcomingEvents() {
+  List<EventModel> getUpcomingEvents() {
     final now = DateTime.now();
-
-    final upcoming = allEvents.where((event) {
-      try {
-        final dateRange = event.date.split(' - ').first.trim();
-        final parts = dateRange.split('/');
-        final parsedDate = DateTime(
-          int.parse(parts[2]),
-          int.parse(parts[1]),
-          int.parse(parts[0]),
-        );
-
-        return parsedDate.isAfter(now);
-      } catch (e) {
-        return false;
-      }
-    }).toList();
-
-    upcoming.sort((a, b) {
-      final aDateParts = a.date.split(' - ').first.trim().split('/');
-      final bDateParts = b.date.split(' - ').first.trim().split('/');
-
-      final aDate = DateTime(
-        int.parse(aDateParts[2]),
-        int.parse(aDateParts[1]),
-        int.parse(aDateParts[0]),
-      );
-
-      final bDate = DateTime(
-        int.parse(bDateParts[2]),
-        int.parse(bDateParts[1]),
-        int.parse(bDateParts[0]),
-      );
-
-      return aDate.compareTo(bDate);
-    });
-
+    final upcoming =
+        allEvents.where((event) {
+            try {
+              final parts = event.date.split(' - ').first.trim().split('/');
+              final parsedDate = DateTime(
+                int.parse(parts[2]),
+                int.parse(parts[1]),
+                int.parse(parts[0]),
+              );
+              return parsedDate.isAfter(now);
+            } catch (_) {
+              return false;
+            }
+          }).toList()
+          ..sort((a, b) {
+            final aParts = a.date.split(' - ').first.trim().split('/');
+            final bParts = b.date.split(' - ').first.trim().split('/');
+            return DateTime(
+              int.parse(aParts[2]),
+              int.parse(aParts[1]),
+              int.parse(aParts[0]),
+            ).compareTo(
+              DateTime(
+                int.parse(bParts[2]),
+                int.parse(bParts[1]),
+                int.parse(bParts[0]),
+              ),
+            );
+          });
     return upcoming.take(3).toList();
   }
 
-
-
-
-
-
-  String name = "";
-String searchText = '';
-final List<String> categories = [
-  "Entertainment",
-  "Educational & Business",
-  "Cultural & Arts",
-  "Sports & Fitness",
-  "Technology & Innovation",
-  "Travel & Adventure",
-];
-
-
-  List<EventModel> allEvents = [];
-List<EventModel> filteredEvents = [];
-
-  void initState() {
-    super.initState();
-    final authState = context.read<AuthCubit>().state;
-    if (authState is AuthSuccess) {
-      name = authState.user.name ?? '';
-    }
-     context.read<EventCubit>().fetchEvents();
+  List<EventModel> getRecommendedEvents(String currentUserId) {
+    final filtered =
+        allEvents.where((event) => event.hostId != currentUserId).toList()
+          ..shuffle();
+    return filtered.take(5).toList();
   }
 
-
-  void _filterEvents(String query) {
-  final filtered = allEvents.where((event) =>
-      event.title.toLowerCase().contains(query.toLowerCase())).toList();
-
-  setState(() {
-    filteredEvents = filtered;
-  });
-}
-
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   userId = FirebaseAuth.instance.currentUser!.uid;
+  // }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-               BlocBuilder<EventCubit, EventState>(
-      builder: (context, state) {
-        if (state is EventLoaded) {
-          allEvents = state.events;
-        }
-        return const SizedBox(); 
-      },
-    ),
-              Text(
-                name.isNotEmpty ? "Welcome, $name!" : "Welcome!",
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).primaryColor,
-                ),
-              ),
-              const SizedBox(height: 20),
-              TextField(
-  onChanged: (value) {
-    setState(() {
-      searchText = value;
-      filteredEvents = allEvents
-          .where((event) =>
-              event.title.toLowerCase().contains(value.toLowerCase()))
-          .toList();
-    });
-  },
-  decoration: InputDecoration(
-    hintText: 'Search',
-    prefixIcon: Icon(Icons.search),
-    filled: true,
-    fillColor: Colors.white,
-    contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-    border: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(10),
-      borderSide: BorderSide.none,
-    ),
-    focusedBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(10),
-      borderSide: BorderSide(
-        color: Color(0xFF1B3C53), 
-        width: 2,
-      ),
-    ),
-  ),
-),
-
-
-searchText.isNotEmpty
-    ? (filteredEvents.isNotEmpty
-        ? ListView.builder(
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            itemCount: filteredEvents.length,
-            itemBuilder: (context, index) {
-              final event = filteredEvents[index];
-              return ListTile(
-                title: Text(event.title),
-                onTap: () {
-                  Navigator.pushNamed(
-                    context,
-                    AppRoutes.eventPreview,
-                    arguments: event,
+        child: MultiBlocListener(
+          listeners: [
+            BlocListener<AuthCubit, AuthState>(
+              listener: (context, authState) {
+                final eventState = context.read<EventCubit>().state;
+                if (authState is AuthSuccess && eventState is EventLoaded) {
+                  context.read<HomeCubit>().initHome(
+                    userName: authState.user.name ?? '',
+                    events: eventState.events,
                   );
-                },
-              );
-            },
-          )
-        : const Padding(
-            padding: EdgeInsets.all(16.0),
-            child: Text("No results found."),
-          ))
-    : const SizedBox(),
-   
-const SizedBox(height: 20),
-              const Text(
-                'Categories',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF1B3C53),
-                ),
-              ),
-             
-const SizedBox(height: 10),
-SizedBox(
-  height: 50,
-  child: ListView.builder(
-    scrollDirection: Axis.horizontal,
-    itemCount: categories.length,
-    itemBuilder: (context, index) {
-      final category = categories[index];
-      return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-        child: GestureDetector(
-          onTap: () {
-            Navigator.pushNamed(
-              context,
-              AppRoutes.categoryEvents,
-              arguments: category,
-            );
-          },
-          child: Chip(
-            label: Text(
-              category,
-              style: const TextStyle(fontSize: 12),
+                }
+              },
             ),
-            backgroundColor: Colors.blue.shade100,
-          ),
-        ),
-      );
-    },
-  ),
-),
+            BlocListener<EventCubit, EventState>(
+              listener: (context, eventState) {
+                final authState = context.read<AuthCubit>().state;
+                if (authState is AuthSuccess && eventState is EventLoaded) {
+                  context.read<HomeCubit>().initHome(
+                    userName: authState.user.name ?? '',
+                    events: eventState.events,
+                  );
+                }
+              },
+            ),
+          ],
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: BlocBuilder<HomeCubit, HomeState>(
+              builder: (context, state) {
+                if (state is! HomeLoaded) {
+                  return const Center(child: CircularProgressIndicator());
+                }
 
-
-
-const SizedBox(height: 20),
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(20),
-
-                decoration: BoxDecoration(
-                  color: Theme.of(context).cardColor,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Now that you are all set.\nLet's make your events extraordinary,\nstarting right here!",
-                      style: TextStyle(fontSize: 14, color: Color(0xFF456882)),
-                    ),
-                    const SizedBox(height: 25),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.pushNamed(
-                          context,
-                          AppRoutes.realEventDetails,
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Theme
-                            .of(context)
-                            .primaryColor,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 54,
-                          vertical: 15,
+                final name = state.name;
+                allEvents =
+                    state.filteredEvents.isEmpty && searchText.isEmpty
+                        ? state.allEvents
+                        : state.filteredEvents;
+                userId = FirebaseAuth.instance.currentUser!.uid;
+                final recommendedEvents = getRecommendedEvents(userId);
+                return SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        name.isNotEmpty ? "Welcome, $name! 👋" : "Welcome!",
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: ThemeManager.primaryColor,
                         ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
+                      ),
+                      const SizedBox(height: 20),
+                      SearchInputField(
+                        onChange: (value) {
+                          searchText = value;
+                          context.read<HomeCubit>().search(value);
+                        },
+                      ),
+                      if (searchText.isNotEmpty)
+                        allEvents.isNotEmpty
+                            ? ListView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: allEvents.length,
+                              itemBuilder: (context, index) {
+                                final event = allEvents[index];
+                                return ListTile(
+                                  title: Text(event.title),
+                                  onTap: () {
+                                    Navigator.pushNamed(
+                                      context,
+                                      AppRoutes.eventPreview,
+                                      arguments: event,
+                                    );
+                                  },
+                                );
+                              },
+                            )
+                            : const Padding(
+                              padding: EdgeInsets.all(16.0),
+                              child: Text("No results found."),
+                            ),
+                      const SizedBox(height: 20),
+                      const EventCategories(),
+                      const SizedBox(height: 20),
+                      Text(
+                        'Upcoming Events',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          color: ThemeManager.primaryColor,
                         ),
-                      ), child: const Text(
-                      'Plan an Event',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    ),
-                  ],
-                ),
-              ),
-             
-              const SizedBox(height: 60),
-              
-
-              const Text(
-  'Upcoming Events',
-  style: TextStyle(
-    fontSize: 18,
-    fontWeight: FontWeight.bold,
-    color: Color(0xFF1B3C53),
-  ),
-),
-const SizedBox(height: 20),
-
-
-...getUpcomingEvents().map((event) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(vertical: 8),
-    child: Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: Colors.grey.shade300),
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            blurRadius: 6,
-            offset: const Offset(0, 3),
-          ),
-        ],
-      ),
-      child: ListTile(
-        contentPadding: const EdgeInsets.all(12),
-        leading: event.image != null
-            ? ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: Image.network(
-                  event.image!,
-                  width: 60,
-                  height: 60,
-                  fit: BoxFit.cover,
-                ),
-              )
-            : const Icon(Icons.event),
-        title: Text(
-          event.title,
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
-          ),
-        ),
-        subtitle: Padding(
-          padding: const EdgeInsets.only(top: 4),
-          child: Text(
-            "${event.date} - ${event.location}",
-            style: const TextStyle(fontSize: 13, color: Colors.black54),
-          ),
-        ),
-        onTap: () {
-          Navigator.pushNamed(
-            context,
-            AppRoutes.eventPreview,
-            arguments: event,
-          );
-        },
-      ),
-    ),
-  );
-}).toList(),
-
-
-
-
-if (getUpcomingEvents().isEmpty)
-  const Padding(
-    padding: EdgeInsets.symmetric(horizontal: 16),
-    child: Text(
-      "No upcoming events. Create one now!",
-      style: TextStyle(fontSize: 13, color: Color(0xFF456882)),
-    ),
-  ),
-
-              
-            ],
+                      ),
+                      const SizedBox(height: 10),
+                      ShowUpcomingEvents(upcomingEvents: getUpcomingEvents()),
+                      const SizedBox(height: 10),
+                      Text(
+                        'Recommended Events',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          color: ThemeManager.primaryColor,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      ShowUpcomingEvents(upcomingEvents: recommendedEvents),
+                    ],
+                  ),
+                );
+              },
+            ),
           ),
         ),
       ),
-
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const ChatScreen()),
-          );
-        },
+        onPressed:
+            () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const ChatScreen()),
+            ),
         backgroundColor: const Color(0xFF1B3C53),
-        elevation: 6,
-        shape: const CircleBorder(),
         child: SvgPicture.asset(
           'assets/images/ChatGPT-Logo.svg',
           width: 32,
           height: 32,
-
-          colorFilter: const ColorFilter.mode(
-            Colors.white,
-            BlendMode.srcIn,
-          ),
+          colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
         ),
-
       ),
     );
   }
 }
-
-
-
-
-
-
