@@ -86,6 +86,9 @@ class _ProfileViewState extends State<ProfileView> {
                   _infoTile("Change Password", Icons.lock, () {
                     Navigator.pushNamed(context, AppRoutes.verifyOldPassword);
                   }),
+                  _infoTile("My Events", Icons.event_rounded, () {
+                    Navigator.pushNamed(context, AppRoutes.myCreatedEvents);
+                  }),
                   _infoTile("Notification", Icons.notifications, () {}),
                   _infoTile("Contact Us", Icons.contact_page, () {}),
                   BlocBuilder<ThemeCubit, ThemeMode>(
