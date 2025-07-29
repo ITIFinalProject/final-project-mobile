@@ -12,6 +12,7 @@ class EventModel extends Equatable {
   final String? image;
   final int? templateIndex;
   final String hostName;
+  final String? hostId;
 
   const EventModel({
     required this.hostName,
@@ -23,8 +24,10 @@ class EventModel extends Equatable {
     required this.time,
     required this.location,
     required this.capacity,
+    required this.hostId,
     this.image,
     this.templateIndex,
+    
   });
 
   EventModel copyWith({
@@ -39,6 +42,7 @@ class EventModel extends Equatable {
     String? image,
     int? templateIndex,
     String? hostName,
+    String? hostId,
   }) {
     return EventModel(
       id: id ?? this.id,
@@ -50,6 +54,7 @@ class EventModel extends Equatable {
       location: location ?? this.location,
       capacity: capacity ?? this.capacity,
       hostName: hostName ?? this.hostName,
+      hostId: hostId ?? this.hostId,
     );
   }
 
@@ -66,6 +71,7 @@ class EventModel extends Equatable {
       'image': image,
       'templateIndex': templateIndex,
       'hostName': hostName,
+      'hostId': hostId,
     };
   }
 
@@ -82,6 +88,7 @@ class EventModel extends Equatable {
       image: map['image'],
       templateIndex: map['templateIndex'],
       hostName: map['hostName'] ?? 'Unknown Host',
+      hostId: map['hostId'] ?? '',
     );
   }
 
@@ -98,5 +105,6 @@ class EventModel extends Equatable {
     image,
     templateIndex,
     hostName,
+    hostId,
   ];
 }
