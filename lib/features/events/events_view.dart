@@ -1,4 +1,5 @@
 import 'package:eventify_app/core/theme.dart';
+import 'package:eventify_app/features/add_event/edit%20event/edit_event_view.dart';
 import 'package:eventify_app/features/events/widgets/event_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -72,7 +73,7 @@ class _EventsViewState extends State<EventsView> with RouteAware {
                   ),
                   calendarStyle: const CalendarStyle(
                     todayDecoration: BoxDecoration(
-                      color: Color(0xFF1B3C53),
+                      color: ThemeManager.darkPinkColor,
                       shape: BoxShape.circle,
                     ),
                     selectedDecoration: BoxDecoration(
@@ -129,7 +130,18 @@ class _EventsViewState extends State<EventsView> with RouteAware {
                       filteredEvents.map((event) {
                         return Padding(
                           padding: const EdgeInsets.only(bottom: 12),
-                          child: CardEvent(event: event),
+                          child: CardEvent(
+                            event: event,
+                            onDelete: () {
+                              context.read<EventCubit>().deleteEvent(event.id);
+                            },
+                            onEdit: () {
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) {
+                                    return EditEventView(event: event);
+                                  }));
+                            },
+                          ),
                         );
                       }).toList(),
                     );

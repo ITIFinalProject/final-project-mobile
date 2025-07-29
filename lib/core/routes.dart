@@ -6,6 +6,7 @@ import 'package:eventify_app/features/auth/view/login.dart';
 import 'package:eventify_app/features/auth/view/register.dart';
 import 'package:eventify_app/features/auth/view/widgets/forget_password_view.dart';
 import 'package:eventify_app/features/categories/CategoryEventsView.dart';
+import 'package:eventify_app/features/events/my_created_events.dart';
 import 'package:eventify_app/features/layout/layout.dart';
 import 'package:eventify_app/features/onboarding/onboarding_screen.dart';
 import 'package:eventify_app/features/profile/change%20password/verify_old_pass.dart';
@@ -37,6 +38,8 @@ class AppRoutes {
   static const String profileView = '/profile_view';
   static const String categoryEvents = '/categoryEvents';
 
+  static const String myCreatedEvents = '/my_created_events';
+  static const String editEventView = '/edit_event_view';
   static final routes = <String, WidgetBuilder>{
     splash: (context) => SplashScreen(),
     layout: (context) => LayoutView(),
@@ -54,7 +57,8 @@ class AppRoutes {
     mapPicker: (context) => MapPickerScreen(),
     verifyOldPassword: (context) => VerifyOldPass(),
     profileView: (context) => ProfileView(),
-    categoryEvents: (context) =>  CategoryEventsView(),
+    categoryEvents: (context) => CategoryEventsView(),
 
+    myCreatedEvents: (context) => const MyCreatedEvents(),
   };
 }
