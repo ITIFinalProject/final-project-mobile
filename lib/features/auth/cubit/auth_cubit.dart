@@ -80,7 +80,6 @@ class AuthCubit extends Cubit<AuthState> {
       emit(AuthFailure(e.toString()));
     }
   }
-
   Future<void> resetPassword(String email) async {
     emit(AuthLoading());
     try {
@@ -103,11 +102,12 @@ class AuthCubit extends Cubit<AuthState> {
     await Future.delayed(Duration(seconds: 2));
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
-      UserModel currentUser = UserModel(
-        name: user.displayName,
-        email: user.email,
-        phone: user.phoneNumber,
-      );
+      final doc =
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(user.uid)
+              .get();
+      UserModel currentUser = UserModel.fromFireStore(doc.data()!);
       emit(AuthSuccess(currentUser));
     } else {
       emit(AuthLoggedOut());

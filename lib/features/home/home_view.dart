@@ -25,56 +25,16 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  String searchText = '';
-  List<EventModel> allEvents = [];
-  late String userId;
+  String name = "";
 
-  List<EventModel> getUpcomingEvents() {
-    final now = DateTime.now();
-    final upcoming =
-        allEvents.where((event) {
-            try {
-              final parts = event.date.split(' - ').first.trim().split('/');
-              final parsedDate = DateTime(
-                int.parse(parts[2]),
-                int.parse(parts[1]),
-                int.parse(parts[0]),
-              );
-              return parsedDate.isAfter(now);
-            } catch (_) {
-              return false;
-            }
-          }).toList()
-          ..sort((a, b) {
-            final aParts = a.date.split(' - ').first.trim().split('/');
-            final bParts = b.date.split(' - ').first.trim().split('/');
-            return DateTime(
-              int.parse(aParts[2]),
-              int.parse(aParts[1]),
-              int.parse(aParts[0]),
-            ).compareTo(
-              DateTime(
-                int.parse(bParts[2]),
-                int.parse(bParts[1]),
-                int.parse(bParts[0]),
-              ),
-            );
-          });
-    return upcoming.take(3).toList();
+  void initState() {
+    super.initState();
+    final authState = context.read<AuthCubit>().state;
+    if (authState is AuthSuccess) {
+      name = authState.user.name ?? '';
+    }
   }
 
-  List<EventModel> getRecommendedEvents(String currentUserId) {
-    final filtered =
-        allEvents.where((event) => event.hostId != currentUserId).toList()
-          ..shuffle();
-    return filtered.take(5).toList();
-  }
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   userId = FirebaseAuth.instance.currentUser!.uid;
-  // }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
