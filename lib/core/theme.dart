@@ -14,8 +14,9 @@ class ThemeManager{
         titleTextStyle: TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.w600,
-          color: lightPinkColor,
-        )),
+        color: lightPinkColor,
+      ),
+    ),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       type: BottomNavigationBarType.fixed,
       backgroundColor: primaryColor,
@@ -24,7 +25,7 @@ class ThemeManager{
       showSelectedLabels: true,
       showUnselectedLabels: false,
     ),
-  )
+  );
   static ThemeData darkTheme = ThemeData(
     scaffoldBackgroundColor: primaryColor,
     appBarTheme: AppBarTheme(
@@ -34,8 +35,7 @@ class ThemeManager{
       titleTextStyle: TextStyle(
         fontSize: 20,
         fontWeight: FontWeight.w600,
-        color: primaryColor,
-      ),
+        color: primaryColor),
 
       iconTheme: IconThemeData(color: secondaryColor),
     ),
