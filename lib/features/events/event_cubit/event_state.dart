@@ -27,3 +27,9 @@ class EventJoinError extends EventState {
 
   EventJoinError(this.message);
 }
+
+class EventInterestedLoaded extends EventState {
+  final List<EventModel> interestedEvents;
+
+  EventInterestedLoaded(this.interestedEvents);
+}

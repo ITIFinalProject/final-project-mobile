@@ -79,23 +79,44 @@ class EventModel extends Equatable {
     };
   }
 
+  // factory EventModel.fromMap(Map<String, dynamic> map) {
+  //   return EventModel(
+  //     id: map['id'],
+  //     type: map['type'] ?? 'default',
+  //     title: map['title'],
+  //     description: map['description'],
+  //     date: map['date'],
+  //     time: map['time'],
+  //     location: map['location'],
+  //     capacity: map['capacity'],
+  //     image: map['image'],
+  //     templateIndex: map['templateIndex'],
+  //     hostName: map['hostName'] ?? 'Unknown Host',
+  //     hostId: map['hostId'] ?? '',
+  //     // category: map['category'],
+  //   );
+  // }
   factory EventModel.fromMap(Map<String, dynamic> map) {
-    return EventModel(
-      id: map['id'],
-      type: map['type'] ?? 'default',
-      title: map['title'],
-      description: map['description'],
-      date: map['date'],
-      time: map['time'],
-      location: map['location'],
-      capacity: map['capacity'],
-      image: map['image'],
-      templateIndex: map['templateIndex'],
-      hostName: map['hostName'] ?? 'Unknown Host',
-      hostId: map['hostId'] ?? '',
-      // category: map['category'],
-    );
-  }
+  return EventModel(
+    id: (map['id'] ?? '').toString(),
+    type: (map['type'] ?? 'default').toString(),
+    title: (map['title'] ?? 'Untitled Event').toString(),
+    description: (map['description'] ?? '').toString(),
+    date: (map['date'] ?? '').toString(),
+    time: (map['time'] ?? '').toString(),
+    location: (map['location'] ?? '').toString(),
+    capacity: (map['capacity'] is int)
+        ? map['capacity']
+        : int.tryParse(map['capacity']?.toString() ?? '0') ?? 0,
+    image: map['image']?.toString(),
+    templateIndex: map['templateIndex'] is int
+        ? map['templateIndex']
+        : int.tryParse(map['templateIndex']?.toString() ?? ''),
+    hostName: (map['hostName'] ?? 'Unknown Host').toString(),
+    hostId: map['hostId']?.toString() ?? '',
+  );
+}
+
 
   @override
   List<Object?> get props => [

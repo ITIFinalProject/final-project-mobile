@@ -37,6 +37,8 @@ class _HomeViewState extends State<HomeView> {
     if (authState is AuthSuccess) {
       name = authState.user.name ?? '';
     }
+    // *******************
+      context.read<EventCubit>().fetchEvents();
   }
 
   @override
@@ -64,7 +66,9 @@ class _HomeViewState extends State<HomeView> {
                     userName: authState.user.name ?? '',
                     events: eventState.events,
                   );
-                }
+                }else if (eventState is EventError) {
+      print("⚠️ حدث خطأ في تحميل الأحداث: ${eventState.message}");
+    }
               },
             ),
           ],

@@ -16,12 +16,26 @@ class EventCubit extends Cubit<EventState> {
           await FirebaseFirestore.instance.collection('events').get();
 
       final events =
-          snapshot.docs.map((doc) => EventModel.fromMap(doc.data())).toList();
+          // snapshot.docs.map((doc) => EventModel.fromMap(doc.data())).toList();
 
+          // ***************************************************
+snapshot.docs.map((doc) {
+  final data = doc.data();
+  data['id'] = doc.id;   // نضيف id بتاع الـ document نفسه
+  return EventModel.fromMap(data);
+}).toList();
+// ***********************************************************************
       emit(EventLoaded(events));
-    } catch (e) {
-      emit(EventError("Error occurred during Loading Events"));
     }
+  // catch (e) {
+  //     emit(EventError("Error occurred during Loading Events"));
+  //   }
+  catch (e, stack) {
+  print("🔥 Firestore Error: $e");
+  print(stack);
+  emit(EventError(e.toString()));
+}
+
   }
 
 // **************************************************************************
@@ -124,4 +138,51 @@ class EventCubit extends Cubit<EventState> {
       emit(EventError("Error deleting event: $e"));
     }
   }
+
+// **************************************************************
+Future<void> toggleInterestedEvent(EventModel event) async {
+  final user = FirebaseAuth.instance.currentUser;
+  if (user == null) return;
+
+  final favRef = FirebaseFirestore.instance
+      .collection('users')
+      .doc(user.uid)
+      .collection('interestedEvents')
+      .doc(event.id);
+
+  final snapshot = await favRef.get();
+  if (snapshot.exists) {
+    // لو event موجود في interestedEvents → احذفه
+    await favRef.delete();
+  } else {
+    // لو مش موجود → ضيفه
+    await favRef.set(event.toMap());
+  }
 }
+  Future<void> fetchInterestedEvents() async {
+    emit(EventLoading());
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        emit(EventError("User not logged in"));
+        return;
+      }
+    
+      final snapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .collection('interestedEvents')
+          .get();
+
+      final events =
+          snapshot.docs.map((doc) => EventModel.fromMap(doc.data())).toList();
+
+      emit(EventInterestedLoaded(events));
+    } catch (e) {
+      emit(EventError("Error fetching interested events"));
+    }
+  }
+
+}
+
+// *************************************************************
