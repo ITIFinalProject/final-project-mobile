@@ -8,6 +8,9 @@ import 'event_state.dart';
 class EventCubit extends Cubit<EventState> {
   EventCubit() : super(EventInitial());
 // **************************************************************************
+Set<String> _interestedEventIds = {};
+
+  Set<String> get interestedEventIds => _interestedEventIds;
   Future<void> fetchEvents() async {
     emit(EventLoading());
 
@@ -160,6 +163,7 @@ Future<void> toggleInterestedEvent(EventModel event) async {
   }
 }
   Future<void> fetchInterestedEvents() async {
+
     emit(EventLoading());
     try {
       final user = FirebaseAuth.instance.currentUser;
@@ -173,6 +177,7 @@ Future<void> toggleInterestedEvent(EventModel event) async {
           .doc(user.uid)
           .collection('interestedEvents')
           .get();
+_interestedEventIds = snapshot.docs.map((doc) => doc.id).toSet();
 
       final events =
           snapshot.docs.map((doc) => EventModel.fromMap(doc.data())).toList();
@@ -183,6 +188,10 @@ Future<void> toggleInterestedEvent(EventModel event) async {
     }
   }
 
+
+bool isInterested(String eventId) {
+    return _interestedEventIds.contains(eventId);
+  }
 }
 
 // *************************************************************

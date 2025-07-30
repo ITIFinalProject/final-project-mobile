@@ -24,6 +24,7 @@ class _EventsViewState extends State<EventsView> with RouteAware {
   void initState() {
     super.initState();
     context.read<EventCubit>().fetchEvents();
+    context.read<EventCubit>().fetchInterestedEvents();
   }
 
   Widget build(BuildContext context) {
@@ -128,9 +129,15 @@ class _EventsViewState extends State<EventsView> with RouteAware {
                     return Column(
                       children:
                       filteredEvents.map((event) {
+                        
+          final isInterested = context.read<EventCubit>().isInterested(event.id);
                         return Padding(
                           padding: const EdgeInsets.only(bottom: 12),
                           child: CardEvent(
+                             onToggleInterested: () {
+                              context.read<EventCubit>().toggleInterestedEvent(event);
+                             },
+                             isInterested:isInterested,
                             event: event,
                             onDelete: () {
                               context.read<EventCubit>().deleteEvent(event.id);
