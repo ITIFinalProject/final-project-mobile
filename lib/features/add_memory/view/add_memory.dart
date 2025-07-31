@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:eventify_app/features/add_memory/view/video_player_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -9,10 +10,11 @@ import '../../../models.dart/event_model.dart';
 import '../../events/widgets/card_no_events.dart';
 import '../cubit/memory_cubit.dart';
 import '../cubit/memory_state.dart';
+import 'image_view.dart';
 
 class AddMemory extends StatefulWidget {
-  final EventModel event ;
-  const AddMemory({super.key , required this.event});
+  final EventModel event;
+  const AddMemory({super.key, required this.event});
 
   @override
   State<AddMemory> createState() => _AddMemoryState();
@@ -22,15 +24,17 @@ class _AddMemoryState extends State<AddMemory> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-      context.read<MemoryCubit>().fetchMemories(widget.event.id);
-      print(widget.event.id);
+    context.read<MemoryCubit>().fetchMemories(widget.event.id);
+    print(widget.event.id);
     print(widget.event.title);
   }
-@override
+
+  @override
   void initState() {
     super.initState();
     context.read<MemoryCubit>().fetchMemories(widget.event.id);
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,55 +45,96 @@ class _AddMemoryState extends State<AddMemory> {
             return const Center(child: CircularProgressIndicator());
           } else if (state is MemoriesLoaded) {
             final memories = state.memories;
-            if(memories.isEmpty){
-              return const CardNoEvents(text: 'No Memories added to this event, add one!', title: 'Event Memory');
-            }else{
-            return GridView.builder(
-              padding: const EdgeInsets.all(12),
-              itemCount: memories.length,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-              ),
-              itemBuilder: (context, index) {
-                final memory = memories[index];
-                final isImage = memory.type == 'image';
-
-                // Consider using a proper video player widget here
-                return isImage
-                    ? ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: Image.network(
-                    memory.url,
-                    fit: BoxFit.cover,
-                    loadingBuilder: (context, child, loadingProgress) {
-                      if (loadingProgress == null) return child;
-                      return Center(
-                        child: CircularProgressIndicator(
-                          color: ThemeManager.primaryColor,
+            if (memories.isEmpty) {
+              return const CardNoEvents(
+                text: 'No Memories added to this event, add one!',
+                title: 'Event Memory',
+              );
+            } else {
+              return GridView.builder(
+                padding: const EdgeInsets.all(12),
+                itemCount: memories.length,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                ),
+                itemBuilder: (context, index) {
+                  final memory = memories[index];
+                  final isImage = memory.type == 'image';
+                   return GestureDetector(
+                      onTap: () {
+                    if (isImage) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => FullImageView(imageUrl: memory.url),
                         ),
                       );
-                    },
-                    errorBuilder: (context, error, stackTrace) {
-                      return Container(
-                        color: Colors.grey[200],
-                        child: const Icon(Icons.broken_image, color: Colors.grey, size: 48),
+                    } else {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => VideoPlayerView(videoUrl: memory.url),
+                        ),
                       );
-                    },
-                  ),
-                )
-                    : ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: Container(
-                    color: Colors.black, // Placeholder for video
-                    child: const Center(
-                      child: Icon(Icons.videocam, size: 48, color: Colors.white),
+
+                    }
+                  },
+                     child:
+                   isImage
+                      ? Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      side: BorderSide(color: ThemeManager.secondaryColor)
                     ),
-                  ),
-                );
-              },
-            );}
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: Image.network(
+                            memory.url,
+                            fit: BoxFit.cover,
+                            loadingBuilder: (context, child, loadingProgress) {
+                              if (loadingProgress == null) return child;
+                              return Center(
+                                child: CircularProgressIndicator(
+                                  color: ThemeManager.primaryColor,
+                                ),
+                              );
+                            },
+                            errorBuilder: (context, error, stackTrace) {
+                              return Container(
+
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[200],
+                                    borderRadius: BorderRadius.circular(15),
+                                    border: Border.all(color: ThemeManager.secondaryColor)
+                                ),
+                                child: const Icon(
+                                  Icons.broken_image,
+                                  color: Colors.grey,
+                                  size: 48,
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      )
+                      : ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Container(
+                          color: Colors.black, // Placeholder for video
+                          child: const Center(
+                            child: Icon(
+                              Icons.videocam,
+                              size: 48,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ));
+                },
+              );
+            }
           } else if (state is MemoryError) {
             return Center(child: Text("Error: ${state.message}"));
           } else {
@@ -110,50 +155,51 @@ class _AddMemoryState extends State<AddMemory> {
   }
 
   Future<void> _pickImage() async {
-
     showModalBottomSheet(
       context: context,
-      builder: (context) => SafeArea(
-        child: Wrap(
-          children: [
-            ListTile(
-              leading: const Icon(Icons.photo_camera),
-              title: const Text("Take a photo"),
-              onTap: () {
-                handlePickAndUpload(ImageSource.camera, 'image');
-              },
+      builder:
+          (context) => SafeArea(
+            child: Wrap(
+              children: [
+                ListTile(
+                  leading: const Icon(Icons.photo_camera),
+                  title: const Text("Take a photo"),
+                  onTap: () {
+                    handlePickAndUpload(ImageSource.camera, 'image');
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.photo_library),
+                  title: const Text("Upload Image from gallery"),
+                  onTap: () {
+                    handlePickAndUpload(ImageSource.gallery, 'image');
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.video_camera_back_outlined),
+                  title: const Text("Record a video"),
+                  onTap: () {
+                    handlePickAndUpload(ImageSource.camera, 'video');
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.video_collection),
+                  title: const Text("Upload a video"),
+                  onTap: () {
+                    handlePickAndUpload(ImageSource.gallery, 'video');
+                  },
+                ),
+              ],
             ),
-            ListTile(
-              leading: const Icon(Icons.photo_library),
-              title: const Text("Upload Image from gallery"),
-              onTap: () {
-                handlePickAndUpload(ImageSource.gallery, 'image');
-              },
-            ),
-            ListTile(
-                leading: const Icon(Icons.video_camera_back_outlined),
-                title: const Text("Record a video"),
-                onTap: () {
-                  handlePickAndUpload(ImageSource.camera, 'video');
-                }
-            ),
-            ListTile(
-              leading: const Icon(Icons.video_collection),
-              title: const Text("Upload a video"),
-              onTap: () {
-                handlePickAndUpload(ImageSource.gallery, 'video');
-              },
-            ),
-          ],
-        ),
-      ),
+          ),
     );
   }
 
   Future<void> handlePickAndUpload(ImageSource source, String type) async {
-    final picked = type == 'image'
-        ? await ImagePicker().pickImage(source: source)
-        : await ImagePicker().pickVideo(source: source);
+    final picked =
+        type == 'image'
+            ? await ImagePicker().pickImage(source: source)
+            : await ImagePicker().pickVideo(source: source);
 
     if (picked != null) {
       final file = File(picked.path);

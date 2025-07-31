@@ -28,23 +28,22 @@ class MemoryCubit extends Cubit<MemoryState> {
       final fileName = '${DateTime.now().millisecondsSinceEpoch}.$fileExt';
       final filePath = 'events/$eventId/$fileName';
 
-      // ✅ رفع الملف باستخدام uploadBinary
       final response = await supabase.storage
           .from('memories')
-          .uploadBinary(filePath, fileBytes);
+          .uploadBinary(filePath, fileBytes ,fileOptions: FileOptions(
+        contentType: type=='image'?'image/jpeg' : 'video/mp4'
+      ));
 
       if (response.isEmpty) {
         throw Exception("Upload to Supabase failed");
       }
 
-      // ✅ الحصول على رابط الملف
       final publicUrl = supabase.storage
           .from('memories')
           .getPublicUrl(filePath);
 
       print('Done uploading to Supabase: $publicUrl');
 
-      // ✅ حفظ الرابط في Firestore
       await firestore
           .collection('events')
           .doc(eventId)
@@ -52,6 +51,7 @@ class MemoryCubit extends Cubit<MemoryState> {
           .add({
         'url': publicUrl,
         'type': type,
+         'id':eventId
       });
 
       print('Done uploading to Firestore');
@@ -65,6 +65,7 @@ class MemoryCubit extends Cubit<MemoryState> {
       emit(MemoryError(e.toString()));
     }
   }
+
 
   Future<void> fetchMemories(String eventId) async {
     emit(MemoryLoading());

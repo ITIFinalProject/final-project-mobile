@@ -10,7 +10,7 @@ class MemoryModel{
    });
     Map<String, dynamic> toMap() {
       return {
-        'eventId': eventId,
+        'id': eventId,
         'url': url,
         'type': type,
 
@@ -18,9 +18,9 @@ class MemoryModel{
     }
     factory MemoryModel.fromMap(Map<String, dynamic> map) {
       return MemoryModel(
-        eventId: map['eventId'],
-        url:map['url'],
-        type: map['type'],
+        eventId: map['id'] as String,
+        url:map['url'] as String,
+        type: map['type'] as String,
       );
     }
      
