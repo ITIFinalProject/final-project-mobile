@@ -3,14 +3,14 @@ import 'package:equatable/equatable.dart';
 class EventModel extends Equatable {
   final String id;
 
-  // final String category;
+  final String category;
   final String title;
   final String description;
   final String date;
   final String time;
   final String location;
   final int capacity;
-  final String? image;
+  final String? bannerUrl;
   final int? templateIndex;
   final String hostName;
   final String? hostId;
@@ -27,8 +27,8 @@ class EventModel extends Equatable {
     required this.location,
     required this.capacity,
     required this.hostId,
-    // required this.category,
-    this.image,
+    required this.category,
+    this.bannerUrl,
     this.templateIndex,
   });
 
@@ -41,7 +41,7 @@ class EventModel extends Equatable {
   //   String? time,
   //   String? location,
   //   int? capacity,
-  //   String? image,
+  //   String? bannerUrl,
   //   int? templateIndex,
   //   String? hostName,
   //   String? hostId,
@@ -60,44 +60,45 @@ class EventModel extends Equatable {
   //     hostId: hostId ?? this.hostId,
   //   );
   // }
-  DateTime get eventEndDateTime {
-    try {
-      final dateParts = date.split(' - ');
-      final timeParts = time.split(' - ');
+ DateTime get eventEndDateTime {
+  try {
+    final dateParts = date.split(' - ');
+    final timeParts = time.split(' - ');
 
-      if (dateParts.length < 2 || timeParts.length < 2) return DateTime.now();
+    if (dateParts.length < 2 || timeParts.length < 2) return DateTime.now();
 
-      final endDate = dateParts[1].trim(); // "31/07/2025"
-      final endTime = timeParts[1].trim(); // "12:00 PM"
+    final endDate = dateParts[1].trim(); // "31/07/2025"
+    final endTime = timeParts[1].trim(); // "12:00 PM"
 
-      final full = '$endDate $endTime'; // "31/07/2025 12:00 PM"
+    final full = '$endDate $endTime'; // "31/07/2025 12:00 PM"
 
-      return DateTime.parse(_formatToISO(full));
-    } catch (e) {
-      return DateTime.now();
-    }
+    return DateTime.parse(
+      _formatToISO(full),
+    );
+  } catch (e) {
+    return DateTime.now();
   }
+}
 
-  String _formatToISO(String dateTime) {
-    // from "31/07/2025 12:00 PM" to ISO string
-    final parts = dateTime.split(' ');
-    final dateParts = parts[0].split('/');
-    final time = parts[1];
-    final ampm = parts[2];
+String _formatToISO(String dateTime) {
+  // from "31/07/2025 12:00 PM" to ISO string
+  final parts = dateTime.split(' ');
+  final dateParts = parts[0].split('/');
+  final time = parts[1];
+  final ampm = parts[2];
 
-    int hour = int.parse(time.split(':')[0]);
-    int minute = int.parse(time.split(':')[1]);
+  int hour = int.parse(time.split(':')[0]);
+  int minute = int.parse(time.split(':')[1]);
 
-    if (ampm == 'PM' && hour != 12) hour += 12;
-    if (ampm == 'AM' && hour == 12) hour = 0;
+  if (ampm == 'PM' && hour != 12) hour += 12;
+  if (ampm == 'AM' && hour == 12) hour = 0;
 
-    final day = dateParts[0].padLeft(2, '0');
-    final month = dateParts[1].padLeft(2, '0');
-    final year = dateParts[2];
+  final day = dateParts[0].padLeft(2, '0');
+  final month = dateParts[1].padLeft(2, '0');
+  final year = dateParts[2];
 
-    return '$year-$month-${day}T${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}:00';
-  }
-
+  return '$year-$month-${day}T${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}:00';
+}
   Map<String, dynamic> toMap() {
     return {
       'id': id,
@@ -108,11 +109,11 @@ class EventModel extends Equatable {
       'time': time,
       'location': location,
       'capacity': capacity,
-      'image': image,
+      'bannerUrl': bannerUrl,
       'templateIndex': templateIndex,
       'hostName': hostName,
       'hostId': hostId,
-      // 'category': category,
+      'category': category,
     };
   }
 
@@ -126,7 +127,7 @@ class EventModel extends Equatable {
   //     time: map['time'],
   //     location: map['location'],
   //     capacity: map['capacity'],
-  //     image: map['image'],
+  //     bannerUrl: map['bannerUrl'],
   //     templateIndex: map['templateIndex'],
   //     hostName: map['hostName'] ?? 'Unknown Host',
   //     hostId: map['hostId'] ?? '',
@@ -146,13 +147,14 @@ class EventModel extends Equatable {
           (map['capacity'] is int)
               ? map['capacity']
               : int.tryParse(map['capacity']?.toString() ?? '0') ?? 0,
-      image: map['image']?.toString(),
+      bannerUrl: map['bannerUrl']?.toString(),
       templateIndex:
           map['templateIndex'] is int
               ? map['templateIndex']
               : int.tryParse(map['templateIndex']?.toString() ?? ''),
       hostName: (map['hostName'] ?? 'Unknown Host').toString(),
       hostId: map['hostId']?.toString() ?? '',
+      category: map['category']?.toString() ?? '',
     );
   }
 
@@ -166,10 +168,10 @@ class EventModel extends Equatable {
     time,
     location,
     capacity,
-    image,
+    bannerUrl,
     templateIndex,
     hostName,
     hostId,
-    // category
+    category,
   ];
 }

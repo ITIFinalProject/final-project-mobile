@@ -58,11 +58,11 @@ class CategoryEventsView extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if (event.image != null)
+                      if (event.bannerUrl != null)
                         ClipRRect(
                           borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
                           child: Image.network(
-                            event.image!,
+                            event.bannerUrl!,
                             height: 180,
                             width: double.infinity,
                             fit: BoxFit.cover,

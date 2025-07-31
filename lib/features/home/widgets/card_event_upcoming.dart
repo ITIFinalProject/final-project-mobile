@@ -25,9 +25,9 @@ class CardEventUpcoming extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(15),
               child:
-                  event.image != null && event.image!.isNotEmpty
+                  event.bannerUrl != null && event.bannerUrl!.isNotEmpty
                       ? Image.network(
-                        event.image ?? '',
+                        event.bannerUrl ?? '',
                         width: size.width * 0.5,
                         height: size.height * 0.2,
                         fit: BoxFit.cover,
@@ -44,8 +44,12 @@ class CardEventUpcoming extends StatelessWidget {
                           return Icon(Icons.error, color: Colors.red);
                         },
                       )
-                      : Image.asset(
+                      : (event.templateIndex!=null)?Image.asset(
                         'assets/images/template${event.templateIndex}.jpg',
+                        width: size.width * 0.5,
+                        height: size.height * 0.2,
+                        fit: BoxFit.cover,
+                      ):Image.network('https://i.pinimg.com/1200x/2b/7f/a9/2b7fa911454725f7fd5b9d2f4dd41046.jpg',
                         width: size.width * 0.5,
                         height: size.height * 0.2,
                         fit: BoxFit.cover,

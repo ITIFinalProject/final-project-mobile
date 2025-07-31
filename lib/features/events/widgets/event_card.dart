@@ -320,9 +320,9 @@ class _CardEventState extends State<CardEvent> {
                   borderRadius: const BorderRadius.vertical(
                     top: Radius.circular(18),
                   ),
-                  child: widget.event.image != null && widget.event.image!.isNotEmpty
+                  child: widget.event.bannerUrl != null && widget.event.bannerUrl!.isNotEmpty
                       ? Image.network(
-                          widget.event.image!,
+                          widget.event.bannerUrl!,
                           height: 180,
                           width: double.infinity,
                           fit: BoxFit.cover,
@@ -348,12 +348,12 @@ class _CardEventState extends State<CardEvent> {
                             );
                           },
                         )
-                      : Image.asset(
+                      : (widget.event.templateIndex!=null)?Image.asset(
                           'assets/images/template${widget.event.templateIndex}.jpg',
                           height: 180,
                           width: double.infinity,
                           fit: BoxFit.cover,
-                        ),
+                        ):Image.network('https://i.pinimg.com/1200x/2b/7f/a9/2b7fa911454725f7fd5b9d2f4dd41046.jpg'),
                 ),
 
                 // ⭐ زر النجمة

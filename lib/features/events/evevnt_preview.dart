@@ -251,7 +251,7 @@ class EventPreviewPage extends StatelessWidget {
   Widget build(BuildContext context) {
     var event = ModalRoute.of(context)!.settings.arguments as EventModel;
     var size = MediaQuery.of(context).size;
-    String? imageUrl = event.image;
+    String? imageUrl = event.bannerUrl;
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(backgroundColor: ThemeManager.primaryColor),
@@ -332,21 +332,23 @@ class EventPreviewPage extends StatelessWidget {
 
                     const SizedBox(height: 16),
 
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.location_on_outlined,
-                          color: ThemeManager.secondaryColor,
-                        ),
-                        SizedBox(width: 8),
-                        Text(
-                          event.location,
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Color(0xff1b3c53),
+                    Flexible(
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.location_on_outlined,
+                            color: ThemeManager.secondaryColor,
                           ),
-                        ),
-                      ],
+                          SizedBox(width: 8),
+                          Text(
+                            event.location,
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Color(0xff1b3c53),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
 
                     const SizedBox(height: 24),

@@ -335,8 +335,7 @@ class _EventDetailsViewState extends State<EventDetailsView> {
         return;
       }
       String time = '${startTimeController.text} - ${endTimeController.text}';
-      String dateTime = '${startDateController.text} - ${endDateController
-          .text}';
+      String dateTime = (startDateController.text == endDateController.text)?startDateController.text:'${startDateController.text} - ${endDateController.text}';
       context.read<CreateEventCubit>().createEvent(
         title: titleController.text.trim(),
         type: selectedEventType ?? '',

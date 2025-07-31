@@ -58,9 +58,10 @@ class CreateEventCubit extends Cubit<CreateEventState> {
         time: time,
         location: location,
         capacity: capacity,
-        image: imageUrl,
+        bannerUrl: imageUrl,
         templateIndex: templateIndex,
         hostName: hostName,
+        category: category,
         hostId: FirebaseAuth.instance.currentUser!.uid
       );
 
@@ -87,6 +88,7 @@ class CreateEventCubit extends Cubit<CreateEventState> {
     required String time,
     required String location,
     required int capacity,
+    required String category,
     File? imageFile,
     int? templateIndex,
     required String hostName,
@@ -141,9 +143,10 @@ class CreateEventCubit extends Cubit<CreateEventState> {
         time: time,
         location: location,
         capacity: capacity,
-        image: imageUrl,
+        bannerUrl: imageUrl,
         templateIndex: templateIndex,
         hostName: hostName,
+        category: category,
         hostId: FirebaseAuth.instance.currentUser?.uid ?? '',
       );
 
