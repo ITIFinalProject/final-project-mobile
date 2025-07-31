@@ -20,71 +20,72 @@ class _ChangePassState extends State<ChangePass> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Center(
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                CustomTextFormField(
-                  validator: (val) {
-                    if (val == null || val.isEmpty) {
-                      return 'Please enter your old password';
-                    }
-                    if (val.length < 6) {
-                      return 'Password must be at least 6 characters';
-                    }
-                    return null;
-                  },
-                  hint: "New Password",
-                  controller: newPassController,
-                ),
-                CustomTextFormField(
-                  validator: (val) {
-                    if (val == null || val.isEmpty) {
-                      return 'Please enter your old password';
-                    }
-                    return null;
-                  },
-                  hint: "confirm Password",
-                  controller: confirmPassController,
-                ),
-
-                CustomElevatedButton(
-                  title: "Save Password",
-                  onPressed: () async {
-                    if (_formKey.currentState!.validate()) {
-                      final authCubit = context.read<AuthCubit>();
-                      if (newPassController.text !=
-                          confirmPassController.text) {
+      body: Center(
+        child: SingleChildScrollView(
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CustomTextFormField(
+                    validator: (val) {
+                      if (val == null || val.isEmpty) {
+                        return 'Please enter your old password';
+                      }
+                      if (val.length < 6) {
+                        return 'Password must be at least 6 characters';
+                      }
+                      return null;
+                    },
+                    hint: "New Password",
+                    controller: newPassController,
+                  ),
+                  SizedBox(height: 20,),
+                  CustomTextFormField(
+                    validator: (val) {
+                      if (val == null || val.isEmpty) {
+                        return 'Please enter your old password';
+                      }
+                      return null;
+                    },
+                    hint: "confirm Password",
+                    controller: confirmPassController,
+                  ),
+        
+                  CustomElevatedButton(
+                    title: "Save Password",
+                    onPressed: () async {
+                      if (_formKey.currentState!.validate()) {
+                        final authCubit = context.read<AuthCubit>();
+                        if (newPassController.text !=
+                            confirmPassController.text) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text("Passwords do not match"),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                          return;
+                        } else
+                          await authCubit
+                            ..updatePassword(newPassController.text);
+        
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
-                            content: Text("Passwords do not match"),
-                            backgroundColor: Colors.red,
+                            content: Text("Password updated successfully"),
+                            backgroundColor: Colors.green,
                           ),
                         );
-                        return;
-                      } else
-                        await authCubit
-                          ..updatePassword(newPassController.text);
-
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text("Password updated successfully"),
-                          backgroundColor: Colors.green,
-                        ),
-                      );
-                      Navigator.pushReplacementNamed(
-                        context,
-                        AppRoutes.profileView,
-                      );
-                    }
-                  },
-                ),
-              ],
-            ),
-          ),
+                        Navigator.pushReplacementNamed(
+                          context,
+                          AppRoutes.profileView,
+                        );
+                      }
+                    },
+                  ),
+                ],
+              ),
+            ),  
         ),
       ),
     );
