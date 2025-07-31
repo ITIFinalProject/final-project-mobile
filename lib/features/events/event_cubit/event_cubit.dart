@@ -130,11 +130,27 @@ class EventCubit extends Cubit<EventState> {
     emit(EventLoading());
 
     try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        emit(EventError("User not logged in"));
+        return;
+      }
       await FirebaseFirestore.instance
           .collection('events')
           .doc(eventId)
           .delete();
+      // ✅ Also remove from current user's interested events
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .collection('interestedEvents')
+          .doc(eventId)
+          .delete();
+
+      // ✅ Update local cache
+      _interestedEventIds.remove(eventId);
       await fetchMyEvents();
+      emit(EventDeleted());
     } catch (e) {
       emit(EventError("Error deleting event: $e"));
     }

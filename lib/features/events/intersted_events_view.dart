@@ -1,3 +1,5 @@
+import 'package:eventify_app/core/routes.dart';
+import 'package:eventify_app/features/add_event/edit%20event/edit_event_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:eventify_app/core/theme.dart';
@@ -14,21 +16,17 @@ class InterestedEventsView extends StatefulWidget {
 }
 
 class _InterestedEventsViewState extends State<InterestedEventsView> {
-
   @override
   void initState() {
     super.initState();
     // نجيب الأحداث المهتم بها
     context.read<EventCubit>().fetchInterestedEvents();
   }
-  
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Interested Events"),
-      ),
+      appBar: AppBar(title: const Text("Interested Events")),
       body: BlocBuilder<EventCubit, EventState>(
         builder: (context, state) {
           if (state is EventLoading) {
@@ -46,12 +44,28 @@ class _InterestedEventsViewState extends State<InterestedEventsView> {
                   padding: const EdgeInsets.only(bottom: 12),
                   child: CardEvent(
                     event: event,
-                    isInterested: true, //  لأنها موجودة هنا أصلاً
+                    isInterested: true,
                     onToggleInterested: () {
                       context.read<EventCubit>().toggleInterestedEvent(event);
-                      // بعد الحذف، نعيد التحديث
                       context.read<EventCubit>().fetchInterestedEvents();
                       setState(() {});
+                    },
+                    onDelete: () {
+                      context.read<EventCubit>().deleteEvent(event.id);
+                      (state is EventDeleted)
+                          ? CircularProgressIndicator()
+                          : context.read<EventCubit>().fetchInterestedEvents();
+                      // setState(() {});
+                    },
+                    onEdit: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return EditEventView(event: event);
+                          },
+                        ),
+                      );
                     },
                   ),
                 );

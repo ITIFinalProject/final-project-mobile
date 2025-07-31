@@ -145,6 +145,7 @@ class _EventsViewState extends State<EventsView> with RouteAware {
                                   context.read<EventCubit>().deleteEvent(
                                     event.id,
                                   );
+                                  
                                 },
                                 onEdit: () {
                                   Navigator.push(
