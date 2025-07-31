@@ -19,7 +19,7 @@ class _MyCreatedEventsState extends State<MyCreatedEvents> with RouteAware {
   void initState() {
     super.initState();
     context.read<EventCubit>().fetchMyEvents();
-    context.read<EventCubit>().fetchInterestedEvents();
+
   }
 
   @override

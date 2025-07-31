@@ -143,25 +143,35 @@ snapshot.docs.map((doc) {
   }
 
 // **************************************************************
-Future<void> toggleInterestedEvent(EventModel event) async {
-  final user = FirebaseAuth.instance.currentUser;
-  if (user == null) return;
+  Future<void> toggleInterestedEvent(EventModel event) async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return;
 
-  final favRef = FirebaseFirestore.instance
-      .collection('users')
-      .doc(user.uid)
-      .collection('interestedEvents')
-      .doc(event.id);
+    final favRef = FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.uid)
+        .collection('interestedEvents')
+        .doc(event.id);
 
-  final snapshot = await favRef.get();
-  if (snapshot.exists) {
-    // لو event موجود في interestedEvents → احذفه
-    await favRef.delete();
-  } else {
-    // لو مش موجود → ضيفه
-    await favRef.set(event.toMap());
+    final snapshot = await favRef.get();
+
+    if (snapshot.exists) {
+      await favRef.delete();
+      _interestedEventIds.remove(event.id);
+    } else {
+      await favRef.set(event.toMap());
+      _interestedEventIds.add(event.id);
+    }
+
+    // ✅ إعادة إرسال نفس الـ state عشان يحصل rebuild مباشر
+    if (state is EventLoaded) {
+      emit(EventLoaded((state as EventLoaded).events));
+    } else if (state is EventInterestedLoaded) {
+      emit(EventInterestedLoaded((state as EventInterestedLoaded).interestedEvents));
+    }
   }
-}
+
+// *******************************************************
   Future<void> fetchInterestedEvents() async {
 
     emit(EventLoading());

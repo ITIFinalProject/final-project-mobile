@@ -91,13 +91,33 @@ class _HomeViewState extends State<HomeView> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        name.isNotEmpty ? "Welcome, $name! 👋" : "Welcome!",
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: ThemeManager.primaryColor,
-                        ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            name.isNotEmpty ? "Hello, $name! 👋" : "Welcome!",
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              color: ThemeManager.primaryColor,
+                            ),
+                          ),
+                          Row(
+                            children: [
+                              IconButton(onPressed: (){
+                              
+                                Navigator.pushNamed(
+                                  context,
+                                  AppRoutes.interestedEventsView,
+                                );
+                              }, icon: Icon(Icons.star_outline_rounded,size: 30,)),
+                              IconButton(onPressed: (){
+                              
+                              }, icon: Icon(Icons.notifications_active,size: 30,)),
+                            ],
+                          )
+
+                        ],
                       ),
                       const SizedBox(height: 20),
                       SearchInputField(

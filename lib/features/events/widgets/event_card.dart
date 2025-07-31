@@ -358,10 +358,18 @@ class _CardEventState extends State<CardEvent> {
 
                 // ⭐ زر النجمة
                 IconButton(
+                  style: IconButton.styleFrom(
+                    backgroundColor: Colors.white.withOpacity(0.6),
+                    shape: const CircleBorder(),
+                    padding: const EdgeInsets.all(6),
+                    shadowColor: Colors.black12,
+                    elevation: 2,
+                  ),
                   icon: Icon(
                     widget.isInterested ? Icons.star : Icons.star_border,
                     color: widget.isInterested ? Colors.yellow[700] : Colors.white,
                     size: 30,
+                    
                   ),
                   onPressed: widget.onToggleInterested,
                 ),

@@ -34,9 +34,7 @@ class _EventsViewState extends State<EventsView> with RouteAware {
         child: AppBar(
           title: Padding(
             padding: const EdgeInsets.only(top: 20),
-            child: Text(
-              'Events',
-            ),
+            child: Text('Events'),
           ),
         ),
       ),
@@ -47,7 +45,6 @@ class _EventsViewState extends State<EventsView> with RouteAware {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
               const SizedBox(height: 16),
               Container(
                 padding: const EdgeInsets.all(12),
@@ -109,48 +106,59 @@ class _EventsViewState extends State<EventsView> with RouteAware {
                     );
                   } else if (state is EventLoaded) {
                     final filteredEvents =
-                    selectedDate == null
-                        ? state.events
-                        : state.events.where((event) {
-                      try {
-                        final parts = event.date.split(' - ');
-                        final eventDate = DateFormat('dd/MM/yyyy').parse(
-                            parts[0]);
-                        return eventDate.year == selectedDate!.year &&
-                            eventDate.month == selectedDate!.month &&
-                            eventDate.day == selectedDate!.day;
-                      } catch (e) {
-                        return false; // Skip invalid dates
-                      }
-                    }).toList();
+                        selectedDate == null
+                            ? state.events
+                            : state.events.where((event) {
+                              try {
+                                final parts = event.date.split(' - ');
+                                final eventDate = DateFormat(
+                                  'dd/MM/yyyy',
+                                ).parse(parts[0]);
+                                return eventDate.year == selectedDate!.year &&
+                                    eventDate.month == selectedDate!.month &&
+                                    eventDate.day == selectedDate!.day;
+                              } catch (e) {
+                                return false; // Skip invalid dates
+                              }
+                            }).toList();
                     if (filteredEvents.isEmpty) {
                       return showNoEvents();
                     }
                     return Column(
                       children:
-                      filteredEvents.map((event) {
-                        
-          final isInterested = context.read<EventCubit>().isInterested(event.id);
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 12),
-                          child: CardEvent(
-                             onToggleInterested: () {
-                              context.read<EventCubit>().toggleInterestedEvent(event);
-                             },
-                             isInterested:isInterested,
-                            event: event,
-                            onDelete: () {
-                              context.read<EventCubit>().deleteEvent(event.id);
-                            },
-                            onEdit: () {
-                              Navigator.push(context,
-                                  MaterialPageRoute(builder: (context) {
-                                    return EditEventView(event: event);
-                                  }));
-                            },
-                          ),
-                        );
-                      }).toList(),
+                          filteredEvents.map((event) {
+                            final isInterested = context
+                                .read<EventCubit>()
+                                .isInterested(event.id);
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 12),
+                              child: CardEvent(
+                                onToggleInterested: () {
+                                  context
+                                      .read<EventCubit>()
+                                      .toggleInterestedEvent(event);
+                                        setState(() {}); //
+                                },
+                                isInterested: isInterested,
+                                event: event,
+                                onDelete: () {
+                                  context.read<EventCubit>().deleteEvent(
+                                    event.id,
+                                  );
+                                },
+                                onEdit: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) {
+                                        return EditEventView(event: event);
+                                      },
+                                    ),
+                                  );
+                                },
+                              ),
+                            );
+                          }).toList(),
                     );
                   } else if (state is EventError) {
                     return Center(child: Text(state.message));
@@ -161,7 +169,6 @@ class _EventsViewState extends State<EventsView> with RouteAware {
               ),
 
               const SizedBox(height: 70),
-
             ],
           ),
         ),
@@ -172,6 +179,8 @@ class _EventsViewState extends State<EventsView> with RouteAware {
   @override
   void didPopNext() {
     context.read<EventCubit>().fetchEvents();
+    context.read<EventCubit>().fetchInterestedEvents();
+    context.read<EventCubit>().fetchMyEvents();
   }
 
   @override
@@ -232,6 +241,4 @@ class _EventsViewState extends State<EventsView> with RouteAware {
       ),
     );
   }
-
 }
-
