@@ -7,8 +7,8 @@ import 'event_state.dart';
 
 class EventCubit extends Cubit<EventState> {
   EventCubit() : super(EventInitial());
-// **************************************************************************
-Set<String> _interestedEventIds = {};
+  // **************************************************************************
+  Set<String> _interestedEventIds = {};
 
   Set<String> get interestedEventIds => _interestedEventIds;
   Future<void> fetchEvents() async {
@@ -20,28 +20,26 @@ Set<String> _interestedEventIds = {};
 
       final events =
           // snapshot.docs.map((doc) => EventModel.fromMap(doc.data())).toList();
-
           // ***************************************************
-snapshot.docs.map((doc) {
-  final data = doc.data();
-  data['id'] = doc.id;   // نضيف id بتاع الـ document نفسه
-  return EventModel.fromMap(data);
-}).toList();
-// ***********************************************************************
+          snapshot.docs.map((doc) {
+            final data = doc.data();
+            data['id'] = doc.id; // نضيف id بتاع الـ document نفسه
+            return EventModel.fromMap(data);
+          }).toList();
+      // ***********************************************************************
       emit(EventLoaded(events));
     }
-  // catch (e) {
-  //     emit(EventError("Error occurred during Loading Events"));
-  //   }
-  catch (e, stack) {
-  print("🔥 Firestore Error: $e");
-  print(stack);
-  emit(EventError(e.toString()));
-}
-
+    // catch (e) {
+    //     emit(EventError("Error occurred during Loading Events"));
+    //   }
+    catch (e, stack) {
+      print("🔥 Firestore Error: $e");
+      print(stack);
+      emit(EventError(e.toString()));
+    }
   }
 
-// **************************************************************************
+  // **************************************************************************
   Future<void> joinEvent(EventModel event) async {
     emit(EventJoinLoading());
 
@@ -74,7 +72,7 @@ snapshot.docs.map((doc) {
     }
   }
 
-// *******************************************************************************
+  // *******************************************************************************
   Future<void> fetchJoinedEvents() async {
     emit(EventLoading());
 
@@ -142,7 +140,7 @@ snapshot.docs.map((doc) {
     }
   }
 
-// **************************************************************
+  // **************************************************************
   Future<void> toggleInterestedEvent(EventModel event) async {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) return;
@@ -167,13 +165,16 @@ snapshot.docs.map((doc) {
     if (state is EventLoaded) {
       emit(EventLoaded((state as EventLoaded).events));
     } else if (state is EventInterestedLoaded) {
-      emit(EventInterestedLoaded((state as EventInterestedLoaded).interestedEvents));
+      emit(
+        EventInterestedLoaded(
+          (state as EventInterestedLoaded).interestedEvents,
+        ),
+      );
     }
   }
 
-// *******************************************************
+  // *******************************************************
   Future<void> fetchInterestedEvents() async {
-
     emit(EventLoading());
     try {
       final user = FirebaseAuth.instance.currentUser;
@@ -181,13 +182,14 @@ snapshot.docs.map((doc) {
         emit(EventError("User not logged in"));
         return;
       }
-    
-      final snapshot = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(user.uid)
-          .collection('interestedEvents')
-          .get();
-_interestedEventIds = snapshot.docs.map((doc) => doc.id).toSet();
+
+      final snapshot =
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(user.uid)
+              .collection('interestedEvents')
+              .get();
+      _interestedEventIds = snapshot.docs.map((doc) => doc.id).toSet();
 
       final events =
           snapshot.docs.map((doc) => EventModel.fromMap(doc.data())).toList();
@@ -198,10 +200,38 @@ _interestedEventIds = snapshot.docs.map((doc) => doc.id).toSet();
     }
   }
 
-
-bool isInterested(String eventId) {
+  bool isInterested(String eventId) {
     return _interestedEventIds.contains(eventId);
   }
+  Future<void> fetchJoinedEndedEvents() async {
+  emit(EventLoading());
+
+  try {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      emit(EventError("User not logged in"));
+      return;
+    }
+
+    final snapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.uid)
+        .collection('eventsJoined')
+        .get();
+
+    final now = DateTime.now();
+
+    final events = snapshot.docs
+        .map((doc) => EventModel.fromMap(doc.data()))
+        .where((event) => event.eventEndDateTime.isBefore(now)) // ✅ الأحداث المنتهية فقط
+        .toList();
+
+    emit(EventLoaded(events));
+  } catch (e) {
+    emit(EventError("Error fetching ended joined events"));
+  }
+}
+
 }
 
 // *************************************************************

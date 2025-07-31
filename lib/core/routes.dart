@@ -2,10 +2,12 @@ import 'package:eventify_app/features/add_event/add_event_view.dart';
 import 'package:eventify_app/features/add_event/create_contact.dart';
 import 'package:eventify_app/features/add_event/event_details_view.dart';
 import 'package:eventify_app/features/add_event/widgets/map_location.dart';
+import 'package:eventify_app/features/add_memory/view/add_memory.dart';
 import 'package:eventify_app/features/auth/view/login.dart';
 import 'package:eventify_app/features/auth/view/register.dart';
 import 'package:eventify_app/features/auth/view/widgets/forget_password_view.dart';
 import 'package:eventify_app/features/categories/CategoryEventsView.dart';
+import 'package:eventify_app/features/events/event_memory_view.dart';
 import 'package:eventify_app/features/events/intersted_events_view.dart';
 import 'package:eventify_app/features/events/my_created_events.dart';
 import 'package:eventify_app/features/layout/layout.dart';
@@ -42,6 +44,8 @@ class AppRoutes {
   static const String myCreatedEvents = '/my_created_events';
   static const String editEventView = '/edit_event_view';
   static const String interestedEventsView = '/interested_events_view';
+  static const String eventMemories ='/eventMemories';
+    static const String addMemory ='/add_memories';
   static final routes = <String, WidgetBuilder>{
     splash: (context) => SplashScreen(),
     layout: (context) => LayoutView(),
@@ -63,5 +67,7 @@ class AppRoutes {
 
     myCreatedEvents: (context) => const MyCreatedEvents(),
     interestedEventsView: (context) => const InterestedEventsView(),
+    eventMemories :(context)=>const EventMemoryView(),
+    addMemory:(context)=>const AddMemory(),
   };
 }

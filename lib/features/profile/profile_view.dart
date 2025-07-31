@@ -90,7 +90,9 @@ class _ProfileViewState extends State<ProfileView> {
                     Navigator.pushNamed(context, AppRoutes.myCreatedEvents);
                   }),
                   _infoTile("Notification", Icons.notifications, () {}),
-                  _infoTile("Contact Us", Icons.contact_page, () {}),
+                  _infoTile("Event Memories", Icons.memory, () {
+                    Navigator.pushNamed(context, AppRoutes.eventMemories);
+                  }),
                   BlocBuilder<ThemeCubit, ThemeMode>(
                     builder: (context, themeMode) {
                       final isDark = themeMode == ThemeMode.dark;

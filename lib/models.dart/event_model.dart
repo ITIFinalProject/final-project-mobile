@@ -60,6 +60,43 @@ class EventModel extends Equatable {
   //     hostId: hostId ?? this.hostId,
   //   );
   // }
+  DateTime get eventEndDateTime {
+    try {
+      final dateParts = date.split(' - ');
+      final timeParts = time.split(' - ');
+
+      if (dateParts.length < 2 || timeParts.length < 2) return DateTime.now();
+
+      final endDate = dateParts[1].trim(); // "31/07/2025"
+      final endTime = timeParts[1].trim(); // "12:00 PM"
+
+      final full = '$endDate $endTime'; // "31/07/2025 12:00 PM"
+
+      return DateTime.parse(_formatToISO(full));
+    } catch (e) {
+      return DateTime.now();
+    }
+  }
+
+  String _formatToISO(String dateTime) {
+    // from "31/07/2025 12:00 PM" to ISO string
+    final parts = dateTime.split(' ');
+    final dateParts = parts[0].split('/');
+    final time = parts[1];
+    final ampm = parts[2];
+
+    int hour = int.parse(time.split(':')[0]);
+    int minute = int.parse(time.split(':')[1]);
+
+    if (ampm == 'PM' && hour != 12) hour += 12;
+    if (ampm == 'AM' && hour == 12) hour = 0;
+
+    final day = dateParts[0].padLeft(2, '0');
+    final month = dateParts[1].padLeft(2, '0');
+    final year = dateParts[2];
+
+    return '$year-$month-${day}T${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}:00';
+  }
 
   Map<String, dynamic> toMap() {
     return {
@@ -97,26 +134,27 @@ class EventModel extends Equatable {
   //   );
   // }
   factory EventModel.fromMap(Map<String, dynamic> map) {
-  return EventModel(
-    id: (map['id'] ?? '').toString(),
-    type: (map['type'] ?? 'default').toString(),
-    title: (map['title'] ?? 'Untitled Event').toString(),
-    description: (map['description'] ?? '').toString(),
-    date: (map['date'] ?? '').toString(),
-    time: (map['time'] ?? '').toString(),
-    location: (map['location'] ?? '').toString(),
-    capacity: (map['capacity'] is int)
-        ? map['capacity']
-        : int.tryParse(map['capacity']?.toString() ?? '0') ?? 0,
-    image: map['image']?.toString(),
-    templateIndex: map['templateIndex'] is int
-        ? map['templateIndex']
-        : int.tryParse(map['templateIndex']?.toString() ?? ''),
-    hostName: (map['hostName'] ?? 'Unknown Host').toString(),
-    hostId: map['hostId']?.toString() ?? '',
-  );
-}
-
+    return EventModel(
+      id: (map['id'] ?? '').toString(),
+      type: (map['type'] ?? 'default').toString(),
+      title: (map['title'] ?? 'Untitled Event').toString(),
+      description: (map['description'] ?? '').toString(),
+      date: (map['date'] ?? '').toString(),
+      time: (map['time'] ?? '').toString(),
+      location: (map['location'] ?? '').toString(),
+      capacity:
+          (map['capacity'] is int)
+              ? map['capacity']
+              : int.tryParse(map['capacity']?.toString() ?? '0') ?? 0,
+      image: map['image']?.toString(),
+      templateIndex:
+          map['templateIndex'] is int
+              ? map['templateIndex']
+              : int.tryParse(map['templateIndex']?.toString() ?? ''),
+      hostName: (map['hostName'] ?? 'Unknown Host').toString(),
+      hostId: map['hostId']?.toString() ?? '',
+    );
+  }
 
   @override
   List<Object?> get props => [
