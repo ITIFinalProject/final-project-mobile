@@ -265,7 +265,7 @@ class _EditEventViewState extends State<EditEventView> {
       endDateController = TextEditingController(text: widget.event.date);
     }
     startTimeController = TextEditingController(text: widget.event.time.split('-')[0]);
-    endTimeController = TextEditingController(text: widget.event.time.split('-')[1]);
+    endTimeController = TextEditingController(text: widget.event.time.split('-')[1].trim());
     selectedCategory = widget.event.category;
     selectedEventType = widget.event.type;
   
@@ -608,6 +608,8 @@ class _EditEventViewState extends State<EditEventView> {
       final end = DateTime(
           endDate.year, endDate.month, endDate.day, endTime.hour,
           endTime.minute);
+print('Start: $start');
+print('End: $end');
 
       return end.isAfter(start);
     } catch (_) {
