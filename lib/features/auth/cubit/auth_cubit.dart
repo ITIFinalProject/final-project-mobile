@@ -83,6 +83,8 @@ class AuthCubit extends Cubit<AuthState> {
     try {
       await _auth.signOut();
       await GoogleSignIn().signOut();
+      final prefs = await SharedPreferences.getInstance();
+      prefs.setString('userId','');
       emit(AuthLoggedOut());
     } catch (e) {
       emit(AuthFailure(e.toString()));
@@ -127,7 +129,6 @@ class AuthCubit extends Cubit<AuthState> {
 
     final currentUser = FirebaseAuth.instance.currentUser;
 
-    // الحصول على userId المحفوظ مسبقًا
     final prefs = await SharedPreferences.getInstance();
     final localUserId = prefs.getString('userId');
 
@@ -142,15 +143,24 @@ class AuthCubit extends Cubit<AuthState> {
           UserModel userModel = UserModel.fromFireStore(doc.data()!);
           emit(AuthSuccess(userModel));
         } else {
-          await FirebaseAuth.instance.signOut();
+          await _auth.signOut();
+          await GoogleSignIn().signOut();
+          final prefs = await SharedPreferences.getInstance();
+          prefs.setString('userId','');
           emit(AuthLoggedOut());
         }
       } catch (e) {
-        await FirebaseAuth.instance.signOut();
+        await _auth.signOut();
+        await GoogleSignIn().signOut();
+        final prefs = await SharedPreferences.getInstance();
+        prefs.setString('userId','');
         emit(AuthLoggedOut());
       }
     } else {
-      signOut();
+      await _auth.signOut();
+      await GoogleSignIn().signOut();
+      final prefs = await SharedPreferences.getInstance();
+      prefs.setString('userId','');
       emit(AuthLoggedOut());
     }
   }
