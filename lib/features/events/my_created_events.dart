@@ -19,6 +19,7 @@ class _MyCreatedEventsState extends State<MyCreatedEvents> with RouteAware {
   void initState() {
     super.initState();
     context.read<EventCubit>().fetchMyEvents();
+
   }
 
   @override
@@ -69,13 +70,19 @@ class _MyCreatedEventsState extends State<MyCreatedEvents> with RouteAware {
               itemCount: state.events.length,
               itemBuilder: (context, index) {
                 final event = state.events[index];
+                final isInterested = context.read<EventCubit>().isInterested(event.id);
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 12),
                   child: CardEvent(
+                    isInterested:isInterested ,
+                    onToggleInterested: () {
+                      context.read<EventCubit>().toggleInterestedEvent(event);
+                    },
                     event: event,
                     onDelete: () {
                       context.read<EventCubit>().deleteEvent(event.id);
                     },
+
                     onEdit: () {
                       Navigator.push(
                         context,
