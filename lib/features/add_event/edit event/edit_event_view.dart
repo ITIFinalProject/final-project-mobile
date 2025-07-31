@@ -257,9 +257,14 @@ class _EditEventViewState extends State<EditEventView> {
     capacityController = TextEditingController(
       text: widget.event.capacity.toString(),
     );
-    startDateController = TextEditingController(text: widget.event.date.split('-')[0]);
+    if(widget.event.date.contains('-')) {
+      startDateController = TextEditingController(text: widget.event.date.split('-')[0]);
+      endDateController = TextEditingController(text: widget.event.date.split('-')[1]);
+    } else {
+      startDateController = TextEditingController(text: widget.event.date);
+      endDateController = TextEditingController(text: widget.event.date);
+    }
     startTimeController = TextEditingController(text: widget.event.time.split('-')[0]);
-    endDateController = TextEditingController(text: widget.event.date.split('-')[1]);
     endTimeController = TextEditingController(text: widget.event.time.split('-')[1]);
     selectedCategory = widget.event.category;
     selectedEventType = widget.event.type;
