@@ -62,7 +62,7 @@ class EventModel extends Equatable {
   // }
  DateTime get eventEndDateTime {
   try {
-    final dateParts = date.split(' - ');
+    final dateParts = date.split(' _');
     final timeParts = time.split(' - ');
 
     if (dateParts.length < 2 || timeParts.length < 2) return DateTime.now();
@@ -83,7 +83,7 @@ class EventModel extends Equatable {
 String _formatToISO(String dateTime) {
   // from "31/07/2025 12:00 PM" to ISO string
   final parts = dateTime.split(' ');
-  final dateParts = parts[0].split('/');
+  final dateParts = parts[0].split('-');
   final time = parts[1];
   final ampm = parts[2];
 

@@ -249,7 +249,16 @@ class EventPreviewPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var event = ModalRoute.of(context)!.settings.arguments as EventModel;
+    final args = ModalRoute.of(context)?.settings.arguments;
+
+    if (args == null || args is! EventModel) {
+      return const Scaffold(
+        body: Center(
+          child: Text("No event data provided."),
+        ),
+      );
+    }
+    var event = args;
     var size = MediaQuery.of(context).size;
     String? imageUrl = event.bannerUrl;
     return Scaffold(
@@ -332,23 +341,24 @@ class EventPreviewPage extends StatelessWidget {
 
                     const SizedBox(height: 16),
 
-                    Flexible(
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.location_on_outlined,
-                            color: ThemeManager.secondaryColor,
-                          ),
-                          SizedBox(width: 8),
-                          Text(
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Icon(
+                          Icons.location_on_outlined,
+                          color: ThemeManager.secondaryColor,
+                        ),
+                        SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
                             event.location,
                             style: TextStyle(
                               fontSize: 14,
                               color: Color(0xff1b3c53),
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
 
                     const SizedBox(height: 24),

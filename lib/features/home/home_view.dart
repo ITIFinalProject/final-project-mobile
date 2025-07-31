@@ -204,7 +204,7 @@ class _HomeViewState extends State<HomeView> {
     final upcoming =
         allEvents.where((event) {
             try {
-              final parts = event.date.split(' - ').first.trim().split('/');
+              final parts = event.date.split(' _').first.trim().split('-');
               final parsedDate = DateTime(
                 int.parse(parts[2]),
                 int.parse(parts[1]),
@@ -216,8 +216,8 @@ class _HomeViewState extends State<HomeView> {
             }
           }).toList()
           ..sort((a, b) {
-            final aParts = a.date.split(' - ').first.trim().split('/');
-            final bParts = b.date.split(' - ').first.trim().split('/');
+            final aParts = a.date.split('_').first.trim().split('-');
+            final bParts = b.date.split(' _').first.trim().split('-');
             return DateTime(
               int.parse(aParts[2]),
               int.parse(aParts[1]),

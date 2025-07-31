@@ -9,6 +9,8 @@ import 'package:eventify_app/features/events/event_cubit/event_state.dart';
 import 'package:eventify_app/features/events/widgets/event_card.dart';
 import 'package:eventify_app/models.dart/event_model.dart';
 
+import '../add_memory/view/add_memory.dart';
+
 class InterestedEventsView extends StatefulWidget {
   const InterestedEventsView({super.key});
 
@@ -66,9 +68,17 @@ class _InterestedEventsViewState extends State<InterestedEventsView> {
                             return EditEventView(event: event);
                           },
                         ),
+
                       );
                     },
+                    onJoin: () {
+                      context.read<EventCubit>().joinEvent(event);
+                    },
+                    onAddMemory: (){
+                      Navigator.push(context,MaterialPageRoute(builder: (context)=>AddMemory(event: event)));
+                    },
                   ),
+
                 );
               },
             );

@@ -18,7 +18,7 @@ class CategoryEventsView extends StatelessWidget {
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection('events')
-            .where('type', isEqualTo: category)
+            .where('category', isEqualTo: category)
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {

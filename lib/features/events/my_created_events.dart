@@ -8,6 +8,9 @@ import 'package:eventify_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../core/routes.dart';
+import '../add_memory/view/add_memory.dart';
+
 class MyCreatedEvents extends StatefulWidget {
   const MyCreatedEvents({super.key});
 
@@ -93,6 +96,12 @@ class _MyCreatedEventsState extends State<MyCreatedEvents> with RouteAware {
                           },
                         ),
                       );
+                    },
+                    onJoin: () {
+                      context.read<EventCubit>().joinEvent(event);
+                    },
+                    onAddMemory: (){
+                      Navigator.push(context,MaterialPageRoute(builder: (context)=>AddMemory(event: event)));
                     },
                   ), //  نفس الكارد اللي بتستخدميه في EventsView
                 );

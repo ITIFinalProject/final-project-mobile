@@ -335,7 +335,7 @@ class _EventDetailsViewState extends State<EventDetailsView> {
         return;
       }
       String time = '${startTimeController.text} - ${endTimeController.text}';
-      String dateTime = (startDateController.text == endDateController.text)?startDateController.text:'${startDateController.text} - ${endDateController.text}';
+      String dateTime = (startDateController.text == endDateController.text)?startDateController.text:'${startDateController.text} _ ${endDateController.text}';
       context.read<CreateEventCubit>().createEvent(
         title: titleController.text.trim(),
         type: selectedEventType ?? '',
@@ -355,9 +355,9 @@ class _EventDetailsViewState extends State<EventDetailsView> {
 
   bool _isDateTimeRangeValid() {
     try {
-      final startDate = DateFormat('dd/MM/yyyy').parse(
+      final startDate = DateFormat('dd-MM-yyyy').parse(
           startDateController.text);
-      final endDate = DateFormat('dd/MM/yyyy').parse(endDateController.text);
+      final endDate = DateFormat('dd-MM-yyyy').parse(endDateController.text);
       final startTime = DateFormat('hh:mm a').parse(startTimeController.text);
       final endTime = DateFormat('hh:mm a').parse(endTimeController.text);
 
@@ -381,7 +381,7 @@ class _EventDetailsViewState extends State<EventDetailsView> {
       lastDate: DateTime(2026),
     );
     if (_date != null) {
-      startDateController.text = DateFormat('dd/MM/yyyy').format(_date);
+      startDateController.text = DateFormat('dd-MM-yyyy').format(_date);
       setState(() {});
     }
   }
@@ -393,7 +393,7 @@ class _EventDetailsViewState extends State<EventDetailsView> {
       lastDate: DateTime(2026),
     );
     if (_date != null) {
-      endDateController.text = DateFormat('dd/MM/yyyy').format(_date);
+      endDateController.text = DateFormat('dd-MM-yyyy').format(_date);
       setState(() {});
     }
   }

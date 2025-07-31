@@ -1,23 +1,171 @@
-import 'package:eventify_app/core/theme.dart';
-import 'package:eventify_app/models.dart/event_model.dart';
-import 'package:flutter/material.dart';
+import 'dart:io';
 
-class AddMemory extends StatelessWidget {
-  const AddMemory({super.key});
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
+
+import '../../../core/theme.dart';
+import '../../../models.dart/event_model.dart';
+import '../../events/widgets/card_no_events.dart';
+import '../cubit/memory_cubit.dart';
+import '../cubit/memory_state.dart';
+
+class AddMemory extends StatefulWidget {
+  final EventModel event ;
+  const AddMemory({super.key , required this.event});
 
   @override
+  State<AddMemory> createState() => _AddMemoryState();
+}
+
+class _AddMemoryState extends State<AddMemory> {
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+      context.read<MemoryCubit>().fetchMemories(widget.event.id);
+      print(widget.event.id);
+    print(widget.event.title);
+  }
+@override
+  void initState() {
+    super.initState();
+    context.read<MemoryCubit>().fetchMemories(widget.event.id);
+  }
+  @override
   Widget build(BuildContext context) {
-    var args = ModalRoute.of(context)!.settings.arguments as EventModel;
     return Scaffold(
-      appBar: AppBar(title: Text('${args.title} Memory'),),
-      body: Column(children: [
+      appBar: AppBar(title: Text('${widget.event.title} Memories')),
+      body: BlocBuilder<MemoryCubit, MemoryState>(
+        builder: (context, state) {
+          if (state is MemoryLoading) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (state is MemoriesLoaded) {
+            final memories = state.memories;
+            if(memories.isEmpty){
+              return const CardNoEvents(text: 'No Memories added to this event, add one!', title: 'Event Memory');
+            }else{
+            return GridView.builder(
+              padding: const EdgeInsets.all(12),
+              itemCount: memories.length,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+              ),
+              itemBuilder: (context, index) {
+                final memory = memories[index];
+                final isImage = memory.type == 'image';
 
-      ],),
-      floatingActionButton: FloatingActionButton(onPressed: (){
-
-      },
-      backgroundColor: ThemeManager.primaryColor,
-      child: Icon(Icons.add_a_photo_outlined, color: Colors.white,size: 30,),),
+                // Consider using a proper video player widget here
+                return isImage
+                    ? ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Image.network(
+                    memory.url,
+                    fit: BoxFit.cover,
+                    loadingBuilder: (context, child, loadingProgress) {
+                      if (loadingProgress == null) return child;
+                      return Center(
+                        child: CircularProgressIndicator(
+                          color: ThemeManager.primaryColor,
+                        ),
+                      );
+                    },
+                    errorBuilder: (context, error, stackTrace) {
+                      return Container(
+                        color: Colors.grey[200],
+                        child: const Icon(Icons.broken_image, color: Colors.grey, size: 48),
+                      );
+                    },
+                  ),
+                )
+                    : ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Container(
+                    color: Colors.black, // Placeholder for video
+                    child: const Center(
+                      child: Icon(Icons.videocam, size: 48, color: Colors.white),
+                    ),
+                  ),
+                );
+              },
+            );}
+          } else if (state is MemoryError) {
+            return Center(child: Text("Error: ${state.message}"));
+          } else {
+            return const SizedBox.shrink();
+          }
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _pickImage,
+        backgroundColor: ThemeManager.primaryColor,
+        child: const Icon(
+          Icons.add_a_photo_outlined,
+          color: Colors.white,
+          size: 30,
+        ),
+      ),
     );
+  }
+
+  Future<void> _pickImage() async {
+
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => SafeArea(
+        child: Wrap(
+          children: [
+            ListTile(
+              leading: const Icon(Icons.photo_camera),
+              title: const Text("Take a photo"),
+              onTap: () {
+                handlePickAndUpload(ImageSource.camera, 'image');
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.photo_library),
+              title: const Text("Upload Image from gallery"),
+              onTap: () {
+                handlePickAndUpload(ImageSource.gallery, 'image');
+              },
+            ),
+            ListTile(
+                leading: const Icon(Icons.video_camera_back_outlined),
+                title: const Text("Record a video"),
+                onTap: () {
+                  handlePickAndUpload(ImageSource.camera, 'video');
+                }
+            ),
+            ListTile(
+              leading: const Icon(Icons.video_collection),
+              title: const Text("Upload a video"),
+              onTap: () {
+                handlePickAndUpload(ImageSource.gallery, 'video');
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> handlePickAndUpload(ImageSource source, String type) async {
+    final picked = type == 'image'
+        ? await ImagePicker().pickImage(source: source)
+        : await ImagePicker().pickVideo(source: source);
+
+    if (picked != null) {
+      final file = File(picked.path);
+      if (widget.event != null) {
+        context.read<MemoryCubit>().uploadMemory(
+          type: type,
+          file: file,
+          eventId: widget.event.id, // Use ! here because we've checked for null
+        );
+      }
+    }
+
+    Navigator.pop(context);
   }
 }

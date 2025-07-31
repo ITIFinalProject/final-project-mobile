@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 
 import '../../../models.dart/event_model.dart';
 import 'event_state.dart';
@@ -219,35 +220,87 @@ class EventCubit extends Cubit<EventState> {
   bool isInterested(String eventId) {
     return _interestedEventIds.contains(eventId);
   }
-  Future<void> fetchJoinedEndedEvents() async {
-  emit(EventLoading());
 
-  try {
-    final user = FirebaseAuth.instance.currentUser;
-    if (user == null) {
-      emit(EventError("User not logged in"));
-      return;
+
+//   Future<void> fetchJoinedEndedEvents() async {
+//   emit(EventLoading());
+//
+//   try {
+//     final user = FirebaseAuth.instance.currentUser;
+//     if (user == null) {
+//       emit(EventError("User not logged in"));
+//       return;
+//     }
+//
+//     final snapshot = await FirebaseFirestore.instance
+//         .collection('users')
+//         .doc(user.uid)
+//         .collection('eventsJoined')
+//         .get();
+//
+//     final now = DateTime.now();
+//
+//     final events = snapshot.docs
+//         .map((doc) => EventModel.fromMap(doc.data()))
+//         .where((event) => event.eventEndDateTime.isBefore(now)) // ✅ الأحداث المنتهية فقط
+//         .toList();
+//
+//     emit(EventLoaded(events));
+//   } catch (e) {
+//     emit(EventError("Error fetching ended joined events"));
+//   }
+// }
+
+
+//   ==============================
+  Future<void> fetchJoinedStartedEvents() async {
+    emit(EventLoading());
+
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        emit(EventError("User not logged in"));
+        return;
+      }
+
+      final snapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .collection('eventsJoined')
+          .get();
+
+      final now = DateTime.now();
+
+      final events = snapshot.docs
+          .map((doc) => EventModel.fromMap(doc.data()))
+          .where((event) => isEventStartedOrPast(event.date))
+          .toList();
+
+      emit(EventLoaded(events));
+    } catch (e) {
+      emit(EventError("Error fetching started joined events"));
     }
-
-    final snapshot = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(user.uid)
-        .collection('eventsJoined')
-        .get();
-
-    final now = DateTime.now();
-
-    final events = snapshot.docs
-        .map((doc) => EventModel.fromMap(doc.data()))
-        .where((event) => event.eventEndDateTime.isBefore(now)) // ✅ الأحداث المنتهية فقط
-        .toList();
-
-    emit(EventLoaded(events));
-  } catch (e) {
-    emit(EventError("Error fetching ended joined events"));
   }
-}
+  bool isEventStartedOrPast(String dateString) {
+    try {
+      String date;
+      if (dateString.contains('_')) {
+        date = dateString.split(' _').first.trim();
+      } else {
+        date = dateString;
+      }
+      final startDate = DateFormat('dd-MM-yyyy').parse(date);
+      final today = DateTime.now();
 
+      return today.isAfter(startDate) || isSameDay(today, startDate);
+    } catch (_) {
+      return false;
+    }
+  }
+
+  bool isSameDay(DateTime a, DateTime b) {
+    return a.year == b.year && a.month == b.month && a.day == b.day;
+  }
 }
 
 // *************************************************************
