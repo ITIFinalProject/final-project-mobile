@@ -37,7 +37,7 @@ class _HomeViewState extends State<HomeView> {
     if (authState is AuthSuccess) {
       name = authState.user.name ?? '';
     }
-    // *******************
+
       context.read<EventCubit>().fetchEvents();
   }
 

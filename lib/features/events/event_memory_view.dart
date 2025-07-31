@@ -2,6 +2,7 @@ import 'package:eventify_app/core/routes.dart';
 import 'package:eventify_app/core/theme.dart';
 import 'package:eventify_app/features/events/event_cubit/event_cubit.dart';
 import 'package:eventify_app/features/events/event_cubit/event_state.dart';
+import 'package:eventify_app/features/events/widgets/card_no_events.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -29,7 +30,7 @@ class _EventMemoryViewState extends State<EventMemoryView> {
           } else if (state is EventLoaded) {
             final events = state.events;
             if (events.isEmpty) {
-              return const Center(child: Text('No ended events yet.'));
+              return CardNoEvents(text: 'No ended events yet.', title: 'Event Memory');
             }
 
             return ListView.builder(

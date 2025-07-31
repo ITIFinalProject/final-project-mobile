@@ -1,5 +1,6 @@
 import 'package:eventify_app/core/theme.dart';
 import 'package:eventify_app/features/add_event/edit%20event/edit_event_view.dart';
+import 'package:eventify_app/features/events/widgets/card_no_events.dart';
 import 'package:eventify_app/features/events/widgets/event_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -110,19 +111,30 @@ class _EventsViewState extends State<EventsView> with RouteAware {
                             ? state.events
                             : state.events.where((event) {
                               try {
-                                final parts = event.date.split(' - ');
-                                final eventDate = DateFormat(
-                                  'dd/MM/yyyy',
-                                ).parse(parts[0]);
-                                return eventDate.year == selectedDate!.year &&
-                                    eventDate.month == selectedDate!.month &&
-                                    eventDate.day == selectedDate!.day;
+                                final parts = event.date.contains(' - ');
+                                if (parts) {
+                                  final datePart = event.date.split('-');
+                                  final eventDate = DateFormat(
+                                    'dd/MM/yyyy',
+                                  ).parse(datePart.first.trim());
+                                  return eventDate.year == selectedDate!.year &&
+                                      eventDate.month == selectedDate!.month &&
+                                      eventDate.day == selectedDate!.day;
+                                } else {
+                                  final datePart = event.date;
+                                  final eventDate = DateFormat(
+                                    'dd/MM/yyyy',
+                                  ).parse(datePart);
+                                  return eventDate.year == selectedDate!.year &&
+                                      eventDate.month == selectedDate!.month &&
+                                      eventDate.day == selectedDate!.day;
+                                }
                               } catch (e) {
-                                return false; // Skip invalid dates
+                                return false;
                               }
                             }).toList();
                     if (filteredEvents.isEmpty) {
-                      return showNoEvents();
+                      return CardNoEvents(text: 'Create an event and make some memorizes',title: 'No Events in that Day',);
                     }
                     return Column(
                       children:
@@ -137,7 +149,7 @@ class _EventsViewState extends State<EventsView> with RouteAware {
                                   context
                                       .read<EventCubit>()
                                       .toggleInterestedEvent(event);
-                                        setState(() {}); //
+                                  setState(() {}); //
                                 },
                                 isInterested: isInterested,
                                 event: event,
@@ -145,7 +157,6 @@ class _EventsViewState extends State<EventsView> with RouteAware {
                                   context.read<EventCubit>().deleteEvent(
                                     event.id,
                                   );
-                                  
                                 },
                                 onEdit: () {
                                   Navigator.push(

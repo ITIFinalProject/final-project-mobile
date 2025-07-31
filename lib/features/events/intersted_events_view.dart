@@ -1,5 +1,6 @@
 import 'package:eventify_app/core/routes.dart';
 import 'package:eventify_app/features/add_event/edit%20event/edit_event_view.dart';
+import 'package:eventify_app/features/events/widgets/card_no_events.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:eventify_app/core/theme.dart';
@@ -33,7 +34,7 @@ class _InterestedEventsViewState extends State<InterestedEventsView> {
             return const Center(child: CircularProgressIndicator());
           } else if (state is EventInterestedLoaded) {
             if (state.interestedEvents.isEmpty) {
-              return const Center(child: Text("No interested events yet."));
+              return CardNoEvents(text: "No interested events yet.", title: 'Interested Events',);
             }
             return ListView.builder(
               padding: const EdgeInsets.all(16),
