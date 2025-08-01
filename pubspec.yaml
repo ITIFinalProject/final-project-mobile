@@ -88,7 +88,7 @@ flutter:
   assets:
     - assets/images/
     - .env
-    - assets/eventify-app-c92d4-29f0234c150b.json
+    - assets/eventify-app-c92d4-firebase-adminsdk-fbsvc-df9be473a8.json
     # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 
