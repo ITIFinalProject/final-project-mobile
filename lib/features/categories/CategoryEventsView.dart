@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eventify_app/core/routes.dart';
+import 'package:eventify_app/features/events/widgets/card_no_events.dart';
 import 'package:eventify_app/models.dart/event_model.dart';
 import 'package:flutter/material.dart';
 
@@ -17,7 +18,7 @@ class CategoryEventsView extends StatelessWidget {
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection('events')
-            .where('type', isEqualTo: category)
+            .where('category', isEqualTo: category)
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -33,7 +34,7 @@ class CategoryEventsView extends StatelessWidget {
               .toList();
 
           if (categoryEvents.isEmpty) {
-            return const Center(child: Text("No events found in this category."));
+            return CardNoEvents(text: '"No events found in this category."', title: 'Events Category');
           }
 
           return ListView.builder(
@@ -58,11 +59,11 @@ class CategoryEventsView extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if (event.image != null)
+                      if (event.bannerUrl != null)
                         ClipRRect(
                           borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
                           child: Image.network(
-                            event.image!,
+                            event.bannerUrl!,
                             height: 180,
                             width: double.infinity,
                             fit: BoxFit.cover,

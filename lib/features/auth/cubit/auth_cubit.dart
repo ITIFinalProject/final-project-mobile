@@ -7,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' hide AuthState;
 import 'package:uuid/uuid.dart';
 
@@ -23,6 +24,8 @@ class AuthCubit extends Cubit<AuthState> {
         email: email,
         password: password,
       );
+      final prefs = await SharedPreferences.getInstance();
+      prefs.setString('userId',result.user!.uid);
       final doc =
       await FirebaseFirestore.instance
           .collection('users')
@@ -55,6 +58,8 @@ class AuthCubit extends Cubit<AuthState> {
         email: email,
         password: password,
       );
+      final prefs = await SharedPreferences.getInstance();
+      prefs.setString('userId', result.user!.uid);
       UserModel user = UserModel(
         name: name,
         email: email,
@@ -78,6 +83,8 @@ class AuthCubit extends Cubit<AuthState> {
     try {
       await _auth.signOut();
       await GoogleSignIn().signOut();
+      final prefs = await SharedPreferences.getInstance();
+      prefs.setString('userId','');
       emit(AuthLoggedOut());
     } catch (e) {
       emit(AuthFailure(e.toString()));
@@ -102,18 +109,58 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
+  // void checkUserLoggedIn() async {
+  //   await Future.delayed(Duration(seconds: 2));
+  //   final user = FirebaseAuth.instance.currentUser;
+  //   if (user != null) {
+  //     final doc =
+  //     await FirebaseFirestore.instance
+  //         .collection('users')
+  //         .doc(user.uid)
+  //         .get();
+  //     UserModel currentUser = UserModel.fromFireStore(doc.data()!);
+  //     emit(AuthSuccess(currentUser));
+  //   } else {
+  //     emit(AuthLoggedOut());
+  //   }
+  // }
   void checkUserLoggedIn() async {
-    await Future.delayed(Duration(seconds: 2));
-    final user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      final doc =
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(user.uid)
-          .get();
-      UserModel currentUser = UserModel.fromFireStore(doc.data()!);
-      emit(AuthSuccess(currentUser));
+    await Future.delayed(const Duration(seconds: 2));
+
+    final currentUser = FirebaseAuth.instance.currentUser;
+
+    final prefs = await SharedPreferences.getInstance();
+    final localUserId = prefs.getString('userId');
+
+    if (currentUser != null && currentUser.uid == localUserId) {
+      try {
+        final doc = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(currentUser.uid)
+            .get();
+
+        if (doc.exists) {
+          UserModel userModel = UserModel.fromFireStore(doc.data()!);
+          emit(AuthSuccess(userModel));
+        } else {
+          await _auth.signOut();
+          await GoogleSignIn().signOut();
+          final prefs = await SharedPreferences.getInstance();
+          prefs.setString('userId','');
+          emit(AuthLoggedOut());
+        }
+      } catch (e) {
+        await _auth.signOut();
+        await GoogleSignIn().signOut();
+        final prefs = await SharedPreferences.getInstance();
+        prefs.setString('userId','');
+        emit(AuthLoggedOut());
+      }
     } else {
+      await _auth.signOut();
+      await GoogleSignIn().signOut();
+      final prefs = await SharedPreferences.getInstance();
+      prefs.setString('userId','');
       emit(AuthLoggedOut());
     }
   }

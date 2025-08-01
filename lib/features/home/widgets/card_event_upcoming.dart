@@ -25,9 +25,9 @@ class CardEventUpcoming extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(15),
               child:
-                  event.image != null && event.image!.isNotEmpty
+                  event.bannerUrl != null && event.bannerUrl!.isNotEmpty
                       ? Image.network(
-                        event.image ?? '',
+                        event.bannerUrl ?? '',
                         width: size.width * 0.5,
                         height: size.height * 0.2,
                         fit: BoxFit.cover,
@@ -44,8 +44,12 @@ class CardEventUpcoming extends StatelessWidget {
                           return Icon(Icons.error, color: Colors.red);
                         },
                       )
-                      : Image.asset(
+                      : (event.templateIndex!=null)?Image.asset(
                         'assets/images/template${event.templateIndex}.jpg',
+                        width: size.width * 0.5,
+                        height: size.height * 0.2,
+                        fit: BoxFit.cover,
+                      ):Image.network('https://i.pinimg.com/1200x/2b/7f/a9/2b7fa911454725f7fd5b9d2f4dd41046.jpg',
                         width: size.width * 0.5,
                         height: size.height * 0.2,
                         fit: BoxFit.cover,
@@ -55,41 +59,45 @@ class CardEventUpcoming extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 5,
-                        horizontal: 10,
-                      ),
-                      child: Text(
-                        event.title,
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
+                Expanded(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 5,
+                          horizontal: 10,
+                        ),
+                        child: Text(
+                          event.title,
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        spacing: 5,
-                        children: [
-                          Icon(Icons.access_time),
-                          Text(
-                            event.time.split('-')[0],
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w400,
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          spacing: 5,
+                          children: [
+                            Icon(Icons.access_time),
+                            Text(
+                              event.time.split('-')[0],
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w400,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
                 IconButton(
                   onPressed: () {},

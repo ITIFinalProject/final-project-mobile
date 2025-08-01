@@ -37,6 +37,8 @@ class _HomeViewState extends State<HomeView> {
     if (authState is AuthSuccess) {
       name = authState.user.name ?? '';
     }
+
+      context.read<EventCubit>().fetchEvents();
   }
 
   @override
@@ -64,7 +66,9 @@ class _HomeViewState extends State<HomeView> {
                     userName: authState.user.name ?? '',
                     events: eventState.events,
                   );
-                }
+                }else if (eventState is EventError) {
+      print("⚠️ حدث خطأ في تحميل الأحداث: ${eventState.message}");
+    }
               },
             ),
           ],
@@ -87,13 +91,33 @@ class _HomeViewState extends State<HomeView> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        name.isNotEmpty ? "Welcome, $name! 👋" : "Welcome!",
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: ThemeManager.primaryColor,
-                        ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            name.isNotEmpty ? "Hello, $name! 👋" : "Welcome!",
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              color: ThemeManager.primaryColor,
+                            ),
+                          ),
+                          Row(
+                            children: [
+                              IconButton(onPressed: (){
+                              
+                                Navigator.pushNamed(
+                                  context,
+                                  AppRoutes.interestedEventsView,
+                                );
+                              }, icon: Icon(Icons.star_outline_rounded,size: 30,)),
+                              IconButton(onPressed: (){
+                              
+                              }, icon: Icon(Icons.notifications_active,size: 30,)),
+                            ],
+                          )
+
+                        ],
                       ),
                       const SizedBox(height: 20),
                       SearchInputField(
@@ -180,7 +204,7 @@ class _HomeViewState extends State<HomeView> {
     final upcoming =
         allEvents.where((event) {
             try {
-              final parts = event.date.split(' - ').first.trim().split('/');
+              final parts = event.date.split(' _').first.trim().split('-');
               final parsedDate = DateTime(
                 int.parse(parts[2]),
                 int.parse(parts[1]),
@@ -192,8 +216,8 @@ class _HomeViewState extends State<HomeView> {
             }
           }).toList()
           ..sort((a, b) {
-            final aParts = a.date.split(' - ').first.trim().split('/');
-            final bParts = b.date.split(' - ').first.trim().split('/');
+            final aParts = a.date.split('_').first.trim().split('-');
+            final bParts = b.date.split(' _').first.trim().split('-');
             return DateTime(
               int.parse(aParts[2]),
               int.parse(aParts[1]),

@@ -17,7 +17,7 @@ class EventError extends EventState {
 
   EventError(this.message);
 }
-
+class EventDeleted extends EventState{}
 class EventJoinLoading extends EventState {}
 
 class EventJoinSuccess extends EventState {}
@@ -26,4 +26,10 @@ class EventJoinError extends EventState {
   final String message;
 
   EventJoinError(this.message);
+}
+
+class EventInterestedLoaded extends EventState {
+  final List<EventModel> interestedEvents;
+
+  EventInterestedLoaded(this.interestedEvents);
 }

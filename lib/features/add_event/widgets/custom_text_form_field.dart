@@ -12,7 +12,7 @@ class CustomTextFormField extends StatelessWidget {
   final String hint;
   final VoidCallback? onTapped;
   final Changed? onChange;
-
+  final TextInputType keyboardType;
 
   const CustomTextFormField({
     super.key,
@@ -22,7 +22,8 @@ class CustomTextFormField extends StatelessWidget {
     required this.controller,
     this.onTapped,
     this.lines = 1,
-    this.onChange
+    this.onChange,
+    this.keyboardType = TextInputType.text
 
   });
 
@@ -36,7 +37,7 @@ class CustomTextFormField extends StatelessWidget {
         maxLines: lines,
         onTap: onTapped,
         onChanged: onChange,
-
+        keyboardType: keyboardType,
         decoration: CustomInputDecoration.getDecoration(
           hintText: hint,
           icon: prefixIcon,

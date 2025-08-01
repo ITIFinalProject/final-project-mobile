@@ -1,3 +1,4 @@
+import 'package:eventify_app/features/events/widgets/card_no_events.dart';
 import 'package:eventify_app/features/home/widgets/card_event_upcoming.dart';
 import 'package:flutter/material.dart';
 
@@ -14,7 +15,7 @@ class ShowUpcomingEvents extends StatelessWidget {
     var size = MediaQuery.of(context).size;
     return SizedBox(
       height: size.height * 0.3,
-      child: ListView.builder(
+      child: upcomingEvents.isEmpty?CardNoEvents(text: 'No Events Created To be UpComing',title: 'No Events Created',):ListView.builder(
         scrollDirection: Axis.horizontal,
         itemBuilder: (BuildContext context, int index) {
           return GestureDetector(
