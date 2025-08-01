@@ -368,7 +368,7 @@ class _EventDetailsViewState extends State<EventDetailsView> {
         category: selectedEventCategory ?? '',
       );
     }
-  }}
+  }
 
   bool _isDateTimeRangeValid() {
     try {
@@ -467,5 +467,4 @@ class _EventDetailsViewState extends State<EventDetailsView> {
       locationController.text = result;
     }
   }
-
 }
