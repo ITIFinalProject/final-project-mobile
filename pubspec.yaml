@@ -61,6 +61,8 @@ dependencies:
   flutter_svg: ^2.1.0
   shared_preferences: ^2.5.3
   video_player: ^2.9.5
+  firebase_messaging: ^15.2.8
+  googleapis_auth: ^2.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -86,6 +88,7 @@ flutter:
   assets:
     - assets/images/
     - .env
+    - assets/eventify-app-c92d4-29f0234c150b.json
     # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 
