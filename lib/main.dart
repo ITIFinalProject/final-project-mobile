@@ -25,14 +25,12 @@ final RouteObserver<ModalRoute> routeObserver = RouteObserver<ModalRoute>();
 Future<void> setupFCM() async {
   FirebaseMessaging messaging = FirebaseMessaging.instance;
 
-  // اطلب الإذن
+
   await messaging.requestPermission();
 
-  // احصل على FCM Token
   String? token = await messaging.getToken();
   print("🔐 FCM Token: $token");
 
-  // خزنه مع بيانات المستخدم في Firestore
   final user = FirebaseAuth.instance.currentUser;
   if (user != null && token != null) {
     await FirebaseFirestore.instance.collection('users').doc(user.uid).update({
@@ -40,16 +38,13 @@ Future<void> setupFCM() async {
     });
   }
 
-  // استقبال الإشعار والتطبيق شغال (Foreground)
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     print("📩 Received message: ${message.notification?.title}");
-    // ممكن تضيف local notification هنا
+
   });
 
-  // المستخدم فتح الإشعار
   FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
     print("🚪 Notification opened");
-    // تقدر توديه على صفحة معينة مثلاً
   });
 }
 

@@ -55,10 +55,7 @@ class _EventDetailsViewState extends State<EventDetailsView> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    final args = ModalRoute
-        .of(context)!
-        .settings
-        .arguments as Map?;
+    final args = ModalRoute.of(context)!.settings.arguments as Map?;
 
     if (args != null) {
       pickedImage = args['selectedImage'];
@@ -353,8 +350,13 @@ class _EventDetailsViewState extends State<EventDetailsView> {
         return;
       }
       String time = '${startTimeController.text} - ${endTimeController.text}';
-      String dateTime = (startDateController.text == endDateController.text)?startDateController.text:'${startDateController.text} _ ${endDateController.text}';
-      context.read<CreateEventCubit>().createEvent(
+      String dateTime =
+          (startDateController.text == endDateController.text)
+              ? startDateController.text
+              : '${startDateController.text} _ ${endDateController.text}';
+      final event = EventModel(
+        id: const Uuid().v4(),
+        hostId: '123',
         title: titleController.text.trim(),
         type: selectedEventType ?? '',
         description: descriptionController.text.trim(),
@@ -363,17 +365,38 @@ class _EventDetailsViewState extends State<EventDetailsView> {
         location: locationController.text.trim(),
         hostName: hostNameController.text.trim(),
         capacity: int.tryParse(attendeesController.text) ?? 50,
-        imageFile: pickedImage,
+        bannerUrl: pickedImage?.path ?? '',
         templateIndex: selectedTemplateIndex,
         category: selectedEventCategory ?? '',
       );
+      if (selectedEventType == 'Private') {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => CreateContact(event: event)),
+        );
+      } else {
+        context.read<CreateEventCubit>().createEvent(
+          title: titleController.text.trim(),
+          type: selectedEventType ?? '',
+          time: time,
+          location: locationController.text.trim(),
+          hostName: hostNameController.text.trim(),
+          capacity: int.tryParse(attendeesController.text) ?? 50,
+          imageFile: pickedImage,
+          templateIndex: selectedTemplateIndex,
+          category: selectedEventCategory ?? '',
+          date: dateTime,
+          description: descriptionController.text,
+        );
+      }
     }
   }
 
   bool _isDateTimeRangeValid() {
     try {
-      final startDate = DateFormat('dd-MM-yyyy').parse(
-          startDateController.text);
+      final startDate = DateFormat(
+        'dd-MM-yyyy',
+      ).parse(startDateController.text);
       final endDate = DateFormat('dd-MM-yyyy').parse(endDateController.text);
       final startTime = DateFormat('hh:mm a').parse(startTimeController.text);
       final endTime = DateFormat('hh:mm a').parse(endTimeController.text);
@@ -458,7 +481,6 @@ class _EventDetailsViewState extends State<EventDetailsView> {
       endTimeController.text = DateFormat('hh:mm a').format(dateTime);
     }
   }
-
 
   openMapToGetLocation() async {
     final result = await Navigator.pushNamed(context, AppRoutes.mapPicker);
