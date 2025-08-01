@@ -284,7 +284,7 @@ class CreateEventCubit extends Cubit<CreateEventState> {
         'guestEmail': guest.email,
         'type': 'invitation',
         'read': false,
-        'status': 'pending', // or null
+        'status': 'pending',
       });
     }
   }
