@@ -79,54 +79,54 @@ class _CategoryEventsViewState extends State<CategoryEventsView> {
             itemBuilder: (context, index) {
               final event = categoryEvents[index];
               return BlocBuilder<EventCubit, EventState>(
-  builder: (context, state) {
-    final isInterested =
-        context.read<EventCubit>().isInterested(event.id);
+                builder: (context, state) {
+                  final isInterested = context.read<EventCubit>().isInterested(
+                    event.id,
+                  );
                   return GestureDetector(
-                              onTap: () {
-                                Navigator.pushNamed(
-                                  context,
-                                  AppRoutes.eventPreview, // عدلي لو اسمك مختلف
-                                  arguments: event,
-                                );
-                              },
-              
-                              child: CardEvent(
-                                
-                                onToggleInterested: () {
-                                  context.read<EventCubit>().toggleInterestedEvent(event);
-                                  setState(() {}); //
-                                },
-                                isInterested:context
-                                              .read<EventCubit>()
-                                              .isInterested(event.id),
-                                event: event,
-                                onDelete: () {
-                                  context.read<EventCubit>().deleteEvent(event.id);
-                                },
-                                onEdit: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) {
-                                        return EditEventView(event: event);
-                                      },
-                                    ),
-                                  );
-                                },
-                                onJoin: () {
-                                  context.read<EventCubit>().joinEvent(event);
-                                },
-                                onAddMemory: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => AddMemory(event: event),
-                                    ),
-                                  );
-                                },
-                              ),
-                            );
+                    onTap: () {
+                      Navigator.pushNamed(
+                        context,
+                        AppRoutes.eventPreview, // عدلي لو اسمك مختلف
+                        arguments: event,
+                      );
+                    },
+
+                    child: CardEvent(
+                      onToggleInterested: () {
+                        context.read<EventCubit>().toggleInterestedEvent(event);
+                        setState(() {}); //
+                      },
+                      isInterested: context.read<EventCubit>().isInterested(
+                        event.id,
+                      ),
+                      event: event,
+                      onDelete: () {
+                        context.read<EventCubit>().deleteEvent(event.id);
+                      },
+                      onEdit: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return EditEventView(event: event);
+                            },
+                          ),
+                        );
+                      },
+                      onJoin: () {
+                        context.read<EventCubit>().joinEvent(event);
+                      },
+                      onAddMemory: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AddMemory(event: event),
+                          ),
+                        );
+                      },
+                    ),
+                  );
                 },
               );
             },

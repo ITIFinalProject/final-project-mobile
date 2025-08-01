@@ -117,7 +117,7 @@ class _EventsViewState extends State<EventsView> with RouteAware {
                                 if (parts) {
                                   final datePart = event.date.split('_');
                                   final eventDate = DateFormat(
-                                    'dd-MM-yyyy',
+                                    'yyyy-MM-dd',
                                   ).parse(datePart.first.trim());
                                   return eventDate.year == selectedDate!.year &&
                                       eventDate.month == selectedDate!.month &&
@@ -125,7 +125,7 @@ class _EventsViewState extends State<EventsView> with RouteAware {
                                 } else {
                                   final datePart = event.date;
                                   final eventDate = DateFormat(
-                                    'dd-MM-yyyy',
+                                    'yyyy-MM-dd',
                                   ).parse(datePart);
                                   return eventDate.year == selectedDate!.year &&
                                       eventDate.month == selectedDate!.month &&

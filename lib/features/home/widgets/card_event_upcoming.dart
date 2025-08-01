@@ -1,6 +1,8 @@
 import 'package:eventify_app/core/theme.dart';
+import 'package:eventify_app/features/events/event_cubit/event_cubit.dart';
 import 'package:eventify_app/models.dart/event_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CardEventUpcoming extends StatelessWidget {
   final EventModel event;
@@ -10,6 +12,7 @@ class CardEventUpcoming extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
+    var isIntersted = context.read<EventCubit>().isInterested(event.id);
     return SizedBox(
       width: size.width * 0.6,
       child: Card(
@@ -100,10 +103,12 @@ class CardEventUpcoming extends StatelessWidget {
                   ),
                 ),
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    context.read<EventCubit>().toggleInterestedEvent(event);
+                  },
                   icon: Icon(
-                    Icons.favorite_border_outlined,
-                    color: ThemeManager.primaryColor,
+                    isIntersted?Icons.star:Icons.star_border_outlined,
+                    color: isIntersted?Colors.amber:ThemeManager.primaryColor,
                     size: 35,
                   ),
                 ),

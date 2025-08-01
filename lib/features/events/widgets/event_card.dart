@@ -578,7 +578,7 @@ class _CardEventState extends State<CardEvent> {
       } else {
         date = dateString;
       }
-      final startDate = DateFormat('dd-MM-yyyy').parse(date);
+      final startDate = DateFormat('yyyy-MM-dd').parse(date);
       final today = DateTime.now();
 
       return today.isAfter(startDate) || isSameDay(today, startDate);

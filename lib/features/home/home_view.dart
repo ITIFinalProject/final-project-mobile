@@ -126,30 +126,41 @@ class _HomeViewState extends State<HomeView> {
                           context.read<HomeCubit>().search(value);
                         },
                       ),
-                      if (searchText.isNotEmpty)
+                      if (searchText.isNotEmpty) ...[
+                        const SizedBox(height: 20),
+                        Text(
+                          'Search Results',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                            color: ThemeManager.primaryColor,
+                          ),
+                        ),
+                        const SizedBox(height: 10),
                         allEvents.isNotEmpty
                             ? ListView.builder(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: allEvents.length,
-                              itemBuilder: (context, index) {
-                                final event = allEvents[index];
-                                return ListTile(
-                                  title: Text(event.title),
-                                  onTap: () {
-                                    Navigator.pushNamed(
-                                      context,
-                                      AppRoutes.eventPreview,
-                                      arguments: event,
-                                    );
-                                  },
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: allEvents.length,
+                          itemBuilder: (context, index) {
+                            final event = allEvents[index];
+                            return ListTile(
+                              title: Text(event.title),
+                              onTap: () {
+                                Navigator.pushNamed(
+                                  context,
+                                  AppRoutes.eventPreview,
+                                  arguments: event,
                                 );
                               },
-                            )
+                            );
+                          },
+                        )
                             : const Padding(
-                              padding: EdgeInsets.all(16.0),
-                              child: Text("No results found."),
-                            ),
+                          padding: EdgeInsets.all(16.0),
+                          child: Text("No results found."),
+                        ),
+                      ],
                       const SizedBox(height: 20),
                       const EventCategories(),
                       const SizedBox(height: 20),
@@ -206,9 +217,9 @@ class _HomeViewState extends State<HomeView> {
             try {
               final parts = event.date.split(' _').first.trim().split('-');
               final parsedDate = DateTime(
-                int.parse(parts[2]),
-                int.parse(parts[1]),
                 int.parse(parts[0]),
+                int.parse(parts[1]),
+                int.parse(parts[2]),
               );
               return parsedDate.isAfter(now);
             } catch (_) {
@@ -219,14 +230,14 @@ class _HomeViewState extends State<HomeView> {
             final aParts = a.date.split('_').first.trim().split('-');
             final bParts = b.date.split(' _').first.trim().split('-');
             return DateTime(
-              int.parse(aParts[2]),
-              int.parse(aParts[1]),
               int.parse(aParts[0]),
+              int.parse(aParts[1]),
+              int.parse(aParts[2]),
             ).compareTo(
               DateTime(
-                int.parse(bParts[2]),
-                int.parse(bParts[1]),
                 int.parse(bParts[0]),
+                int.parse(bParts[1]),
+                int.parse(bParts[2]),
               ),
             );
           });
