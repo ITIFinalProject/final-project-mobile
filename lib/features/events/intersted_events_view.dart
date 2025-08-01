@@ -24,6 +24,7 @@ class _InterestedEventsViewState extends State<InterestedEventsView> {
   }
 
   @override
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("Interested Events")),

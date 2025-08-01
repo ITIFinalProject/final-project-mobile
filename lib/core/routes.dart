@@ -30,7 +30,7 @@ class AppRoutes {
   static const String layout = "/layout";
   static const String addEvent = '/add_event';
   static const String eventDetails = '/event_details';
-  static const String createContacts = '/create_contact';
+  // static const String createContacts = '/create_contact';
   static const String editProfile = "/edit_profile";
   static const String eventPreview = "/event_preview";
   static const String realEventDetails = "/real_event_details";
@@ -54,7 +54,10 @@ class AppRoutes {
     register: (context) => RegisterView(),
     addEvent: (context) => AddEventView(),
     eventDetails: (context) => EventDetailsView(),
-    createContacts: (context) => CreateContact(),
+//     createContacts: (context) {
+//   final capacity = ModalRoute.of(context)!.settings.arguments as int;
+//   return CreateContact(capacity: capacity);
+// }, // capacity will be set later
     editProfile: (context) => EditProfile(),
     addGuest: (context) => AddGuests(),
     eventPreview: (context) => const EventPreviewPage(),

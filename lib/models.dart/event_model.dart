@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:eventify_app/features/auth/models/user_model.dart';
 
 class EventModel extends Equatable {
   final String id;
@@ -15,8 +16,9 @@ class EventModel extends Equatable {
   final String hostName;
   final String? hostId;
   final String type;
+  final List<UserModel>? guests;
 
-  const EventModel({
+  const EventModel( {
     required this.hostName,
     required this.type,
     required this.id,
@@ -30,6 +32,7 @@ class EventModel extends Equatable {
     required this.category,
     this.bannerUrl,
     this.templateIndex,
+    this.guests
   });
 
   // EventModel copyWith({
@@ -99,23 +102,30 @@ String _formatToISO(String dateTime) {
 
   return '$year-$month-${day}T${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}:00';
 }
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'title': title,
-      'type': type,
-      'description': description,
-      'date': date,
-      'time': time,
-      'location': location,
-      'capacity': capacity,
-      'bannerUrl': bannerUrl,
-      'templateIndex': templateIndex,
-      'hostName': hostName,
-      'hostId': hostId,
-      'category': category,
-    };
+ Map<String, dynamic> toMap() {
+  final data = {
+    'id': id,
+    'title': title,
+    'type': type,
+    'description': description,
+    'date': date,
+    'time': time,
+    'location': location,
+    'capacity': capacity,
+    'bannerUrl': bannerUrl,
+    'templateIndex': templateIndex,
+    'hostName': hostName,
+    'hostId': hostId,
+    'category': category,
+  };
+
+  // ✅ نضيف guests بس لو type = Private
+  if (type.toLowerCase() == 'private' && guests != null) {
+    data['guests'] = guests!.map((user) => user.toFireStore()).toList();
   }
+
+  return data;
+}
 
   // factory EventModel.fromMap(Map<String, dynamic> map) {
   //   return EventModel(
@@ -135,28 +145,32 @@ String _formatToISO(String dateTime) {
   //   );
   // }
   factory EventModel.fromMap(Map<String, dynamic> map) {
-    return EventModel(
-      id: (map['id'] ?? '').toString(),
-      type: (map['type'] ?? 'default').toString(),
-      title: (map['title'] ?? 'Untitled Event').toString(),
-      description: (map['description'] ?? '').toString(),
-      date: (map['date'] ?? '').toString(),
-      time: (map['time'] ?? '').toString(),
-      location: (map['location'] ?? '').toString(),
-      capacity:
-          (map['capacity'] is int)
-              ? map['capacity']
-              : int.tryParse(map['capacity']?.toString() ?? '0') ?? 0,
-      bannerUrl: map['bannerUrl']?.toString(),
-      templateIndex:
-          map['templateIndex'] is int
-              ? map['templateIndex']
-              : int.tryParse(map['templateIndex']?.toString() ?? ''),
-      hostName: (map['hostName'] ?? 'Unknown Host').toString(),
-      hostId: map['hostId']?.toString() ?? '',
-      category: map['category']?.toString() ?? '',
-    );
-  }
+  return EventModel(
+    id: (map['id'] ?? '').toString(),
+    type: (map['type'] ?? 'default').toString(),
+    title: (map['title'] ?? 'Untitled Event').toString(),
+    description: (map['description'] ?? '').toString(),
+    date: (map['date'] ?? '').toString(),
+    time: (map['time'] ?? '').toString(),
+    location: (map['location'] ?? '').toString(),
+    capacity: (map['capacity'] is int)
+        ? map['capacity']
+        : int.tryParse(map['capacity']?.toString() ?? '0') ?? 0,
+    bannerUrl: map['bannerUrl']?.toString(),
+    templateIndex: map['templateIndex'] is int
+        ? map['templateIndex']
+        : int.tryParse(map['templateIndex']?.toString() ?? ''),
+    hostName: (map['hostName'] ?? 'Unknown Host').toString(),
+    hostId: map['hostId']?.toString() ?? '',
+    category: map['category']?.toString() ?? '',
+    // ✅ نقرأ guests بس لو type = Private
+    guests: (map['type']?.toString().toLowerCase() == 'private' &&
+            map['guests'] != null)
+        ? List<UserModel>.from(
+            (map['guests'] as List).map((e) => UserModel.fromFireStore(e)))
+        : null,
+  );
+}
 
   @override
   List<Object?> get props => [

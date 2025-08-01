@@ -1,5 +1,6 @@
 import 'package:eventify_app/core/routes.dart';
 import 'package:eventify_app/core/theme.dart';
+import 'package:eventify_app/features/add_event/logic/invite_state_cubit/invite_cubit.dart';
 import 'package:eventify_app/features/auth/cubit/auth_cubit.dart';
 import 'package:eventify_app/features/home/cubit/home_cubit.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -48,6 +49,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) =>
         EventCubit()
           ..fetchEvents()),
+          // BlocProvider(create: (context) => InviteCubit()),
       ],
       child: BlocBuilder<LanguageCubit, Locale>(
         builder: (context, locale) {
