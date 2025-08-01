@@ -9,16 +9,22 @@ class CategoryEventsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String category = ModalRoute.of(context)!.settings.arguments as String;
-
+    // final String category = ModalRoute.of(context)!.settings.arguments as String;
+    final args = ModalRoute.of(context)!.settings.arguments;
+ final bool isAll = args is List<String>;
+    final List<String> allCategories = isAll ? args as List<String> : [args as String];
     return Scaffold(
       appBar: AppBar(
-        title: Text(category),
+        // title: Text(category),
+        title: Text(isAll ? "All Events" : allCategories.first),
+
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection('events')
-            .where('category', isEqualTo: category)
+            // .where('category', isEqualTo: category)
+            .where('category', whereIn: allCategories.length > 10 ? allCategories.sublist(0, 10) : allCategories)
+
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -105,6 +111,7 @@ class CategoryEventsView extends StatelessWidget {
                     ],
                   ),
                 ),
+           
               );
             },
           );
