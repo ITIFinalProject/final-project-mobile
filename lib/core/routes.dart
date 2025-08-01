@@ -45,7 +45,6 @@ class AppRoutes {
   static const String editEventView = '/edit_event_view';
   static const String interestedEventsView = '/interested_events_view';
   static const String eventMemories ='/eventMemories';
-    static const String addMemory ='/add_memories';
   static final routes = <String, WidgetBuilder>{
     splash: (context) => SplashScreen(),
     layout: (context) => LayoutView(),
@@ -60,7 +59,7 @@ class AppRoutes {
 // }, // capacity will be set later
     editProfile: (context) => EditProfile(),
     addGuest: (context) => AddGuests(),
-    eventPreview: (context) => const EventPreviewPage(),
+    eventPreview: (context) =>  EventPreviewPage(),
     realEventDetails: (context) => const RealEventDetails(),
     forgetPassword: (context) => ForgetPasswordView(),
     mapPicker: (context) => MapPickerScreen(),
@@ -71,6 +70,5 @@ class AppRoutes {
     myCreatedEvents: (context) => const MyCreatedEvents(),
     interestedEventsView: (context) => const InterestedEventsView(),
     eventMemories :(context)=>const EventMemoryView(),
-    addMemory:(context)=>const AddMemory(),
   };
 }
