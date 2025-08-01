@@ -1,10 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eventify_app/core/routes.dart';
 import 'package:eventify_app/core/theme.dart';
 import 'package:eventify_app/features/add_event/logic/invite_state_cubit/invite_cubit.dart';
 import 'package:eventify_app/features/add_memory/cubit/memory_cubit.dart';
 import 'package:eventify_app/features/auth/cubit/auth_cubit.dart';
 import 'package:eventify_app/features/home/cubit/home_cubit.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -19,6 +22,36 @@ import 'generated/l10n.dart';
 
 final RouteObserver<ModalRoute> routeObserver = RouteObserver<ModalRoute>();
 
+Future<void> setupFCM() async {
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+  // اطلب الإذن
+  await messaging.requestPermission();
+
+  // احصل على FCM Token
+  String? token = await messaging.getToken();
+  print("🔐 FCM Token: $token");
+
+  // خزنه مع بيانات المستخدم في Firestore
+  final user = FirebaseAuth.instance.currentUser;
+  if (user != null && token != null) {
+    await FirebaseFirestore.instance.collection('users').doc(user.uid).update({
+      'fcmToken': token,
+    });
+  }
+
+  // استقبال الإشعار والتطبيق شغال (Foreground)
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    print("📩 Received message: ${message.notification?.title}");
+    // ممكن تضيف local notification هنا
+  });
+
+  // المستخدم فتح الإشعار
+  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+    print("🚪 Notification opened");
+    // تقدر توديه على صفحة معينة مثلاً
+  });
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,6 +62,7 @@ void main() async {
   );
 
   await dotenv.load(fileName: ".env");
+  await setupFCM();
   runApp(const MyApp());
 }
 
@@ -80,4 +114,7 @@ class MyApp extends StatelessWidget {
       ),
     );
   }
+
+
 }
+

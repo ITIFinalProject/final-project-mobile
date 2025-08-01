@@ -170,6 +170,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../../../core/fcm_service.dart';
+
 part 'create_event_state.dart';
 
 class CreateEventCubit extends Cubit<CreateEventState> {
@@ -230,7 +232,11 @@ class CreateEventCubit extends Cubit<CreateEventState> {
         guests: guests,
 
       );
-print('Guests: ${guests?.map((e) => e.name)}');
+      if (type.toLowerCase() == 'private' && guests != null && guests.isNotEmpty) {
+        await sendPrivateInvitations(guests: guests, event: newEvent);
+      }
+
+      print('Guests: ${guests?.map((e) => e.name)}');
       await FirebaseFirestore.instance
           .collection('events')
           .doc(eventId)
@@ -242,6 +248,44 @@ print('Guests: ${guests?.map((e) => e.name)}');
       print('Error creating event: $e');
       print('StackTrace: $stackTrace');
       emit(CreateEventError(e.toString()));
+    }
+  }
+  Future<void> sendPrivateInvitations({
+    required List<UserModel> guests,
+    required EventModel event,
+  }) async {
+    for (final guest in guests) {
+      if (guest.fcmToken != null && guest.fcmToken!.isNotEmpty) {
+        // 1. Send FCM Notification
+        await FCMService.sendNotification(
+          fcmToken: guest.fcmToken!,
+          title: " You're Invited to ${event.title}! 🎉",
+          body: "Don't miss the fun — check your invitation now.",
+        );
+      }
+
+      // 2. Save Notification in Firestore
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(guest.uid)
+          .collection('notifications')
+          .add({
+        'createdAt': FieldValue.serverTimestamp(),
+        'eventId': event.id,
+        'eventTitle': event.title,
+        'eventDescription': event.description,
+        'eventCategory': event.category,
+        'eventLocation': event.location,
+        'eventDate': event.date,
+        'eventTime': event.time,
+        'hostId': event.hostId,
+        'hostName': event.hostName,
+        'guestId': guest.uid,
+        'guestEmail': guest.email,
+        'type': 'invitation',
+        'read': false,
+        'status': 'pending', // or null
+      });
     }
   }
 
