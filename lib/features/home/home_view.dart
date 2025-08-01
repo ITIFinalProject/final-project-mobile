@@ -11,11 +11,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+
 import '../auth/cubit/auth_cubit.dart';
 import '../auth/cubit/auth_state.dart';
 import '../floating_button/chatscreen.dart';
 import 'cubit/home_cubit.dart';
 import 'cubit/home_state.dart';
+import 'package:eventify_app/generated/l10n.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -95,7 +97,7 @@ class _HomeViewState extends State<HomeView> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            name.isNotEmpty ? "Hello, $name! 👋" : "Welcome!",
+                            name.isNotEmpty ? "Hello, $name! 👋" :  S.of(context).welcome,
                             style: TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.bold,
@@ -146,15 +148,15 @@ class _HomeViewState extends State<HomeView> {
                                 );
                               },
                             )
-                            : const Padding(
+                            :  Padding(
                               padding: EdgeInsets.all(16.0),
-                              child: Text("No results found."),
+                              child: Text(S.of(context).no_results_found),
                             ),
                       const SizedBox(height: 20),
                       const EventCategories(),
                       const SizedBox(height: 20),
                       Text(
-                        'Upcoming Events',
+                        S.of(context).upcoming_events,
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
@@ -165,7 +167,7 @@ class _HomeViewState extends State<HomeView> {
                       ShowUpcomingEvents(upcomingEvents: getUpcomingEvents()),
                       const SizedBox(height: 10),
                       Text(
-                        'Recommended Events',
+                        S.of(context).recommended_events,
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w600,

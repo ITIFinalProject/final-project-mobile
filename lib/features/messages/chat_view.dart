@@ -89,7 +89,7 @@ import 'package:eventify_app/core/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:eventify_app/generated/l10n.dart';
 import '../auth/cubit/auth_cubit.dart';
 import '../auth/cubit/auth_state.dart';
 import 'cubit/event_chat_cubit.dart';
@@ -168,12 +168,12 @@ class _ChatPageState extends State<ChatPage> {
     if (authState is! AuthSuccess) {
       return Scaffold(
         body: Center(
-            child: Text('You need to be logged in to access the chat.')),
+            child: Text(S.of(context).login_required_message)),
       );
     }
 
     return Scaffold(
-      appBar: AppBar(title: Text(eventName ?? 'Chat')),
+      appBar: AppBar(title: Text(eventName ??  S.of(context).chat)),
       body: Column(
         children: [
           Expanded(
@@ -235,7 +235,7 @@ class _ChatPageState extends State<ChatPage> {
                     },
                   );
                 } else {
-                  return Center(child: Text("No messages yet."));
+                  return Center(child: Text(S.of(context).no_messages_yet));
                 }
               },
             ),
@@ -250,7 +250,7 @@ class _ChatPageState extends State<ChatPage> {
                     decoration: InputDecoration(
                       fillColor: ThemeManager.primaryColor.withOpacity(0.1),
                       filled: true,
-                      hintText: "Write a message...",
+                      hintText:  S.of(context).write_a_message,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(20),
                       ),

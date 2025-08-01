@@ -3,7 +3,7 @@ import 'package:eventify_app/features/events/event_cubit/event_cubit.dart';
 import 'package:eventify_app/features/messages/chat_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:eventify_app/generated/l10n.dart';
 import '../events/event_cubit/event_state.dart';
 
 class MessagesView extends StatefulWidget {
@@ -24,7 +24,7 @@ class _MessagesViewState extends State<MessagesView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Messages"),
+        title: Text(S.of(context).messages),
         automaticallyImplyLeading: false,
       ),
 
@@ -35,7 +35,7 @@ class _MessagesViewState extends State<MessagesView> {
           } else if (state is EventLoaded) {
             final events = state.events;
             if (events.isEmpty) {
-              return Center(child: Text("No joined events yet."));
+              return Center(child: Text(S.of(context).no_joined_events_yet));
             } else {
               return ListView.builder(
                 itemCount: events.length,
@@ -57,7 +57,7 @@ class _MessagesViewState extends State<MessagesView> {
                         event.title ?? '',
                         style: TextStyle(color: ThemeManager.primaryColor),
                       ),
-                      subtitle: Text("Send a message to your guests"),
+                      subtitle: Text(S.of(context).send_a_message_to_your_guests),
                       onTap: () {
                         Navigator.push(
                           context,

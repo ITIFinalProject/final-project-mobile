@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:eventify_app/generated/l10n.dart';
 import 'package:eventify_app/features/add_event/widgets/build_preview.dart';
 import 'package:eventify_app/features/add_event/widgets/template_choice.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +21,7 @@ class _AddEventViewState extends State<AddEventView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('1 of 5: Customize'),
+        title: Text(S.of(context).customize_step_title),
         automaticallyImplyLeading: false,
       ),
       body: AnimatedSwitcher(

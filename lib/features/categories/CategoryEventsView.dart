@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eventify_app/core/routes.dart';
 import 'package:eventify_app/models.dart/event_model.dart';
 import 'package:flutter/material.dart';
+import '../../generated/l10n.dart';
 
 class CategoryEventsView extends StatelessWidget {
   const CategoryEventsView({super.key});
@@ -33,7 +34,7 @@ class CategoryEventsView extends StatelessWidget {
               .toList();
 
           if (categoryEvents.isEmpty) {
-            return const Center(child: Text("No events found in this category."));
+            return  Center(child: Text(S.of(context).no_events_found_in_this_category));
           }
 
           return ListView.builder(

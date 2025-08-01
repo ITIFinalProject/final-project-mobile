@@ -271,6 +271,7 @@
 // }
 import 'package:eventify_app/core/routes.dart';
 import 'package:eventify_app/core/theme.dart';
+import 'package:eventify_app/generated/l10n.dart';
 import 'package:eventify_app/models.dart/event_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -463,8 +464,8 @@ class _CardEventState extends State<CardEvent> {
                               borderRadius: BorderRadius.circular(12),
                             ),
                           ),
-                          label: const Text(
-                            "Edit",
+                          label:  Text(
+                            S.of(context).edit,
                             style: TextStyle(color: ThemeManager.primaryColor),
                           ),
                         ),
@@ -479,7 +480,7 @@ class _CardEventState extends State<CardEvent> {
                               borderRadius: BorderRadius.circular(12),
                             ),
                           ),
-                          label: const Text("Delete"),
+                          label:  Text(S.of(context).delete),
                         ),
                       ],
                     ),
@@ -512,8 +513,8 @@ class _CardEventState extends State<CardEvent> {
                                 borderRadius: BorderRadius.circular(12),
                               ),
                             ),
-                            label: const Text(
-                              "Join",
+                            label:  Text(
+                              S.of(context).join,
                               style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,

@@ -1,5 +1,6 @@
 import 'package:eventify_app/core/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:eventify_app/generated/l10n.dart';
 
 class RealEventDetails extends StatelessWidget {
   const RealEventDetails({super.key});
@@ -102,7 +103,7 @@ class RealEventDetails extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      "Start Time",
+                                      S.of(context).start_time,
                                       style: TextStyle(
                                         color: Color.alphaBlend(
                                           Colors.black.withOpacity(0.2),

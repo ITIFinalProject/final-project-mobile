@@ -5,10 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
-
+import 'package:eventify_app/generated/l10n.dart';
 import '../../main.dart';
 import 'event_cubit/event_cubit.dart';
 import 'event_cubit/event_state.dart';
+
 
 class EventsView extends StatefulWidget {
   const EventsView({super.key});
@@ -34,7 +35,13 @@ class _EventsViewState extends State<EventsView> with RouteAware {
         child: AppBar(
           title: Padding(
             padding: const EdgeInsets.only(top: 20),
-            child: Text('Events'),
+            child: Text(S.of(context).events,
+              style: const TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
           ),
         ),
       ),
@@ -218,12 +225,12 @@ class _EventsViewState extends State<EventsView> with RouteAware {
               ),
             ),
             const SizedBox(width: 50),
-            const Expanded(
+             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'No Events',
+                    S.of(context).no_events,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Color(0xFF1B3C53),
@@ -231,7 +238,7 @@ class _EventsViewState extends State<EventsView> with RouteAware {
                   ),
                   SizedBox(height: 8),
                   Text(
-                    "Create an event and make some memories.",
+                    S.of(context).no_events_desc,
                     style: TextStyle(fontSize: 13, color: Color(0xFF456882)),
                   ),
                 ],

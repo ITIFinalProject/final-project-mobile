@@ -1,5 +1,6 @@
 import 'package:eventify_app/features/floating_button/chat_service.dart';
 import 'package:flutter/material.dart';
+import 'package:eventify_app/generated/l10n.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
@@ -9,8 +10,19 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  final List<String> messages = ["Ask Ai about anything!"];
+  // final List<String> messages = ["Ask Ai about anything"];
+  late List<String> messages = [];
   final TextEditingController _controller = TextEditingController();
+
+
+  @override
+void didChangeDependencies() {
+  super.didChangeDependencies();
+  if (messages.isEmpty) {
+    // بنستخدم didChangeDependencies لأن S.of(context) بيحتاج context جاهز
+    messages = [S.of(context).ask_ai_about_anything];
+  }
+}
 
   void sendMessage() async {
     final text = _controller.text.trim();
@@ -35,8 +47,8 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          "AI Chat",
+        title:  Text(
+          S.of(context).ai_chat,
           style: TextStyle(
             color: Colors.white,
             fontSize: 20,
@@ -70,8 +82,8 @@ class _ChatScreenState extends State<ChatScreen> {
                 Expanded(
                   child: TextField(
                     controller: _controller,
-                    decoration: const InputDecoration(
-                      hintText: "Write your message here...",
+                    decoration:  InputDecoration(
+                      hintText: S.of(context).write_your_message_here,
                       filled: true,
                       fillColor: Color(0xFFF5F5F5),
                       // لون خلفية الصندوق (اختياري)

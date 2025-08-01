@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:eventify_app/generated/l10n.dart';
 import '../../../core/theme.dart';
 
 typedef Change = void Function(String)?;
@@ -14,7 +14,7 @@ class SearchInputField extends StatelessWidget {
     return TextField(
       onChanged: onChange,
       decoration: InputDecoration(
-        hintText: 'Search',
+        hintText:S.of(context).search ,
         prefixIcon: const Icon(Icons.search),
         filled: true,
         fillColor: Colors.white,
