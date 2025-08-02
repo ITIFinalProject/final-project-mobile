@@ -266,7 +266,9 @@ class CreateEventCubit extends Cubit<CreateEventState> {
             "eventId": event.id,
             "type": "event_invitation",
             "eventTitle":event.title,
-            "guestId":event.id,
+            "guestId":guest.uid,
+            "guestName":guest.name,
+            "hostId":event.hostId
           }
         );
       }

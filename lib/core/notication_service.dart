@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:eventify_app/features/auth/models/user_model.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -36,7 +37,7 @@ class NotificationService {
                   TextButton(
                     onPressed: () {
                       print('rejected');
-                      _handleInvitation(data['guestId'], false);
+                      _handleInvitation(data, false);
                       Navigator.pop(navigatorKey.currentContext!);
                     },
                     child: Text("cancel"),
@@ -45,7 +46,7 @@ class NotificationService {
                     onPressed: () async {
                       print('accepted');
                       // await joinEvent(eventId);
-                      _handleInvitation(data['guestId'], true);
+                      _handleInvitation(data, true);
                       Navigator.pop(navigatorKey.currentContext!);
                     },
                     child: Text("Accept"),
@@ -62,7 +63,6 @@ class NotificationService {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       if (message.data.isNotEmpty) {
         final data = message.data;
-        final eventId = data['eventId'];
         final eventTitle = data['eventTitle'];
 
         // عرض Dialog للمستخدم
@@ -76,7 +76,7 @@ class NotificationService {
                   TextButton(
                     onPressed: () {
                       print('rejected');
-                      _handleInvitation(data['guestId'], false);
+                      _handleInvitation(data, false);
 
                       Navigator.pop(navigatorKey.currentContext!);
                     },
@@ -85,7 +85,7 @@ class NotificationService {
                   TextButton(
                     onPressed: () async {
                       print('accepted');
-                      _handleInvitation(data['guestId'], true);
+                      _handleInvitation(data, true);
                       Navigator.pop(navigatorKey.currentContext!);
                     },
                     child: Text("Accept"),
@@ -97,13 +97,27 @@ class NotificationService {
     });
   }
 
-  Future<void> _handleInvitation(String docId, bool accepted) async {
-    await FirebaseFirestore.instance
+  Future<void> _handleInvitation(Map docId, bool accepted) async {
+    var docRef = await FirebaseFirestore.instance
         .collection('users')
-        .doc(docId)
+        .doc(docId['guestId'])
         .collection('notifications')
-        .doc(docId)
-        .update({'status': accepted ? 'accepted' : 'rejected'});
+        .doc(docId['guestId']);
+
+    final status = accepted ? 'accepted' : 'rejected';
+    await docRef.update({'status': status});
+    var docRefHost =
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(docId['hostId'])
+            .get();
+    var user = UserModel.fromFireStore(docRefHost.data()!);
+    await NotificationService().sendPushNotification(
+      deviceToken: user.fcmToken!,
+      title: "Invitation $status",
+      body:
+          "${docId['guestName']} has $status your invitation to event ${docId['eventTitle']}.",
+    );
   }
 
   Future<AccessCredentials> _getAccessToken() async {
