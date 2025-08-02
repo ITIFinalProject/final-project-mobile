@@ -588,7 +588,7 @@ class _EditEventViewState extends State<EditEventView> {
         time: time,
         location: locationController.text.trim(),
         capacity:  int.tryParse(capacityController.text) ?? 50,
-        imageFile: selectedImage ?? newImageFile,
+        imageFile: selectedImage,
         templateIndex: selectedTemplateIndex,
         category: selectedCategory ?? '',
       );
