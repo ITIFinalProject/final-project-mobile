@@ -64,6 +64,7 @@ dependencies:
   firebase_messaging: ^15.2.8
   googleapis_auth: ^2.0.0
   flutter_typeahead: ^5.2.0
+  url_launcher: ^6.3.1
 dev_dependencies:
   flutter_test:
     sdk: flutter

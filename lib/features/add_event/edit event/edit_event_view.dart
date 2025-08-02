@@ -480,7 +480,7 @@ class _EditEventViewState extends State<EditEventView> {
                                         }
                                         return null;
                                       },
-                                      hint: '12:00 AM',
+                                      hint: '12:00 ',
                                       controller: startTimeController,
                                       onTapped: clickStartTime,
                                       prefixIcon: Icons.access_time,
@@ -527,7 +527,7 @@ class _EditEventViewState extends State<EditEventView> {
                                         }
                                         return null;
                                       },
-                                      hint: '12:00 AM',
+                                      hint: '12:00 ',
                                       controller: endTimeController,
                                       onTapped: clickEndTime,
                                       prefixIcon: Icons.access_time,
@@ -599,8 +599,8 @@ class _EditEventViewState extends State<EditEventView> {
       final startDate = DateFormat('yyyy-MM-dd').parse(
           startDateController.text);
       final endDate = DateFormat('yyyy-MM-dd').parse(endDateController.text);
-      final startTime = DateFormat('hh:mm a').parse(startTimeController.text);
-      final endTime = DateFormat('hh:mm a').parse(endTimeController.text);
+      final startTime = DateFormat('HH:mm').parse(startTimeController.text);
+      final endTime = DateFormat('HH:mm').parse(endTimeController.text);
 
       final start = DateTime(
           startDate.year, startDate.month, startDate.day, startTime.hour,
@@ -655,7 +655,7 @@ print('End: $end');
         time.hour,
         time.minute,
       );
-      startTimeController.text = DateFormat('hh:mm a').format(dateTime);
+      startTimeController.text = DateFormat('HH:mm').format(dateTime);
     }
   }
 
@@ -673,7 +673,7 @@ print('End: $end');
         time.hour,
         time.minute,
       );
-      endTimeController.text = DateFormat('hh:mm a').format(dateTime);
+      endTimeController.text = DateFormat('HH:mm').format(dateTime);
     }
   }
 

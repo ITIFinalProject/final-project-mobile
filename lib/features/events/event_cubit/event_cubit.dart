@@ -8,7 +8,7 @@ import 'event_state.dart';
 
 class EventCubit extends Cubit<EventState> {
   EventCubit() : super(EventInitial());
-  // **************************************************************************
+
   Set<String> _interestedEventIds = {};
 
   Set<String> get interestedEventIds => _interestedEventIds;
@@ -20,19 +20,14 @@ class EventCubit extends Cubit<EventState> {
           await FirebaseFirestore.instance.collection('events').get();
 
       final events =
-          // snapshot.docs.map((doc) => EventModel.fromMap(doc.data())).toList();
-          // ***************************************************
+
           snapshot.docs.map((doc) {
             final data = doc.data();
-            data['id'] = doc.id; // نضيف id بتاع الـ document نفسه
+            data['id'] = doc.id;
             return EventModel.fromMap(data);
           }).toList();
-      // ***********************************************************************
       emit(EventLoaded(events));
     }
-    // catch (e) {
-    //     emit(EventError("Error occurred during Loading Events"));
-    //   }
     catch (e, stack) {
       print("🔥 Firestore Error: $e");
       print(stack);
@@ -40,7 +35,7 @@ class EventCubit extends Cubit<EventState> {
     }
   }
 
-  // **************************************************************************
+
   Future<void> joinEvent(EventModel event) async {
     emit(EventJoinLoading());
 
@@ -68,13 +63,12 @@ class EventCubit extends Cubit<EventState> {
       await eventRef.update({'capacity': event.capacity - 1});
 
       emit(EventJoinSuccess());
-      await fetchEvents();
+      await fetchJoinedEvents();
     } catch (e) {
       emit(EventJoinError(e.toString()));
     }
   }
 
-  // *******************************************************************************
   Future<void> fetchJoinedEvents() async {
     emit(EventLoading());
 
@@ -94,14 +88,13 @@ class EventCubit extends Cubit<EventState> {
 
       final events =
           snapshot.docs.map((doc) => EventModel.fromMap(doc.data())).toList();
+      emit(EventJoinedLoaded(events));
 
-      emit(EventLoaded(events));
     } catch (e) {
       emit(EventError("Error fetching joined events"));
     }
   }
 
-  // ****************************************************************************
   Future<void> fetchMyEvents() async {
     emit(EventLoading());
 
@@ -127,7 +120,6 @@ class EventCubit extends Cubit<EventState> {
     }
   }
 
-  // *************************************************************************************
   Future<void> deleteEvent(String eventId) async {
     emit(EventLoading());
 
@@ -149,9 +141,9 @@ class EventCubit extends Cubit<EventState> {
           .doc(eventId)
           .delete();
 
-      // ✅ Update local cache
+
       _interestedEventIds.remove(eventId);
-      await fetchMyEvents();
+      // await fetchMyEvents();
       emit(EventDeleted());
     } catch (e) {
       emit(EventError("Error deleting event: $e"));
