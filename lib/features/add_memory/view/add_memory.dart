@@ -89,7 +89,7 @@ class _AddMemoryState extends State<AddMemory> {
                       side: BorderSide(color: ThemeManager.secondaryColor)
                     ),
                         child: ClipRRect(
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(15),
                           child: Image.network(
                             memory.url,
                             fit: BoxFit.cover,

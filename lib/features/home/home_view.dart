@@ -81,10 +81,8 @@ class _HomeViewState extends State<HomeView> {
                 }
 
                 final name = state.name;
-                allEvents =
-                    state.filteredEvents.isEmpty && searchText.isEmpty
-                        ? state.allEvents
-                        : state.filteredEvents;
+                allEvents = state.allEvents;
+                filterdEvents = state.filteredEvents;
                 userId = FirebaseAuth.instance.currentUser!.uid;
                 final recommendedEvents = getRecommendedEvents(userId);
                 return SingleChildScrollView(
@@ -124,32 +122,49 @@ class _HomeViewState extends State<HomeView> {
                         onChange: (value) {
                           searchText = value;
                           context.read<HomeCubit>().search(value);
-                        },
+                            }
+
                       ),
-                      if (searchText.isNotEmpty)
-                        allEvents.isNotEmpty
+                      if (searchText.isNotEmpty) ...[
+                        const SizedBox(height: 20),
+                        Text(
+                          'Search Results',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                            color: ThemeManager.primaryColor,
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        filterdEvents.isNotEmpty
                             ? ListView.builder(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: allEvents.length,
-                              itemBuilder: (context, index) {
-                                final event = allEvents[index];
-                                return ListTile(
-                                  title: Text(event.title),
-                                  onTap: () {
-                                    Navigator.pushNamed(
-                                      context,
-                                      AppRoutes.eventPreview,
-                                      arguments: event,
-                                    );
-                                  },
-                                );
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: filterdEvents.length,
+                          itemBuilder: (context, index) {
+                            final event = filterdEvents[index];
+                            return GestureDetector(
+                              onTap: (){
+                                Navigator.pushNamed(context, AppRoutes.eventPreview,arguments: event);
                               },
-                            )
+                              child: ListTile(
+                                title: Text(event.title),
+                                onTap: () {
+                                  Navigator.pushNamed(
+                                    context,
+                                    AppRoutes.eventPreview,
+                                    arguments: event,
+                                  );
+                                },
+                              ),
+                            );
+                          },
+                        )
                             : const Padding(
-                              padding: EdgeInsets.all(16.0),
-                              child: Text("No results found."),
-                            ),
+                          padding: EdgeInsets.all(16.0),
+                          child: Text("No results found."),
+                        ),
+                      ],
                       const SizedBox(height: 20),
                       const EventCategories(),
                       const SizedBox(height: 20),
@@ -199,43 +214,89 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
+  // List<EventModel> getUpcomingEvents() {
+  //   final now = DateTime.now();
+  //   final upcoming =
+  //       allEvents.where((event) {
+  //           try {
+  //             final parts = event.date.split(' _').first.trim().split('-');
+  //             final parsedDate = DateTime(
+  //               int.parse(parts[0]),
+  //               int.parse(parts[1]),
+  //               int.parse(parts[2]),
+  //             );
+  //             return parsedDate.isAfter(now);
+  //           } catch (_) {
+  //             return false;
+  //           }
+  //         }).toList()
+  //         ..sort((a, b) {
+  //           final aParts = a.date.split('_').first.trim().split('-');
+  //           final bParts = b.date.split(' _').first.trim().split('-');
+  //           return DateTime(
+  //             int.parse(aParts[0]),
+  //             int.parse(aParts[1]),
+  //             int.parse(aParts[2]),
+  //           ).compareTo(
+  //             DateTime(
+  //               int.parse(bParts[0]),
+  //               int.parse(bParts[1]),
+  //               int.parse(bParts[2]),
+  //             ),
+  //           );
+  //         });
+  //   return upcoming.take(3).toList();
+  // }
   List<EventModel> getUpcomingEvents() {
     final now = DateTime.now();
-    final upcoming =
-        allEvents.where((event) {
-            try {
-              final parts = event.date.split(' _').first.trim().split('-');
-              final parsedDate = DateTime(
-                int.parse(parts[2]),
-                int.parse(parts[1]),
-                int.parse(parts[0]),
-              );
-              return parsedDate.isAfter(now);
-            } catch (_) {
-              return false;
-            }
-          }).toList()
-          ..sort((a, b) {
-            final aParts = a.date.split('_').first.trim().split('-');
-            final bParts = b.date.split(' _').first.trim().split('-');
-            return DateTime(
-              int.parse(aParts[2]),
-              int.parse(aParts[1]),
-              int.parse(aParts[0]),
-            ).compareTo(
-              DateTime(
-                int.parse(bParts[2]),
-                int.parse(bParts[1]),
-                int.parse(bParts[0]),
-              ),
-            );
-          });
+    final upcoming = allEvents.where((event) {
+      final isPublic = event.type == 'Public';
+      final isPrivateAndUserIsGuest =
+          event.type == 'Private' && event.guests!.contains(userId);
+
+      if (!isPublic && !isPrivateAndUserIsGuest) return false;
+
+      try {
+        final parts = event.date.split('_').first.trim().split('-');
+        final parsedDate = DateTime(
+          int.parse(parts[0]),
+          int.parse(parts[1]),
+          int.parse(parts[2]),
+        );
+        return parsedDate.isAfter(now);
+      } catch (_) {
+        return false;
+      }
+    }).toList()
+      ..sort((a, b) {
+        final aParts = a.date.split('_').first.trim().split('-');
+        final bParts = b.date.split('_').first.trim().split('-');
+        return DateTime(
+          int.parse(aParts[0]),
+          int.parse(aParts[1]),
+          int.parse(aParts[2]),
+        ).compareTo(
+          DateTime(
+            int.parse(bParts[0]),
+            int.parse(bParts[1]),
+            int.parse(bParts[2]),
+          ),
+        );
+      });
+
     return upcoming.take(3).toList();
   }
 
   List<EventModel> getRecommendedEvents(String currentUserId) {
-    final filtered =
-        allEvents.where((event) => event.hostId != currentUserId).toList()
+    final filtered = allEvents.where((event) {
+      final isPublic = event.type == 'Public';
+      final isPrivateAndUserIsGuest =
+          event.type == 'Private' && event.guests!.contains(currentUserId);
+
+      final isNotHost = event.hostId != currentUserId;
+
+      return (isPublic || isPrivateAndUserIsGuest) && isNotHost;
+    }).toList()
           ..shuffle();
     return filtered.take(5).toList();
   }

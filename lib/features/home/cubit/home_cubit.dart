@@ -77,7 +77,7 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   DateTime extractStartDateTime(Map<String, dynamic> event) {
-    final dateRange = event['date']?.split(' - ');
+    final dateRange = event['date']?.split(' _ ');
     final timeRange = event['time']?.split(' - ');
 
     if (dateRange == null || timeRange == null) return DateTime.now();
@@ -86,7 +86,7 @@ class HomeCubit extends Cubit<HomeState> {
     final time = timeRange[0]; // "09:00 PM"
 
     final dateTimeStr = "$date $time";
-    final format = DateFormat("dd/MM/yyyy hh:mm a");
+    final format = DateFormat("yyyy-MM-dd hh:mm a");
     return format.parse(dateTimeStr);
   }
 }

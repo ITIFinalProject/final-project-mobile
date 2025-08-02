@@ -459,7 +459,7 @@ class _EditEventViewState extends State<EditEventView> {
                                         }
                                         return null;
                                       },
-                                      hint: 'DD/MM/YY',
+                                      hint: 'yyyy-MM-dd',
                                       controller: startDateController,
                                       onTapped: clickStartDate,
                                       prefixIcon: Icons.calendar_month,
@@ -480,7 +480,7 @@ class _EditEventViewState extends State<EditEventView> {
                                         }
                                         return null;
                                       },
-                                      hint: '12:00 AM',
+                                      hint: '12:00 ',
                                       controller: startTimeController,
                                       onTapped: clickStartTime,
                                       prefixIcon: Icons.access_time,
@@ -506,7 +506,7 @@ class _EditEventViewState extends State<EditEventView> {
                                         }
                                         return null;
                                       },
-                                      hint: 'DD/MM/YY',
+                                      hint: 'yyyy-MM-dd',
                                       controller: endDateController,
                                       onTapped: clickEndDate,
                                       prefixIcon: Icons.calendar_month,
@@ -527,7 +527,7 @@ class _EditEventViewState extends State<EditEventView> {
                                         }
                                         return null;
                                       },
-                                      hint: '12:00 AM',
+                                      hint: '12:00 ',
                                       controller: endTimeController,
                                       onTapped: clickEndTime,
                                       prefixIcon: Icons.access_time,
@@ -596,11 +596,11 @@ class _EditEventViewState extends State<EditEventView> {
   }
     bool _isDateTimeRangeValid() {
     try {
-      final startDate = DateFormat('dd-MM-yyyy').parse(
+      final startDate = DateFormat('yyyy-MM-dd').parse(
           startDateController.text);
-      final endDate = DateFormat('dd-MM-yyyy').parse(endDateController.text);
-      final startTime = DateFormat('hh:mm a').parse(startTimeController.text);
-      final endTime = DateFormat('hh:mm a').parse(endTimeController.text);
+      final endDate = DateFormat('yyyy-MM-dd').parse(endDateController.text);
+      final startTime = DateFormat('HH:mm').parse(startTimeController.text);
+      final endTime = DateFormat('HH:mm').parse(endTimeController.text);
 
       final start = DateTime(
           startDate.year, startDate.month, startDate.day, startTime.hour,
@@ -624,7 +624,7 @@ print('End: $end');
       lastDate: DateTime(2026),
     );
     if (_date != null) {
-      startDateController.text = DateFormat('dd-MM-yyyy').format(_date);
+      startDateController.text = DateFormat('yyyy-MM-dd').format(_date);
       setState(() {});
     }
   }
@@ -636,7 +636,7 @@ print('End: $end');
       lastDate: DateTime(2026),
     );
     if (_date != null) {
-      endDateController.text = DateFormat('dd-MM-yyyy').format(_date);
+      endDateController.text = DateFormat('yyyy-MM-dd').format(_date);
       setState(() {});
     }
   }
@@ -655,7 +655,7 @@ print('End: $end');
         time.hour,
         time.minute,
       );
-      startTimeController.text = DateFormat('hh:mm a').format(dateTime);
+      startTimeController.text = DateFormat('HH:mm').format(dateTime);
     }
   }
 
@@ -673,7 +673,7 @@ print('End: $end');
         time.hour,
         time.minute,
       );
-      endTimeController.text = DateFormat('hh:mm a').format(dateTime);
+      endTimeController.text = DateFormat('HH:mm').format(dateTime);
     }
   }
 

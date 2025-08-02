@@ -163,12 +163,15 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:eventify_app/core/notication_service.dart';
 import 'package:eventify_app/features/auth/models/user_model.dart';
 import 'package:eventify_app/models.dart/event_model.dart' show EventModel;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:uuid/uuid.dart';
+
+import '../../../../core/fcm_service.dart';
 
 part 'create_event_state.dart';
 
@@ -230,7 +233,11 @@ class CreateEventCubit extends Cubit<CreateEventState> {
         guests: guests,
 
       );
-print('Guests: ${guests?.map((e) => e.name)}');
+      if (type.toLowerCase() == 'private' && guests != null && guests.isNotEmpty) {
+        await sendPrivateInvitations(guests: guests, event: newEvent);
+      }
+
+      print('Guests: ${guests?.map((e) => e.name)}');
       await FirebaseFirestore.instance
           .collection('events')
           .doc(eventId)
@@ -242,6 +249,62 @@ print('Guests: ${guests?.map((e) => e.name)}');
       print('Error creating event: $e');
       print('StackTrace: $stackTrace');
       emit(CreateEventError(e.toString()));
+    }
+  }
+  Future<void> sendPrivateInvitations({
+    required List<UserModel> guests,
+    required EventModel event,
+  }) async {
+    for (final guest in guests) {
+      if (guest.fcmToken != null && guest.fcmToken!.isNotEmpty) {
+        // 1. Send FCM Notification
+        final notifDoc = FirebaseFirestore.instance
+            .collection('users')
+            .doc(guest.uid)
+            .collection('notifications')
+            .doc();
+        await NotificationService().sendPushNotification(
+          deviceToken: guest.fcmToken!,
+          title: " You're Invited to ${event.title}! 🎉",
+          body: "Don't miss the fun — check your invitation now.",
+          data: {
+            "eventId": event.id,
+            "type": "event_invitation",
+            "eventTitle":event.title,
+            "guestId":guest.uid,
+            "guestName":guest.name,
+            "hostId":event.hostId,
+            'notificationId':notifDoc.id
+          }
+        );
+      }
+
+      // 2. Save Notification in Firestore
+      final notifDoc = FirebaseFirestore.instance
+          .collection('users')
+          .doc(guest.uid)
+          .collection('notifications')
+          .doc(); // ينشئ مستند ومعاه ID
+
+      await notifDoc.set({
+        'createdAt': FieldValue.serverTimestamp(),
+        'eventId': event.id,
+        'eventTitle': event.title,
+        'eventDescription': event.description,
+        'eventCategory': event.category,
+        'eventLocation': event.location,
+        'eventDate': event.date,
+        'eventTime': event.time,
+        'hostId': event.hostId,
+        'hostName': event.hostName,
+        'guestId': guest.uid,
+        'guestEmail': guest.email,
+        'type': 'invitation',
+        'read': false,
+        'status': 'pending',
+        'notificationId': notifDoc.id, // ⬅️ احفظ الـ ID داخل المستند نفسه
+      });
+
     }
   }
 

@@ -23,7 +23,6 @@ class _MyCreatedEventsState extends State<MyCreatedEvents> with RouteAware {
   void initState() {
     super.initState();
     context.read<EventCubit>().fetchMyEvents();
-
   }
 
   @override
@@ -46,7 +45,9 @@ class _MyCreatedEventsState extends State<MyCreatedEvents> with RouteAware {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: Theme
+          .of(context)
+          .scaffoldBackgroundColor,
       appBar: AppBar(
         title: const Text(
           "My Events",
@@ -67,41 +68,25 @@ class _MyCreatedEventsState extends State<MyCreatedEvents> with RouteAware {
             );
           } else if (state is EventLoaded) {
             if (state.events.isEmpty) {
-              return CardNoEvents(text: '"You haven’t created any events yet."' , title:   'No Events Created',);
+              return CardNoEvents(
+                text: '"You haven’t created any events yet."',
+                title: 'No Events Created',
+              );
             }
             return ListView.builder(
               padding: const EdgeInsets.all(16),
               itemCount: state.events.length,
               itemBuilder: (context, index) {
                 final event = state.events[index];
-                final isInterested = context.read<EventCubit>().isInterested(event.id);
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 12),
                   child: CardEvent(
-                    isInterested:isInterested ,
-                    onToggleInterested: () {
-                      context.read<EventCubit>().toggleInterestedEvent(event);
-                    },
                     event: event,
-                    onDelete: () {
-                      context.read<EventCubit>().deleteEvent(event.id);
-                    },
-
-                    onEdit: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) {
-                            return EditEventView(event: event);
-                          },
-                        ),
-                      );
+                    onDelete: () async {
+                      showDialogDelete(event.id);
                     },
                     onJoin: () {
                       context.read<EventCubit>().joinEvent(event);
-                    },
-                    onAddMemory: (){
-                      Navigator.push(context,MaterialPageRoute(builder: (context)=>AddMemory(event: event)));
                     },
                   ), //  نفس الكارد اللي بتستخدميه في EventsView
                 );
@@ -121,5 +106,29 @@ class _MyCreatedEventsState extends State<MyCreatedEvents> with RouteAware {
     );
   }
 
-
+  showDialogDelete(String eventId) {
+    showDialog(context: context, builder: (context) =>
+        BlocBuilder<EventCubit, EventState>(
+          builder: (context, state) {
+            if(state is EventDeleted){
+              context.read<EventCubit>().fetchMyEvents();
+              Navigator.pop(context);
+            }else{
+            return AlertDialog(
+              content: Text('Are you sure you want to delete this event'),
+              title: Text('Delete Event'),
+              actions: [
+                TextButton(onPressed: (){
+                  context.read<EventCubit>().deleteEvent(eventId);
+                }, child: Text('Ok')),
+                TextButton(onPressed: (){
+                  Navigator.pop(context);
+                }, child: Text('Cancel')),
+              ],
+            );
+          }
+            return SizedBox.shrink();
+            },
+        ));
+  }
 }

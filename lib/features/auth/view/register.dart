@@ -42,17 +42,79 @@ class _RegisterViewState extends State<RegisterView> {
         final authCubit = context.read<AuthCubit>();
         final isLoading = state is AuthLoading;
         return Scaffold(
-          backgroundColor: Colors.white,
-          body: GestureDetector(
-            onTap: () {
-              FocusScope.of(context).unfocus();
-            },
-            child: Center(
-              child: SingleChildScrollView(
-                child: Form(
-                  key: formKey,
-                  child: Column(
-                    children: [
+  body: GestureDetector(
+    onTap: () => FocusScope.of(context).unfocus(),
+    child: Stack(
+      children: [
+        // خلفية متدرجة
+        Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Color(0xFFE1F5FE), // أزرق فاتح جداً
+                Color(0xFFFFFFFF), // أبيض
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
+
+        //  دوائر ديكورية ناعمة
+        Positioned(
+          top: -60,
+          left: -60,
+          child: CircleAvatar(
+            radius: 100,
+            backgroundColor: ThemeManager.primaryColor.withOpacity(0.2),
+          ),
+        ),
+        Positioned(
+          top: 120,
+          right: -30,
+          child: CircleAvatar(
+            radius: 70,
+            backgroundColor: ThemeManager.primaryColor.withOpacity(0.2),
+          ),
+        ),
+        Positioned(
+          bottom: -50,
+          left: 30,
+          child: CircleAvatar(
+            radius: 60,
+            backgroundColor: ThemeManager.primaryColor.withOpacity(0.15),
+          ),
+        ),
+        Positioned(
+          bottom: 120,
+          right: 20,
+          child: CircleAvatar(
+            radius: 45,
+            backgroundColor: ThemeManager.primaryColor.withOpacity(0.19),
+          ),
+        ),
+
+        // محتوى تسجيل الدخول
+        Center(
+          child: SingleChildScrollView(
+            child: Form(
+              key: formKey,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const SizedBox(height: 60),
+                    Text(
+                      "Create Account",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 32,
+                        fontWeight: FontWeight.bold,
+                        color: ThemeManager.primaryColor,
+                      ),
+                    ),
+                    SizedBox(height: 20),
                       CustomTextFIeld(
                         lable: "Name",
                         icon: Icons.person_add,
@@ -240,7 +302,7 @@ class _RegisterViewState extends State<RegisterView> {
                 ),
               ),
             ),
-          ),
+         ) ]) ),
         );
       },
     );

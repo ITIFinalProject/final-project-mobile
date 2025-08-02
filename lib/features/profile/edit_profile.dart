@@ -137,13 +137,19 @@ class _EditProfileState extends State<EditProfile> {
                       //                     null)
                       //         ? Text(nameController.text[1])
                       //         : null,
-                      child: profileImage == null &&
-        !(context.read<AuthCubit>().state is AuthSuccess &&
-        (context.read<AuthCubit>().state as AuthSuccess).user.imagePath != null)
-    ? (nameController.text.isNotEmpty 
-        ? Text(nameController.text[0]) 
-        : const Icon(Icons.person, size: 40))
-    : null,
+                      child:
+                          profileImage == null &&
+                                  !(context.read<AuthCubit>().state
+                                          is AuthSuccess &&
+                                      (context.read<AuthCubit>().state
+                                                  as AuthSuccess)
+                                              .user
+                                              .imagePath !=
+                                          null)
+                              ? (nameController.text.isNotEmpty
+                                  ? Text(nameController.text[0])
+                                  : const Icon(Icons.person, size: 40))
+                              : null,
                     ),
                     GestureDetector(
                       onTap: _pickImage,
@@ -212,14 +218,6 @@ class _EditProfileState extends State<EditProfile> {
     );
   }
 }
-
-
-
-
-
-
-
-
 
 // import 'dart:developer';
 // import 'dart:io';

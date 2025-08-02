@@ -273,26 +273,32 @@ import 'package:eventify_app/core/theme.dart';
 import 'package:eventify_app/models.dart/event_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+
+import '../../add_event/edit event/edit_event_view.dart';
+import '../../add_memory/view/add_memory.dart';
+import '../event_cubit/event_cubit.dart';
+import '../event_cubit/event_state.dart';
 
 class CardEvent extends StatefulWidget {
   final EventModel event;
-  final VoidCallback? onEdit;
+  // final VoidCallback? onEdit;
   final VoidCallback? onDelete;
-  final bool isInterested;
-  final VoidCallback onJoin;
-  final VoidCallback onAddMemory;
-  final VoidCallback onToggleInterested;
+  // final bool isInterested;
+  final VoidCallback? onJoin;
+  // final VoidCallback onAddMemory;
+  // final VoidCallback onToggleInterested;
 
   const CardEvent({
     super.key,
     required this.event,
-    this.onEdit,
+    // this.onEdit,
     this.onDelete,
-    required this.isInterested,
-    required this.onToggleInterested,
-    required this.onJoin,
-    required this.onAddMemory,
+    // required this.isInterested,
+    // required this.onToggleInterested,
+    this.onJoin,
+    // required this.onAddMemory,
   });
 
   @override
@@ -370,22 +376,33 @@ class _CardEventState extends State<CardEvent> {
                           ),
                 ),
 
-                // ⭐ زر النجمة
-                IconButton(
-                  style: IconButton.styleFrom(
-                    backgroundColor: Colors.white.withOpacity(0.6),
-                    shape: const CircleBorder(),
-                    padding: const EdgeInsets.all(6),
-                    shadowColor: Colors.black12,
-                    elevation: 2,
-                  ),
-                  icon: Icon(
-                    widget.isInterested ? Icons.star : Icons.star_border,
-                    color:
-                        widget.isInterested ? Colors.yellow[700] : Colors.white,
-                    size: 30,
-                  ),
-                  onPressed: widget.onToggleInterested,
+                // ⭐ زر النجمةد
+                BlocBuilder<EventCubit, EventState>(
+                  builder: (context, state) {
+                    final isInterested = context
+                        .read<EventCubit>()
+                        .isInterested(widget.event.id);
+
+                    return IconButton(
+                      style: IconButton.styleFrom(
+                        backgroundColor: Colors.white.withOpacity(0.6),
+                        shape: const CircleBorder(),
+                        padding: const EdgeInsets.all(6),
+                        shadowColor: Colors.black12,
+                        elevation: 2,
+                      ),
+                      icon: Icon(
+                        isInterested ? Icons.star : Icons.star_border,
+                        color: isInterested ? Colors.yellow[700] : Colors.white,
+                        size: 30,
+                      ),
+                      onPressed: () {
+                        context.read<EventCubit>().toggleInterestedEvent(
+                          widget.event,
+                        );
+                      },
+                    );
+                  },
                 ),
               ],
             ),
@@ -471,93 +488,214 @@ class _CardEventState extends State<CardEvent> {
                   ),
 
                   // 🔵 لو الحدث بتاعي → Edit/Delete
-                  if (isMyEvent) ...[
+                  // if (isMyEvent) ...[
+                  //   const SizedBox(height: 10),
+                  //   Row(
+                  //     mainAxisAlignment: MainAxisAlignment.end,
+                  //     children: [
+                  //       TextButton.icon(
+                  //         icon: const Icon(
+                  //           Icons.edit,
+                  //           color: ThemeManager.primaryColor,
+                  //         ),
+                  //         onPressed: () {
+                  //           Navigator.push(
+                  //             context,
+                  //             MaterialPageRoute(
+                  //               builder: (context) {
+                  //                 return EditEventView(event: widget.event);
+                  //               },
+                  //             ),
+                  //           );
+                  //         },
+                  //         style: TextButton.styleFrom(
+                  //           backgroundColor: Color(0xFF1B3C53).withOpacity(0.1),
+                  //           shape: RoundedRectangleBorder(
+                  //             borderRadius: BorderRadius.circular(12),
+                  //           ),
+                  //         ),
+                  //         label: const Text(
+                  //           "Edit",
+                  //           style: TextStyle(color: ThemeManager.primaryColor),
+                  //         ),
+                  //       ),
+                  //       const SizedBox(width: 8),
+                  //       TextButton.icon(
+                  //         icon: const Icon(
+                  //           Icons.delete,
+                  //           color: Colors.redAccent,
+                  //         ),
+                  //         onPressed: widget.onDelete,
+                  //         style: TextButton.styleFrom(
+                  //           backgroundColor: Colors.red.withOpacity(0.1),
+                  //           shape: RoundedRectangleBorder(
+                  //             borderRadius: BorderRadius.circular(12),
+                  //           ),
+                  //         ),
+                  //         label: const Text("Delete"),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ] else ...[
+                  //   Row(
+                  //     mainAxisAlignment: MainAxisAlignment.end,
+                  //     children: [
+                  //       Container(
+                  //         decoration: BoxDecoration(
+                  //           gradient: LinearGradient(
+                  //             colors: [
+                  //               ThemeManager.primaryColor,
+                  //               const Color.fromARGB(255, 163, 188, 196),
+                  //             ],
+                  //             begin: Alignment.topLeft,
+                  //             end: Alignment.bottomRight,
+                  //           ),
+                  //           borderRadius: BorderRadius.circular(12),
+                  //         ),
+                  //         child: TextButton.icon(
+                  //           icon: Icon(
+                  //             isEventStartedOrPast(widget.event.date)
+                  //                 ? Icons.add_a_photo_outlined
+                  //                 : Icons.event_seat_outlined,
+                  //             color: Colors.white,
+                  //           ),
+                  //           onPressed:
+                  //               isEventStartedOrPast(widget.event.date)
+                  //                   ? () => Navigator.push(
+                  //                     context,
+                  //                     MaterialPageRoute(
+                  //                       builder:
+                  //                           (context) =>
+                  //                               AddMemory(event: widget.event),
+                  //                     ),
+                  //                   )
+                  //                   : widget.onJoin,
+                  //           style: TextButton.styleFrom(
+                  //             backgroundColor: Colors.transparent,
+                  //             padding: const EdgeInsets.symmetric(
+                  //               horizontal: 16,
+                  //               vertical: 10,
+                  //             ),
+                  //             shape: RoundedRectangleBorder(
+                  //               borderRadius: BorderRadius.circular(12),
+                  //             ),
+                  //           ),
+                  //           label: Text(
+                  //             isEventStartedOrPast(widget.event.date)
+                  //                 ? "Add Memory"
+                  //                 : "Join",
+                  //             style: TextStyle(
+                  //               color: Colors.white,
+                  //               fontWeight: FontWeight.bold,
+                  //             ),
+                  //           ),
+                  //         ),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ],
+                  if (widget.onDelete != null || widget.onJoin != null) ...[
                     const SizedBox(height: 10),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        TextButton.icon(
-                          icon: const Icon(
-                            Icons.edit,
-                            color: ThemeManager.primaryColor,
-                          ),
-                          onPressed: widget.onEdit,
-                          style: TextButton.styleFrom(
-                            backgroundColor: Color(0xFF1B3C53).withOpacity(0.1),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                          ),
-                          label: const Text(
-                            "Edit",
-                            style: TextStyle(color: ThemeManager.primaryColor),
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        TextButton.icon(
-                          icon: const Icon(
-                            Icons.delete,
-                            color: Colors.redAccent,
-                          ),
-                          onPressed: widget.onDelete,
-                          style: TextButton.styleFrom(
-                            backgroundColor: Colors.red.withOpacity(0.1),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                          ),
-                          label: const Text("Delete"),
-                        ),
-                      ],
-                    ),
-                  ] else ...[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [
-                                ThemeManager.primaryColor,
-                                const Color.fromARGB(255, 163, 188, 196),
-                              ],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                            ),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: TextButton.icon(
-                            icon: Icon(
-                              isEventStartedOrPast(widget.event.date)
-                                  ? Icons.add_a_photo_outlined
-                                  : Icons.event_seat_outlined,
-                              color: Colors.white,
-                            ),
-                            onPressed:
-                                isEventStartedOrPast(widget.event.date)
-                                    ? widget.onAddMemory
-                                    : widget.onJoin,
-                            style: TextButton.styleFrom(
-                              backgroundColor: Colors.transparent,
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 16,
-                                vertical: 10,
+                        if (isMyEvent) // If it's my event, show Edit and Delete buttons
+                          ...[
+                            TextButton.icon(
+                              icon: const Icon(
+                                Icons.edit,
+                                color: ThemeManager.primaryColor,
                               ),
-                              shape: RoundedRectangleBorder(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      return EditEventView(event: widget.event);
+                                    },
+                                  ),
+                                );
+                              },
+                              style: TextButton.styleFrom(
+                                backgroundColor: const Color(0xFF1B3C53).withOpacity(0.1),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              ),
+                              label: const Text(
+                                "Edit",
+                                style: TextStyle(color: ThemeManager.primaryColor),
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            // Only show Delete button if onDelete callback is provided
+                            if (widget.onDelete != null)
+                              TextButton.icon(
+                                icon: const Icon(
+                                  Icons.delete,
+                                  color: Colors.redAccent,
+                                ),
+                                onPressed: widget.onDelete,
+                                style: TextButton.styleFrom(
+                                  backgroundColor: Colors.red.withOpacity(0.1),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                ),
+                                label: const Text("Delete"),
+                              ),
+                          ]
+                        else // If it's not my event, show Join/Add Memory button (if onJoin is provided)
+                          if (widget.onJoin != null) // Only show Join/Add Memory if onJoin callback is provided
+                            Container(
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: [
+                                    ThemeManager.primaryColor,
+                                    const Color.fromARGB(255, 163, 188, 196),
+                                  ],
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                ),
                                 borderRadius: BorderRadius.circular(12),
                               ),
-                            ),
-                            label: Text(
-                              isEventStartedOrPast(widget.event.date)
-                                  ? "Add Memory"
-                                  : "Join",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
+                              child: TextButton.icon(
+                                icon: Icon(
+                                  isEventStartedOrPast(widget.event.date)
+                                      ? Icons.add_a_photo_outlined
+                                      : Icons.event_seat_outlined,
+                                  color: Colors.white,
+                                ),
+                                onPressed: isEventStartedOrPast(widget.event.date)
+                                    ? () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        AddMemory(event: widget.event),
+                                  ),
+                                )
+                                    : widget.onJoin,
+                                style: TextButton.styleFrom(
+                                  backgroundColor: Colors.transparent,
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 16,
+                                    vertical: 10,
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                ),
+                                label: Text(
+                                  isEventStartedOrPast(widget.event.date)
+                                      ? "Add Memory"
+                                      : "Join",
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
-                        ),
                       ],
                     ),
                   ],
@@ -578,7 +716,7 @@ class _CardEventState extends State<CardEvent> {
       } else {
         date = dateString;
       }
-      final startDate = DateFormat('dd-MM-yyyy').parse(date);
+      final startDate = DateFormat('yyyy-MM-dd').parse(date);
       final today = DateTime.now();
 
       return today.isAfter(startDate) || isSameDay(today, startDate);

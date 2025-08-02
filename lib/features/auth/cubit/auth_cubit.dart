@@ -10,6 +10,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' hide AuthState;
 import 'package:uuid/uuid.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 
 class AuthCubit extends Cubit<AuthState> {
@@ -40,6 +41,7 @@ class AuthCubit extends Cubit<AuthState> {
       UserModel user = UserModel.fromFireStore(doc.data()!);
 
       emit(AuthSuccess(user));
+      await _saveFcmToken(user.uid??'');
     } on FirebaseAuthException catch (e) {
       emit(AuthFailure(e.message ?? "Unknown error"));
     } catch (e) {
@@ -61,6 +63,7 @@ class AuthCubit extends Cubit<AuthState> {
       final prefs = await SharedPreferences.getInstance();
       prefs.setString('userId', result.user!.uid);
       UserModel user = UserModel(
+        uid: result.user!.uid,
         name: name,
         email: email,
         phone: phone,
@@ -71,6 +74,7 @@ class AuthCubit extends Cubit<AuthState> {
           .doc(result.user!.uid)
           .set(user.toFireStore());
       emit(AuthSuccess(user));
+      await _saveFcmToken(user.uid??'');
     } on FirebaseAuthException catch (e) {
       emit(AuthFailure(e.message ?? "Unknown error"));
     } catch (e) {
@@ -109,21 +113,6 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  // void checkUserLoggedIn() async {
-  //   await Future.delayed(Duration(seconds: 2));
-  //   final user = FirebaseAuth.instance.currentUser;
-  //   if (user != null) {
-  //     final doc =
-  //     await FirebaseFirestore.instance
-  //         .collection('users')
-  //         .doc(user.uid)
-  //         .get();
-  //     UserModel currentUser = UserModel.fromFireStore(doc.data()!);
-  //     emit(AuthSuccess(currentUser));
-  //   } else {
-  //     emit(AuthLoggedOut());
-  //   }
-  // }
   void checkUserLoggedIn() async {
     await Future.delayed(const Duration(seconds: 2));
 
@@ -198,6 +187,7 @@ class AuthCubit extends Cubit<AuthState> {
           .set(userModel.toFireStore(), SetOptions(merge: true));
 
       emit(AuthSuccess(userModel));
+      await _saveFcmToken(user.uid);
     } catch (e) {
       emit(AuthFailure(e.toString()));
     }
@@ -232,6 +222,7 @@ class AuthCubit extends Cubit<AuthState> {
             .set(userModel.toFireStore(), SetOptions(merge: true));
 
         emit(AuthSuccess(userModel));
+        await _saveFcmToken(user.uid);
       } else {
         emit(AuthFailure(result.message ?? "Facebook sign-in failed."));
       }
@@ -367,6 +358,18 @@ class AuthCubit extends Cubit<AuthState> {
       await user!.reauthenticateWithCredential(credential);
     } on FirebaseAuthException catch (e) {
       print("Error: ${e.code} - ${e.message}");
+    }
+  }
+  Future<void> _saveFcmToken(String userId) async {
+    final token = await FirebaseMessaging.instance.getToken();
+
+    if (token != null) {
+      await FirebaseFirestore.instance.collection('users').doc(userId).update({
+        'fcmToken': token,
+      });
+      print("✅ FCM token saved for user $userId");
+    } else {
+      print("⚠️ FCM token is null");
     }
   }
 
