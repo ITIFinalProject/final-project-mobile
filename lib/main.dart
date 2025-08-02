@@ -22,31 +22,6 @@ import 'generated/l10n.dart';
 final RouteObserver<ModalRoute> routeObserver = RouteObserver<ModalRoute>();
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-// Future<void> setupFCM() async {
-//   FirebaseMessaging messaging = FirebaseMessaging.instance;
-//
-//
-//   await messaging.requestPermission();
-//
-//   String? token = await messaging.getToken();
-//   print("🔐 FCM Token: $token");
-//
-//   final user = FirebaseAuth.instance.currentUser;
-//   if (user != null && token != null) {
-//     await FirebaseFirestore.instance.collection('users').doc(user.uid).update({
-//       'fcmToken': token,
-//     });
-//   }
-//
-//   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-//     print("📩 Received message: ${message.notification?.title}");
-//
-//   });
-//
-//   FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-//     print("🚪 Notification opened");
-//   });
-// }
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();

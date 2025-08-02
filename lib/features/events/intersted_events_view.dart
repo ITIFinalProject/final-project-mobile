@@ -10,6 +10,7 @@ import 'package:eventify_app/features/events/widgets/event_card.dart';
 import 'package:eventify_app/models.dart/event_model.dart';
 
 import '../add_memory/view/add_memory.dart';
+import '../home/widgets/card_event_upcoming.dart';
 
 class InterestedEventsView extends StatefulWidget {
   const InterestedEventsView({super.key});
@@ -57,41 +58,42 @@ class _InterestedEventsViewState extends State<InterestedEventsView> {
                 itemCount: state.interestedEvents.length,
                 itemBuilder: (context, index) {
                   final event = state.interestedEvents[index];
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 12),
-                    child: CardEvent(
-                      event: event,
-                      // isInterested: true,
-                      // onToggleInterested: () {
-                      //   context.read<EventCubit>().toggleInterestedEvent(event);
-                      //   // context.read<EventCubit>().fetchInterestedEvents();
-                      //   // setState(() {});
-                      // },
-                      onDelete: () {
-                        context.read<EventCubit>().deleteEvent(event.id);
-                        // context.read<EventCubit>().fetchInterestedEvents();
-                        // setState(() {});
-                      },
-                      // onEdit: () {
-                      //   Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //       builder: (context) {
-                      //         return EditEventView(event: event);
-                      //       },
-                      //     ),
-                      //
-                      //   );
-                      // },
-                      onJoin: () {
-                        context.read<EventCubit>().joinEvent(event);
-                        context.read<EventCubit>().fetchInterestedEvents();
-                      },
-                      // onAddMemory: (){
-                      //   Navigator.push(context,MaterialPageRoute(builder: (context)=>AddMemory(event: event)));
-                      // },
-                    ),
-                  );
+                  return CardEventUpcoming(event: event,);
+                  // return Padding(
+                  //   padding: const EdgeInsets.only(bottom: 12),
+                  //   child: CardEvent(
+                  //     event: event,
+                  //     // isInterested: true,
+                  //     // onToggleInterested: () {
+                  //     //   context.read<EventCubit>().toggleInterestedEvent(event);
+                  //     //   // context.read<EventCubit>().fetchInterestedEvents();
+                  //     //   // setState(() {});
+                  //     // },
+                  //     onDelete: () {
+                  //       context.read<EventCubit>().deleteEvent(event.id);
+                  //       // context.read<EventCubit>().fetchInterestedEvents();
+                  //       // setState(() {});
+                  //     },
+                  //     // onEdit: () {
+                  //     //   Navigator.push(
+                  //     //     context,
+                  //     //     MaterialPageRoute(
+                  //     //       builder: (context) {
+                  //     //         return EditEventView(event: event);
+                  //     //       },
+                  //     //     ),
+                  //     //
+                  //     //   );
+                  //     // },
+                  //     onJoin: () {
+                  //       context.read<EventCubit>().joinEvent(event);
+                  //       context.read<EventCubit>().fetchInterestedEvents();
+                  //     },
+                  //     // onAddMemory: (){
+                  //     //   Navigator.push(context,MaterialPageRoute(builder: (context)=>AddMemory(event: event)));
+                  //     // },
+                  //   ),
+                  // );
                 },
               );
             }

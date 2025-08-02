@@ -214,43 +214,89 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
+  // List<EventModel> getUpcomingEvents() {
+  //   final now = DateTime.now();
+  //   final upcoming =
+  //       allEvents.where((event) {
+  //           try {
+  //             final parts = event.date.split(' _').first.trim().split('-');
+  //             final parsedDate = DateTime(
+  //               int.parse(parts[0]),
+  //               int.parse(parts[1]),
+  //               int.parse(parts[2]),
+  //             );
+  //             return parsedDate.isAfter(now);
+  //           } catch (_) {
+  //             return false;
+  //           }
+  //         }).toList()
+  //         ..sort((a, b) {
+  //           final aParts = a.date.split('_').first.trim().split('-');
+  //           final bParts = b.date.split(' _').first.trim().split('-');
+  //           return DateTime(
+  //             int.parse(aParts[0]),
+  //             int.parse(aParts[1]),
+  //             int.parse(aParts[2]),
+  //           ).compareTo(
+  //             DateTime(
+  //               int.parse(bParts[0]),
+  //               int.parse(bParts[1]),
+  //               int.parse(bParts[2]),
+  //             ),
+  //           );
+  //         });
+  //   return upcoming.take(3).toList();
+  // }
   List<EventModel> getUpcomingEvents() {
     final now = DateTime.now();
-    final upcoming =
-        allEvents.where((event) {
-            try {
-              final parts = event.date.split(' _').first.trim().split('-');
-              final parsedDate = DateTime(
-                int.parse(parts[0]),
-                int.parse(parts[1]),
-                int.parse(parts[2]),
-              );
-              return parsedDate.isAfter(now);
-            } catch (_) {
-              return false;
-            }
-          }).toList()
-          ..sort((a, b) {
-            final aParts = a.date.split('_').first.trim().split('-');
-            final bParts = b.date.split(' _').first.trim().split('-');
-            return DateTime(
-              int.parse(aParts[0]),
-              int.parse(aParts[1]),
-              int.parse(aParts[2]),
-            ).compareTo(
-              DateTime(
-                int.parse(bParts[0]),
-                int.parse(bParts[1]),
-                int.parse(bParts[2]),
-              ),
-            );
-          });
+    final upcoming = allEvents.where((event) {
+      final isPublic = event.type == 'Public';
+      final isPrivateAndUserIsGuest =
+          event.type == 'Private' && event.guests!.contains(userId);
+
+      if (!isPublic && !isPrivateAndUserIsGuest) return false;
+
+      try {
+        final parts = event.date.split('_').first.trim().split('-');
+        final parsedDate = DateTime(
+          int.parse(parts[0]),
+          int.parse(parts[1]),
+          int.parse(parts[2]),
+        );
+        return parsedDate.isAfter(now);
+      } catch (_) {
+        return false;
+      }
+    }).toList()
+      ..sort((a, b) {
+        final aParts = a.date.split('_').first.trim().split('-');
+        final bParts = b.date.split('_').first.trim().split('-');
+        return DateTime(
+          int.parse(aParts[0]),
+          int.parse(aParts[1]),
+          int.parse(aParts[2]),
+        ).compareTo(
+          DateTime(
+            int.parse(bParts[0]),
+            int.parse(bParts[1]),
+            int.parse(bParts[2]),
+          ),
+        );
+      });
+
     return upcoming.take(3).toList();
   }
 
   List<EventModel> getRecommendedEvents(String currentUserId) {
-    final filtered =
-        allEvents.where((event) => event.hostId != currentUserId).toList()
+    final filtered = allEvents.where((event) {
+      final isPublic = event.type == 'Public';
+      final isPrivateAndUserIsGuest =
+          event.type == 'Private' && event.guests!.contains(currentUserId);
+
+      final isNotHost = event.hostId != currentUserId;
+
+      return (isPublic || isPrivateAndUserIsGuest) && isNotHost;
+    }).toList()
           ..shuffle();
     return filtered.take(5).toList();
   }
