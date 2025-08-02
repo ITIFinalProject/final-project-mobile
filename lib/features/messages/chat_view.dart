@@ -92,6 +92,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:eventify_app/generated/l10n.dart';
 import '../auth/cubit/auth_cubit.dart';
 import '../auth/cubit/auth_state.dart';
+import '../profile/cubit/theme_cubit.dart';
 import 'cubit/event_chat_cubit.dart';
 import 'cubit/event_chat_state.dart';
 
@@ -162,6 +163,8 @@ class _ChatPageState extends State<ChatPage> {
 
   @override
   Widget build(BuildContext context) {
+    final themeMode = context.watch<ThemeCubit>().state;
+    final isDark = themeMode == ThemeMode.dark;
     final authState = context
         .watch<AuthCubit>()
         .state;
@@ -200,7 +203,7 @@ class _ChatPageState extends State<ChatPage> {
                           padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
                             color: isMe
-                                ? ThemeManager.primaryColor
+                                ? (isDark)?ThemeManager.secondaryColor.withOpacity(0.7):ThemeManager.primaryColor
                                 : ThemeManager.darkPinkColor.withOpacity(0.9),
                             borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(12),
@@ -248,12 +251,15 @@ class _ChatPageState extends State<ChatPage> {
                   child: TextField(
                     controller: _messageController,
                     decoration: InputDecoration(
-                      fillColor: ThemeManager.primaryColor.withOpacity(0.1),
+                      fillColor: isDark?ThemeManager.secondaryColor.withOpacity(0.5):ThemeManager.primaryColor.withOpacity(0.1),
                       filled: true,
                       hintText:  S.of(context).write_a_message,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(20),
                       ),
+                      hintStyle: TextStyle(
+                        color: isDark?ThemeManager.lightPinkColor:Colors.grey
+                      )
                     ),
                   ),
                 ),

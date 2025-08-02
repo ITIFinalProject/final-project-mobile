@@ -384,9 +384,9 @@ class _EditEventViewState extends State<EditEventView> {
                     padding: const EdgeInsets.symmetric(horizontal: 25),
                     child: DropdownButtonFormField<String>(
                       value: selectedCategory,
-                      decoration: CustomInputDecoration.getDecoration(
-                        hintText: 'Select category',
-                      ),
+                      // decoration: CustomInputDecoration.getDecoration(
+                      //   hintText: 'Select category',
+                      // ),
                       items:
                           eventTypes
                               .map(
@@ -407,9 +407,9 @@ class _EditEventViewState extends State<EditEventView> {
                     padding: const EdgeInsets.symmetric(horizontal: 25),
                     child: DropdownButtonFormField<String>(
                       value: selectedEventType,
-                      decoration: CustomInputDecoration.getDecoration(
-                        hintText: 'Select type',
-                      ),
+                      // decoration: CustomInputDecoration.getDecoration(
+                      //   hintText: 'Select type',
+                      // ),
                       items:
                           eventVisibility
                               .map(

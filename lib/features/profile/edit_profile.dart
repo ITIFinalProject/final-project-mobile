@@ -11,6 +11,7 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../core/theme.dart';
 import '../auth/view/widgets/custom_text_field.dart';
+import 'cubit/theme_cubit.dart';
 
 class EditProfile extends StatefulWidget {
   const EditProfile({super.key});
@@ -84,6 +85,8 @@ class _EditProfileState extends State<EditProfile> {
 
   @override
   Widget build(BuildContext context) {
+    final themeMode = context.watch<ThemeCubit>().state;
+    final isDark = themeMode == ThemeMode.dark;
     return BlocConsumer<AuthCubit, AuthState>(
       listener: (context, state) {
         if (state is AuthSuccess) {
@@ -110,7 +113,7 @@ class _EditProfileState extends State<EditProfile> {
                   children: [
                     CircleAvatar(
                       radius: 45,
-                      backgroundColor: ThemeManager.darkPinkColor,
+                      backgroundColor: isDark?ThemeManager.lightPinkColor:ThemeManager.primaryColor,
                       backgroundImage:
                           profileImage != null
                               ? FileImage(profileImage!)
@@ -148,13 +151,14 @@ class _EditProfileState extends State<EditProfile> {
                                               .imagePath !=
                                           null)
                               ? (nameController.text.isNotEmpty
-                                  ? Text(nameController.text[0])
+                                  ? Text(nameController.text[0] , style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20,color: isDark?ThemeManager.primaryColor:ThemeManager.lightPinkColor),)
                                   : const Icon(Icons.person, size: 40))
                               : null,
                     ),
                     GestureDetector(
                       onTap: _pickImage,
                       child: CircleAvatar(
+
                         backgroundColor: ThemeManager.lightPinkColor,
                         child: Icon(
                           Icons.camera_alt,

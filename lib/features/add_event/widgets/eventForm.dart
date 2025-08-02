@@ -131,9 +131,9 @@ class _EventFormState extends State<EventForm> {
                       return DropdownMenuItem(value: value, child: Text(value));
                     }).toList(),
                 onChanged: (val) => setState(() => selectedEventType = val),
-                decoration: CustomInputDecoration.getDecoration(
-                  hintText: S.of(context).select_event_type,
-                ),
+                // decoration: CustomInputDecoration.getDecoration(
+                //   hintText: S.of(context).select_event_type,
+                // ),
                 validator:
                     (value) =>
                         value == null ? S.of(context).please_select_event_type : null,

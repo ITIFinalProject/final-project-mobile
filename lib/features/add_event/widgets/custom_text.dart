@@ -1,5 +1,8 @@
 import 'package:eventify_app/core/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../profile/cubit/theme_cubit.dart';
 
 class CustomText extends StatelessWidget {
   const CustomText({super.key, required this.title});
@@ -34,12 +37,14 @@ class CustomElevatedButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeMode = context.watch<ThemeCubit>().state;
+    final isDark = themeMode == ThemeMode.dark;
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: ThemeManager.primaryColor,
+          backgroundColor: isDark?ThemeManager.lightPinkColor:ThemeManager.primaryColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
           ),
@@ -49,7 +54,7 @@ class CustomElevatedButton extends StatelessWidget {
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.normal,
-            color: Colors.white,
+            color:isDark?ThemeManager.primaryColor:ThemeManager.lightPinkColor,
           ),
           textAlign: TextAlign.start,
         ),

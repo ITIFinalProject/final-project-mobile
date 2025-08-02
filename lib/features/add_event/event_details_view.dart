@@ -108,9 +108,9 @@ class _EventDetailsViewState extends State<EventDetailsView> {
                         color: ThemeManager.primaryColor,
                       ),
                       borderRadius: BorderRadius.circular(15),
-                      decoration: CustomInputDecoration.getDecoration(
-                        hintText: 'Select event category',
-                      ),
+                      // decoration: CustomInputDecoration.getDecoration(
+                      //   hintText: 'Select event category',
+                      // ),
 
                       items:
                           eventTypes.map((value) {
@@ -154,9 +154,9 @@ class _EventDetailsViewState extends State<EventDetailsView> {
                         color: ThemeManager.primaryColor,
                       ),
                       borderRadius: BorderRadius.circular(15),
-                      decoration: CustomInputDecoration.getDecoration(
-                        hintText: 'Select event type',
-                      ),
+                      // decoration: CustomInputDecoration.getDecoration(
+                      //   hintText: 'Select event type',
+                      // ),
 
                       items:
                           ['Private', 'Public'].map((value) {

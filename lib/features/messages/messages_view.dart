@@ -43,6 +43,10 @@ class _MessagesViewState extends State<MessagesView> {
                 itemBuilder: (context, index) {
                   final event = events[index];
                   return Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      side: BorderSide(color: ThemeManager.primaryColor),
+                    ),
                     color: ThemeManager.lightPinkColor,
                     margin: EdgeInsets.all(10),
                     child: ListTile(

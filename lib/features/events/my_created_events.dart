@@ -11,6 +11,7 @@ import 'package:eventify_app/generated/l10n.dart';
 
 import '../../core/routes.dart';
 import '../add_memory/view/add_memory.dart';
+import '../profile/cubit/theme_cubit.dart';
 
 class MyCreatedEvents extends StatefulWidget {
   const MyCreatedEvents({super.key});
@@ -45,20 +46,13 @@ class _MyCreatedEventsState extends State<MyCreatedEvents> with RouteAware {
 
   @override
   Widget build(BuildContext context) {
+    final themeMode = context.watch<ThemeCubit>().state;
+    final isDark = themeMode == ThemeMode.dark;
     return Scaffold(
-      backgroundColor: Theme
-          .of(context)
-          .scaffoldBackgroundColor,
       appBar: AppBar(
         title: Text(
           S.of(context).my_events,
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 22,
-            color: Colors.white,
-          ),
         ),
-        backgroundColor: ThemeManager.primaryColor,
         elevation: 2,
       ),
       body: BlocBuilder<EventCubit, EventState>(
@@ -106,30 +100,34 @@ class _MyCreatedEventsState extends State<MyCreatedEvents> with RouteAware {
       ),
     );
   }
-
   showDialogDelete(String eventId) {
-    showDialog(context: context, builder: (context) =>
-        BlocBuilder<EventCubit, EventState>(
-          builder: (context, state) {
-            if(state is EventDeleted){
-              context.read<EventCubit>().fetchMyEvents();
-              Navigator.pop(context);
-            }else{
+    showDialog(context: context, builder: (context) {
+      return  BlocBuilder<EventCubit, EventState>(
+        builder: (context, state) {
+          if(state is EventDeleted){
+            context.read<EventCubit>().fetchMyEvents();
+            Navigator.pop(context);
+          }else{
             return AlertDialog(
-              content: Text('Are you sure you want to delete this event'),
+              content: Text('Are you sure you want to delete this event' , style: TextStyle(
+                  fontSize: 16,
+                color: ThemeManager.primaryColor
+              ),),
               title: Text('Delete Event'),
               actions: [
                 TextButton(onPressed: (){
                   context.read<EventCubit>().deleteEvent(eventId);
-                }, child: Text('Ok')),
+                }, child: Text('Ok',style: TextStyle(color: ThemeManager.primaryColor),)),
                 TextButton(onPressed: (){
                   Navigator.pop(context);
-                }, child: Text('Cancel')),
+                }, child: Text('Cancel', style: TextStyle(color: Colors.grey),)),
               ],
             );
           }
-            return SizedBox.shrink();
-            },
-        ));
+          return SizedBox.shrink();
+        });
+    }
+      );
+    }
+
   }
-}

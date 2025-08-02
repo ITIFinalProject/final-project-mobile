@@ -18,12 +18,15 @@ class ProfileView extends StatefulWidget {
 }
 
 class _ProfileViewState extends State<ProfileView> {
+
   bool isLoading = true;
   String? token;
   String? imagePath;
 
   @override
   Widget build(BuildContext context) {
+    final themeMode = context.watch<ThemeCubit>().state;
+    final isDark = themeMode == ThemeMode.dark;
     return Scaffold(
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 100),
@@ -52,7 +55,7 @@ class _ProfileViewState extends State<ProfileView> {
                 children: [
                   CircleAvatar(
                     radius: 45,
-                    backgroundColor: ThemeManager.darkPinkColor,
+                    backgroundColor: isDark?ThemeManager.lightPinkColor:ThemeManager.primaryColor,
                     backgroundImage: user.imagePath != null
                         ? NetworkImage(user.imagePath!)
                         : null,
@@ -60,17 +63,17 @@ class _ProfileViewState extends State<ProfileView> {
                         ? Text(
                       user.name?.isNotEmpty == true ? user.name![0]
                           .toUpperCase() : '',
-                      style: const TextStyle(fontSize: 24, color: Colors.white),
+                      style:  TextStyle(fontSize: 24, color:isDark?ThemeManager.primaryColor:ThemeManager.lightPinkColor),
                     )
                         : null,
                   ),
                   const SizedBox(height: 12),
                   Text(
                     user.name ?? '',
-                    style: const TextStyle(
+                    style:  TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: ThemeManager.primaryColor,
+                      color: isDark?ThemeManager.lightPinkColor:ThemeManager.primaryColor,
                     ),
                   ),
                   const SizedBox(height: 4),
@@ -89,7 +92,6 @@ class _ProfileViewState extends State<ProfileView> {
                   _infoTile(S.of(context).my_events, Icons.event_rounded, () {
                     Navigator.pushNamed(context, AppRoutes.myCreatedEvents);
                   }),
-                  _infoTile(S.of(context).notification, Icons.notifications, () {}),
                   _infoTile(S.of(context).event_memories, Icons.memory, () {
                     Navigator.pushNamed(context, AppRoutes.eventMemories);
                   }),
@@ -99,19 +101,19 @@ class _ProfileViewState extends State<ProfileView> {
                       return ListTile(
                         leading: Icon(
                           Icons.brightness_6,
-                          color: ThemeManager.primaryColor,
+                          color: isDark?ThemeManager.lightPinkColor:ThemeManager.primaryColor,
                         ),
                         title: Text(
                           S.of(context).change_theme,
                           // 'Change Theme',
-                          style: TextStyle(color: ThemeManager.primaryColor),
+                          style: TextStyle(color: isDark?ThemeManager.lightPinkColor:ThemeManager.primaryColor),
                         ),
                         trailing: Switch(
                           value: isDark,
                           onChanged: (_) {
                             context.read<ThemeCubit>().toggleTheme();
                           },
-                          activeColor: ThemeManager.primaryColor,
+                          activeColor: isDark?ThemeManager.lightPinkColor:ThemeManager.primaryColor,
                         ),
                       );
                     },
@@ -121,11 +123,11 @@ class _ProfileViewState extends State<ProfileView> {
                       return ListTile(
                         leading: Icon(
                           Icons.language,
-                          color: ThemeManager.primaryColor,
+                          color: isDark?ThemeManager.lightPinkColor:ThemeManager.primaryColor,
                         ),
                         title: Text(
                           S.of(context).change_language,
-                          style: TextStyle(color: ThemeManager.primaryColor),
+                          style: TextStyle(color: isDark?ThemeManager.lightPinkColor:ThemeManager.primaryColor),
                         ),
                         trailing: DropdownButton<String>(
                           value: locale.languageCode,
@@ -154,7 +156,7 @@ class _ProfileViewState extends State<ProfileView> {
                           underline: Container(),
                           icon: Icon(
                             Icons.arrow_drop_down,
-                            color: ThemeManager.primaryColor,
+                            color: isDark?ThemeManager.lightPinkColor:ThemeManager.primaryColor,
                           ),
                         ),
                       );
@@ -200,14 +202,16 @@ class _ProfileViewState extends State<ProfileView> {
   //   ).show();
   // }
   Widget _infoTile(String title, IconData icon, ontap) {
+    final themeMode = context.watch<ThemeCubit>().state;
+    final isDark = themeMode == ThemeMode.dark;
     return GestureDetector(
       onTap: ontap,
       child: ListTile(
-        leading: Icon(icon, color: ThemeManager.primaryColor),
-        title: Text(title, style: TextStyle(color: ThemeManager.primaryColor)),
+        leading: Icon(icon, color: isDark?ThemeManager.lightPinkColor:ThemeManager.primaryColor),
+        title: Text(title, style: TextStyle(color: isDark?ThemeManager.lightPinkColor:ThemeManager.primaryColor)),
         trailing: Icon(
           Icons.arrow_forward_ios,
-          color: ThemeManager.primaryColor,
+          color: isDark?ThemeManager.lightPinkColor:ThemeManager.primaryColor,
         ),
       ),
     );
