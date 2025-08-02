@@ -80,17 +80,17 @@ class _ProfileViewState extends State<ProfileView> {
                   ),
                   const SizedBox(height: 30),
 
-                  _infoTile("Edit Profile", Icons.person, () {
+                  _infoTile(S.of(context).edit_profile, Icons.person, () {
                     Navigator.pushNamed(context, AppRoutes.editProfile);
                   }),
-                  _infoTile("Change Password", Icons.lock, () {
+                  _infoTile(S.of(context).change_password, Icons.lock, () {
                     Navigator.pushNamed(context, AppRoutes.verifyOldPassword);
                   }),
-                  _infoTile("My Events", Icons.event_rounded, () {
+                  _infoTile(S.of(context).my_events, Icons.event_rounded, () {
                     Navigator.pushNamed(context, AppRoutes.myCreatedEvents);
                   }),
-                  _infoTile("Notification", Icons.notifications, () {}),
-                  _infoTile("Event Memories", Icons.memory, () {
+                  _infoTile(S.of(context).notification, Icons.notifications, () {}),
+                  _infoTile(S.of(context).event_memories, Icons.memory, () {
                     Navigator.pushNamed(context, AppRoutes.eventMemories);
                   }),
                   BlocBuilder<ThemeCubit, ThemeMode>(
@@ -102,7 +102,8 @@ class _ProfileViewState extends State<ProfileView> {
                           color: ThemeManager.primaryColor,
                         ),
                         title: Text(
-                          'Change Theme',
+                          S.of(context).change_theme,
+                          // 'Change Theme',
                           style: TextStyle(color: ThemeManager.primaryColor),
                         ),
                         trailing: Switch(
@@ -160,14 +161,14 @@ class _ProfileViewState extends State<ProfileView> {
                     },
                   ),
 
-                  _infoTile("Sign Out", Icons.logout, () {
+                  _infoTile(S.of(context).sign_out, Icons.logout, () {
                     Future.microtask(() => showAlertDialog());
                   }),
                 ],
               );
             }
 
-            return const Center(child: Text("No user data found."));
+            return  Center(child: Text(S.of(context).no_user_data_found));
           },
         ),
       ),

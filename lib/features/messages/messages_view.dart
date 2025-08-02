@@ -4,7 +4,7 @@ import 'package:eventify_app/features/events/widgets/card_no_events.dart';
 import 'package:eventify_app/features/messages/chat_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:eventify_app/generated/l10n.dart';
 import '../events/event_cubit/event_state.dart';
 
 class MessagesView extends StatefulWidget {
@@ -25,7 +25,7 @@ class _MessagesViewState extends State<MessagesView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Messages"),
+        title: Text(S.of(context).messages),
         automaticallyImplyLeading: false,
       ),
 
@@ -58,7 +58,7 @@ class _MessagesViewState extends State<MessagesView> {
                         event.title ?? '',
                         style: TextStyle(color: ThemeManager.primaryColor),
                       ),
-                      subtitle: Text("Send a message to your guests"),
+                      subtitle: Text(S.of(context).send_a_message_to_your_guests),
                       onTap: () {
                         Navigator.push(
                           context,

@@ -7,6 +7,7 @@ import 'package:eventify_app/features/events/widgets/event_card.dart';
 import 'package:eventify_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:eventify_app/generated/l10n.dart';
 
 import '../../core/routes.dart';
 import '../add_memory/view/add_memory.dart';
@@ -49,8 +50,8 @@ class _MyCreatedEventsState extends State<MyCreatedEvents> with RouteAware {
           .of(context)
           .scaffoldBackgroundColor,
       appBar: AppBar(
-        title: const Text(
-          "My Events",
+        title: Text(
+          S.of(context).my_events,
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 22,

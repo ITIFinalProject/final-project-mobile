@@ -4,6 +4,7 @@ import 'package:eventify_app/features/add_event/widgets/custom_text_form_field.d
 import 'package:eventify_app/features/auth/cubit/auth_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:eventify_app/generated/l10n.dart';
 
 class ChangePass extends StatefulWidget {
   const ChangePass({super.key});
@@ -30,38 +31,38 @@ class _ChangePassState extends State<ChangePass> {
                   CustomTextFormField(
                     validator: (val) {
                       if (val == null || val.isEmpty) {
-                        return 'Please enter your old password';
+                        return S.of(context).enter_old_password;
                       }
                       if (val.length < 6) {
-                        return 'Password must be at least 6 characters';
+                        return S.of(context).password_min_length;
                       }
                       return null;
                     },
-                    hint: "New Password",
+                    hint: S.of(context).new_password,
                     controller: newPassController,
                   ),
                   SizedBox(height: 20,),
                   CustomTextFormField(
                     validator: (val) {
                       if (val == null || val.isEmpty) {
-                        return 'Please enter your old password';
+                        return S.of(context).enter_old_password;
                       }
                       return null;
                     },
-                    hint: "confirm Password",
+                    hint: S.of(context).confirm_password,
                     controller: confirmPassController,
                   ),
         
                   CustomElevatedButton(
-                    title: "Save Password",
+                    title: S.of(context).save_password,
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
                         final authCubit = context.read<AuthCubit>();
                         if (newPassController.text !=
                             confirmPassController.text) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text("Passwords do not match"),
+                             SnackBar(
+                              content: Text(S.of(context).passwords_do_not_match),
                               backgroundColor: Colors.red,
                             ),
                           );
@@ -71,8 +72,8 @@ class _ChangePassState extends State<ChangePass> {
                             ..updatePassword(newPassController.text);
         
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text("Password updated successfully"),
+                           SnackBar(
+                            content: Text(S.of(context).password_updated_successfully),
                             backgroundColor: Colors.green,
                           ),
                         );

@@ -283,6 +283,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:eventify_app/generated/l10n.dart';
 
 import '../../core/routes.dart';
 import '../../main.dart'; // Assuming routeObserver is defined in main.dart
@@ -290,6 +291,7 @@ import '../add_memory/view/add_memory.dart';
 import 'event_cubit/event_cubit.dart';
 import 'event_cubit/event_state.dart';
 import '../../models.dart/event_model.dart'; // Make sure EventModel is imported
+
 
 class EventsView extends StatefulWidget {
   const EventsView({super.key});
@@ -350,9 +352,15 @@ class _EventsViewState extends State<EventsView> with RouteAware, WidgetsBinding
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(70),
         child: AppBar(
-          title: const Padding(
-            padding: EdgeInsets.only(top: 20),
-            child: Text('Events'),
+          title: Padding(
+            padding: const EdgeInsets.only(top: 20),
+            child: Text(S.of(context).events,
+              style: const TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
           ),
           backgroundColor: ThemeManager.primaryColor, // Ensure AppBar color is set
         ),
