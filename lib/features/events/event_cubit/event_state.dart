@@ -33,3 +33,8 @@ class EventInterestedLoaded extends EventState {
 
   EventInterestedLoaded(this.interestedEvents);
 }
+class EventJoinedLoaded extends EventState {
+  final List<EventModel> joinedEvents;
+
+  EventJoinedLoaded(this.joinedEvents);
+}

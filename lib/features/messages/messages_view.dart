@@ -33,8 +33,8 @@ class _MessagesViewState extends State<MessagesView> {
         builder: (context, state) {
           if (state is EventLoading) {
             return Center(child: CircularProgressIndicator());
-          } else if (state is EventLoaded) {
-            final events = state.events;
+          } else if (state is EventJoinedLoaded) {
+            final events = state.joinedEvents;
             if (events.isEmpty) {
               return CardNoEvents(text: "No joined events yet." , title: 'Event Messages',);
             } else {

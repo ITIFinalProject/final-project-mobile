@@ -303,6 +303,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:eventify_app/core/routes.dart';
 import 'package:eventify_app/features/add_event/logic/create_event_cubit/create_event_cubit.dart';
 import 'package:eventify_app/features/add_event/logic/invite_state_cubit/invite_cubit.dart';
 import 'package:eventify_app/features/add_event/logic/invite_state_cubit/invite_state.dart';
@@ -577,6 +578,7 @@ class _CreateContactState extends State<CreateContact> {
                                     templateIndex: widget.event.templateIndex,
                                     guests: matchedGuests,
                                   );
+                                  Navigator.pushReplacementNamed(context, AppRoutes.layout);
                                 } catch (e) {
                                   print("❌ Error fetching users: $e");
                                   ScaffoldMessenger.of(context).showSnackBar(

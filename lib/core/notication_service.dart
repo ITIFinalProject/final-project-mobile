@@ -44,7 +44,6 @@ class NotificationService {
                   TextButton(
                     onPressed: () async {
                       print('accepted');
-                      // await joinEvent(eventId);
                       _handleInvitation(data, true);
                       Navigator.pop(navigatorKey.currentContext!);
                     },
@@ -70,7 +69,7 @@ class NotificationService {
           builder:
               (_) => AlertDialog(
                 title: Text("You have been invited to event $eventTitle"),
-                content: Text("Do you want to join yo us"),
+                content: Text("Would you like to join the event?"),
                 actions: [
                   TextButton(
                     onPressed: () {

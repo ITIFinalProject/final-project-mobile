@@ -7,8 +7,11 @@ import 'package:eventify_app/features/events/event_cubit/event_state.dart';
 import 'package:eventify_app/features/events/widgets/card_no_events.dart';
 import 'package:eventify_app/features/events/widgets/event_card.dart';
 import 'package:eventify_app/models.dart/event_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../home/widgets/card_event_upcoming.dart';
 
 class CategoryEventsView extends StatefulWidget {
   const CategoryEventsView({super.key});
@@ -58,13 +61,28 @@ class _CategoryEventsViewState extends State<CategoryEventsView> {
             return Center(child: Text('Error: ${snapshot.error}'));
           }
 
-          final List<EventModel> categoryEvents =
-              snapshot.data!.docs
-                  .map(
-                    (doc) =>
-                        EventModel.fromMap(doc.data() as Map<String, dynamic>),
-                  )
-                  .toList();
+          // final List<EventModel> categoryEvents =
+          //     snapshot.data!.docs
+          //         .map(
+          //           (doc) =>
+          //               EventModel.fromMap(doc.data() as Map<String, dynamic>),
+          //         )
+          //         .toList();
+          final String currentUserId = FirebaseAuth.instance.currentUser!.uid;
+          final List<EventModel> categoryEvents = snapshot.data!.docs
+              .map((doc) => EventModel.fromMap(doc.data() as Map<String, dynamic>))
+              .where((event) {
+            if (event.type == 'Public') return true;
+
+            // Show private events only if current user is a guest
+            if (event.type == 'Private' &&
+                event.guests!.contains(currentUserId)) {
+              return true;
+            }
+
+            return false;
+          })// Exclude others
+              .toList();
 
           if (categoryEvents.isEmpty) {
             return CardNoEvents(
@@ -78,6 +96,7 @@ class _CategoryEventsViewState extends State<CategoryEventsView> {
             itemCount: categoryEvents.length,
             itemBuilder: (context, index) {
               final event = categoryEvents[index];
+              return CardEventUpcoming(event: event,);
                   // return GestureDetector(
                   //   onTap: () {
                   //     Navigator.pushNamed(
@@ -88,23 +107,23 @@ class _CategoryEventsViewState extends State<CategoryEventsView> {
                   //   },
                   //
                   //   child:
-              return CardEvent(
-                      event: event,
-                      onDelete: () {
-                        context.read<EventCubit>().deleteEvent(event.id);
-                      },
-                      onJoin: () {
-                        context.read<EventCubit>().joinEvent(event);
-                      },
-                      // onAddMemory: () {
-                      //   Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //       builder: (context) => AddMemory(event: event),
-                      //     ),
-                      //   );
-                      // },
-                    );
+              // return CardEvent(
+              //         event: event,
+              //         onDelete: () {
+              //           context.read<EventCubit>().deleteEvent(event.id);
+              //         },
+              //         onJoin: () {
+              //           context.read<EventCubit>().joinEvent(event);
+              //         },
+              //         // onAddMemory: () {
+              //         //   Navigator.push(
+              //         //     context,
+              //         //     MaterialPageRoute(
+              //         //       builder: (context) => AddMemory(event: event),
+              //         //     ),
+              //         //   );
+              //         // },
+              //       );
                   // );
                 },
               );
