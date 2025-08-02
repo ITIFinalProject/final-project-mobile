@@ -273,26 +273,32 @@ import 'package:eventify_app/core/theme.dart';
 import 'package:eventify_app/models.dart/event_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+
+import '../../add_event/edit event/edit_event_view.dart';
+import '../../add_memory/view/add_memory.dart';
+import '../event_cubit/event_cubit.dart';
+import '../event_cubit/event_state.dart';
 
 class CardEvent extends StatefulWidget {
   final EventModel event;
-  final VoidCallback? onEdit;
+  // final VoidCallback? onEdit;
   final VoidCallback? onDelete;
-  final bool isInterested;
+  // final bool isInterested;
   final VoidCallback onJoin;
-  final VoidCallback onAddMemory;
-  final VoidCallback onToggleInterested;
+  // final VoidCallback onAddMemory;
+  // final VoidCallback onToggleInterested;
 
   const CardEvent({
     super.key,
     required this.event,
-    this.onEdit,
+    // this.onEdit,
     this.onDelete,
-    required this.isInterested,
-    required this.onToggleInterested,
+    // required this.isInterested,
+    // required this.onToggleInterested,
     required this.onJoin,
-    required this.onAddMemory,
+    // required this.onAddMemory,
   });
 
   @override
@@ -370,22 +376,33 @@ class _CardEventState extends State<CardEvent> {
                           ),
                 ),
 
-                // ⭐ زر النجمة
-                IconButton(
-                  style: IconButton.styleFrom(
-                    backgroundColor: Colors.white.withOpacity(0.6),
-                    shape: const CircleBorder(),
-                    padding: const EdgeInsets.all(6),
-                    shadowColor: Colors.black12,
-                    elevation: 2,
-                  ),
-                  icon: Icon(
-                    widget.isInterested ? Icons.star : Icons.star_border,
-                    color:
-                        widget.isInterested ? Colors.yellow[700] : Colors.white,
-                    size: 30,
-                  ),
-                  onPressed: widget.onToggleInterested,
+                // ⭐ زر النجمةد
+                BlocBuilder<EventCubit, EventState>(
+                  builder: (context, state) {
+                    final isInterested = context
+                        .read<EventCubit>()
+                        .isInterested(widget.event.id);
+
+                    return IconButton(
+                      style: IconButton.styleFrom(
+                        backgroundColor: Colors.white.withOpacity(0.6),
+                        shape: const CircleBorder(),
+                        padding: const EdgeInsets.all(6),
+                        shadowColor: Colors.black12,
+                        elevation: 2,
+                      ),
+                      icon: Icon(
+                        isInterested ? Icons.star : Icons.star_border,
+                        color: isInterested ? Colors.yellow[700] : Colors.white,
+                        size: 30,
+                      ),
+                      onPressed: () {
+                        context.read<EventCubit>().toggleInterestedEvent(
+                          widget.event,
+                        );
+                      },
+                    );
+                  },
                 ),
               ],
             ),
@@ -481,7 +498,16 @@ class _CardEventState extends State<CardEvent> {
                             Icons.edit,
                             color: ThemeManager.primaryColor,
                           ),
-                          onPressed: widget.onEdit,
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return EditEventView(event: widget.event);
+                                },
+                              ),
+                            );
+                          },
                           style: TextButton.styleFrom(
                             backgroundColor: Color(0xFF1B3C53).withOpacity(0.1),
                             shape: RoundedRectangleBorder(
@@ -535,7 +561,14 @@ class _CardEventState extends State<CardEvent> {
                             ),
                             onPressed:
                                 isEventStartedOrPast(widget.event.date)
-                                    ? widget.onAddMemory
+                                    ? () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder:
+                                            (context) =>
+                                                AddMemory(event: widget.event),
+                                      ),
+                                    )
                                     : widget.onJoin,
                             style: TextButton.styleFrom(
                               backgroundColor: Colors.transparent,

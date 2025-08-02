@@ -163,6 +163,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:eventify_app/core/notication_service.dart';
 import 'package:eventify_app/features/auth/models/user_model.dart';
 import 'package:eventify_app/models.dart/event_model.dart' show EventModel;
 import 'package:firebase_auth/firebase_auth.dart';
@@ -257,10 +258,14 @@ class CreateEventCubit extends Cubit<CreateEventState> {
     for (final guest in guests) {
       if (guest.fcmToken != null && guest.fcmToken!.isNotEmpty) {
         // 1. Send FCM Notification
-        await FCMService.sendNotification(
-          fcmToken: guest.fcmToken!,
+        await NotificationService().sendPushNotification(
+          deviceToken: guest.fcmToken!,
           title: " You're Invited to ${event.title}! 🎉",
           body: "Don't miss the fun — check your invitation now.",
+          data: {
+            "eventId": event.id,
+            "type": "event_invitation"
+          }
         );
       }
 

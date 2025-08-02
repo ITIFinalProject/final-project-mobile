@@ -74,35 +74,35 @@ class _MyCreatedEventsState extends State<MyCreatedEvents> with RouteAware {
               itemCount: state.events.length,
               itemBuilder: (context, index) {
                 final event = state.events[index];
-                final isInterested = context.read<EventCubit>().isInterested(event.id);
+                // final isInterested = context.read<EventCubit>().isInterested(event.id);
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 12),
                   child: CardEvent(
-                    isInterested:isInterested ,
-                    onToggleInterested: () {
-                      context.read<EventCubit>().toggleInterestedEvent(event);
-                    },
+                    // isInterested:isInterested ,
+                    // onToggleInterested: () {
+                    //   context.read<EventCubit>().toggleInterestedEvent(event);
+                    // },
                     event: event,
                     onDelete: () {
                       context.read<EventCubit>().deleteEvent(event.id);
                     },
 
-                    onEdit: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) {
-                            return EditEventView(event: event);
-                          },
-                        ),
-                      );
-                    },
+                    // onEdit: () {
+                    //   Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //       builder: (context) {
+                    //         return EditEventView(event: event);
+                    //       },
+                    //     ),
+                    //   );
+                    // },
                     onJoin: () {
                       context.read<EventCubit>().joinEvent(event);
                     },
-                    onAddMemory: (){
-                      Navigator.push(context,MaterialPageRoute(builder: (context)=>AddMemory(event: event)));
-                    },
+                    // onAddMemory: (){
+                    //   Navigator.push(context,MaterialPageRoute(builder: (context)=>AddMemory(event: event)));
+                    // },
                   ), //  نفس الكارد اللي بتستخدميه في EventsView
                 );
               },

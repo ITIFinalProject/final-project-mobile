@@ -1,21 +1,16 @@
-import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:eventify_app/core/notication_service.dart';
 import 'package:eventify_app/core/routes.dart';
 import 'package:eventify_app/core/theme.dart';
-import 'package:eventify_app/features/add_event/logic/invite_state_cubit/invite_cubit.dart';
 import 'package:eventify_app/features/add_memory/cubit/memory_cubit.dart';
 import 'package:eventify_app/features/auth/cubit/auth_cubit.dart';
 import 'package:eventify_app/features/home/cubit/home_cubit.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:googleapis_auth/auth_io.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'features/add_event/logic/create_event_cubit/create_event_cubit.dart';
@@ -25,32 +20,33 @@ import 'features/profile/cubit/theme_cubit.dart';
 import 'generated/l10n.dart';
 
 final RouteObserver<ModalRoute> routeObserver = RouteObserver<ModalRoute>();
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-Future<void> setupFCM() async {
-  FirebaseMessaging messaging = FirebaseMessaging.instance;
-
-
-  await messaging.requestPermission();
-
-  String? token = await messaging.getToken();
-  print("🔐 FCM Token: $token");
-
-  final user = FirebaseAuth.instance.currentUser;
-  if (user != null && token != null) {
-    await FirebaseFirestore.instance.collection('users').doc(user.uid).update({
-      'fcmToken': token,
-    });
-  }
-
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    print("📩 Received message: ${message.notification?.title}");
-
-  });
-
-  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-    print("🚪 Notification opened");
-  });
-}
+// Future<void> setupFCM() async {
+//   FirebaseMessaging messaging = FirebaseMessaging.instance;
+//
+//
+//   await messaging.requestPermission();
+//
+//   String? token = await messaging.getToken();
+//   print("🔐 FCM Token: $token");
+//
+//   final user = FirebaseAuth.instance.currentUser;
+//   if (user != null && token != null) {
+//     await FirebaseFirestore.instance.collection('users').doc(user.uid).update({
+//       'fcmToken': token,
+//     });
+//   }
+//
+//   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+//     print("📩 Received message: ${message.notification?.title}");
+//
+//   });
+//
+//   FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+//     print("🚪 Notification opened");
+//   });
+// }
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -60,7 +56,9 @@ void main() async {
   );
 
   await dotenv.load(fileName: ".env");
-  await setupFCM();
+  final notification = NotificationService();
+  await notification.initFCM();
+  FirebaseMessaging.onBackgroundMessage(handleOnBackground);
   runApp(const MyApp());
 }
 
@@ -90,6 +88,7 @@ class MyApp extends StatelessWidget {
           return BlocBuilder<ThemeCubit, ThemeMode>(
             builder: (context, themeMode) {
               return MaterialApp(
+                navigatorKey: navigatorKey,
                 navigatorObservers: [routeObserver],
                 debugShowCheckedModeBanner: false,
                 routes: AppRoutes.routes,
@@ -114,5 +113,8 @@ class MyApp extends StatelessWidget {
   }
 
 
+}
+Future<void> handleOnBackground (RemoteMessage message)async{
+print("🚪 Notification  ${message.notification?.title}");
 }
 

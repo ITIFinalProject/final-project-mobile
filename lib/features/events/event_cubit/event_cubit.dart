@@ -68,6 +68,7 @@ class EventCubit extends Cubit<EventState> {
       await eventRef.update({'capacity': event.capacity - 1});
 
       emit(EventJoinSuccess());
+      await fetchEvents();
     } catch (e) {
       emit(EventJoinError(e.toString()));
     }
@@ -178,16 +179,30 @@ class EventCubit extends Cubit<EventState> {
       _interestedEventIds.add(event.id);
     }
 
-    // ✅ إعادة إرسال نفس الـ state عشان يحصل rebuild مباشر
-    if (state is EventLoaded) {
-      emit(EventLoaded((state as EventLoaded).events));
-    } else if (state is EventInterestedLoaded) {
-      emit(
-        EventInterestedLoaded(
-          (state as EventInterestedLoaded).interestedEvents,
-        ),
-      );
-    }
+
+
+    final snapshotIn =
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.uid)
+        .collection('interestedEvents')
+        .get();
+    _interestedEventIds = snapshotIn.docs.map((doc) => doc.id).toSet();
+
+    final events =
+    snapshotIn.docs.map((doc) => EventModel.fromMap(doc.data())).toList();
+    emit(EventInterestedLoaded(events));
+    // fetchInterestedEvents();
+    // if (state is EventLoaded) {
+    //   emit(EventLoaded((state as EventLoaded).events));
+    //   fetchInterestedEvents();
+    // } else if (state is EventInterestedLoaded) {
+    //   emit(
+    //     EventInterestedLoaded(
+    //       (state as EventInterestedLoaded).interestedEvents,
+    //     ),
+    //   );
+    // }
   }
 
   // *******************************************************

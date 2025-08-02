@@ -22,67 +22,79 @@ class _InterestedEventsViewState extends State<InterestedEventsView> {
   @override
   void initState() {
     super.initState();
-    // نجيب الأحداث المهتم بها
     context.read<EventCubit>().fetchInterestedEvents();
   }
 
   @override
-
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("Interested Events")),
-      body: BlocBuilder<EventCubit, EventState>(
+
+      body: BlocConsumer<EventCubit, EventState>(
+        listener: (context, state) {
+          if (state is EventJoinSuccess) {
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text("Joined Successfully")));
+          } else if (state is EventJoinError) {
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(state.message)));
+          }
+        },
         builder: (context, state) {
           if (state is EventLoading) {
             return const Center(child: CircularProgressIndicator());
           } else if (state is EventInterestedLoaded) {
-            if (state.interestedEvents.isEmpty) {
-              return CardNoEvents(text: "No interested events yet.", title: 'Interested Events',);
+            if (state .interestedEvents.isEmpty) {
+              return CardNoEvents(
+                text: "No interested events yet.",
+                title: 'Interested Events',
+              );
+            } else {
+              return ListView.builder(
+                padding: const EdgeInsets.all(16),
+                itemCount: state.interestedEvents.length,
+                itemBuilder: (context, index) {
+                  final event = state.interestedEvents[index];
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 12),
+                    child: CardEvent(
+                      event: event,
+                      // isInterested: true,
+                      // onToggleInterested: () {
+                      //   context.read<EventCubit>().toggleInterestedEvent(event);
+                      //   // context.read<EventCubit>().fetchInterestedEvents();
+                      //   // setState(() {});
+                      // },
+                      onDelete: () {
+                        context.read<EventCubit>().deleteEvent(event.id);
+                        // context.read<EventCubit>().fetchInterestedEvents();
+                        // setState(() {});
+                      },
+                      // onEdit: () {
+                      //   Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //       builder: (context) {
+                      //         return EditEventView(event: event);
+                      //       },
+                      //     ),
+                      //
+                      //   );
+                      // },
+                      onJoin: () {
+                        context.read<EventCubit>().joinEvent(event);
+                        context.read<EventCubit>().fetchInterestedEvents();
+                      },
+                      // onAddMemory: (){
+                      //   Navigator.push(context,MaterialPageRoute(builder: (context)=>AddMemory(event: event)));
+                      // },
+                    ),
+                  );
+                },
+              );
             }
-            return ListView.builder(
-              padding: const EdgeInsets.all(16),
-              itemCount: state.interestedEvents.length,
-              itemBuilder: (context, index) {
-                final event = state.interestedEvents[index];
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 12),
-                  child: CardEvent(
-                    event: event,
-                    isInterested: true,
-                    onToggleInterested: () {
-                      context.read<EventCubit>().toggleInterestedEvent(event);
-                      context.read<EventCubit>().fetchInterestedEvents();
-                      setState(() {});
-                    },
-                    onDelete: () {
-                      context.read<EventCubit>().deleteEvent(event.id);
-                      (state is EventDeleted)
-                          ? CircularProgressIndicator()
-                          : context.read<EventCubit>().fetchInterestedEvents();
-                      // setState(() {});
-                    },
-                    onEdit: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) {
-                            return EditEventView(event: event);
-                          },
-                        ),
-
-                      );
-                    },
-                    onJoin: () {
-                      context.read<EventCubit>().joinEvent(event);
-                    },
-                    onAddMemory: (){
-                      Navigator.push(context,MaterialPageRoute(builder: (context)=>AddMemory(event: event)));
-                    },
-                  ),
-
-                );
-              },
-            );
           } else if (state is EventError) {
             return Center(child: Text(state.message));
           }

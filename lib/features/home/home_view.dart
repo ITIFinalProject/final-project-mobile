@@ -81,10 +81,8 @@ class _HomeViewState extends State<HomeView> {
                 }
 
                 final name = state.name;
-                allEvents =
-                    state.filteredEvents.isEmpty && searchText.isEmpty
-                        ? state.allEvents
-                        : state.filteredEvents;
+                allEvents = state.allEvents;
+                filterdEvents = state.filteredEvents;
                 userId = FirebaseAuth.instance.currentUser!.uid;
                 final recommendedEvents = getRecommendedEvents(userId);
                 return SingleChildScrollView(
@@ -124,7 +122,8 @@ class _HomeViewState extends State<HomeView> {
                         onChange: (value) {
                           searchText = value;
                           context.read<HomeCubit>().search(value);
-                        },
+                            }
+
                       ),
                       if (searchText.isNotEmpty) ...[
                         const SizedBox(height: 20),
@@ -137,22 +136,27 @@ class _HomeViewState extends State<HomeView> {
                           ),
                         ),
                         const SizedBox(height: 10),
-                        allEvents.isNotEmpty
+                        filterdEvents.isNotEmpty
                             ? ListView.builder(
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
-                          itemCount: allEvents.length,
+                          itemCount: filterdEvents.length,
                           itemBuilder: (context, index) {
-                            final event = allEvents[index];
-                            return ListTile(
-                              title: Text(event.title),
-                              onTap: () {
-                                Navigator.pushNamed(
-                                  context,
-                                  AppRoutes.eventPreview,
-                                  arguments: event,
-                                );
+                            final event = filterdEvents[index];
+                            return GestureDetector(
+                              onTap: (){
+                                Navigator.pushNamed(context, AppRoutes.eventPreview,arguments: event);
                               },
+                              child: ListTile(
+                                title: Text(event.title),
+                                onTap: () {
+                                  Navigator.pushNamed(
+                                    context,
+                                    AppRoutes.eventPreview,
+                                    arguments: event,
+                                  );
+                                },
+                              ),
                             );
                           },
                         )

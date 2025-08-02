@@ -1,5 +1,6 @@
 import 'package:eventify_app/core/theme.dart';
 import 'package:eventify_app/features/events/event_cubit/event_cubit.dart';
+import 'package:eventify_app/features/events/event_cubit/event_state.dart';
 import 'package:eventify_app/models.dart/event_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,7 +13,7 @@ class CardEventUpcoming extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    var isIntersted = context.read<EventCubit>().isInterested(event.id);
+
     return SizedBox(
       width: size.width * 0.6,
       child: Card(
@@ -47,12 +48,15 @@ class CardEventUpcoming extends StatelessWidget {
                           return Icon(Icons.error, color: Colors.red);
                         },
                       )
-                      : (event.templateIndex!=null)?Image.asset(
+                      : (event.templateIndex != null)
+                      ? Image.asset(
                         'assets/images/template${event.templateIndex}.jpg',
                         width: size.width * 0.5,
                         height: size.height * 0.2,
                         fit: BoxFit.cover,
-                      ):Image.network('https://i.pinimg.com/1200x/2b/7f/a9/2b7fa911454725f7fd5b9d2f4dd41046.jpg',
+                      )
+                      : Image.network(
+                        'https://i.pinimg.com/1200x/2b/7f/a9/2b7fa911454725f7fd5b9d2f4dd41046.jpg',
                         width: size.width * 0.5,
                         height: size.height * 0.2,
                         fit: BoxFit.cover,
@@ -102,15 +106,23 @@ class CardEventUpcoming extends StatelessWidget {
                     ],
                   ),
                 ),
-                IconButton(
-                  onPressed: () {
-                    context.read<EventCubit>().toggleInterestedEvent(event);
+                BlocBuilder<EventCubit, EventState>(
+                  builder: (context, state) {
+                    final isInterested = context.read<EventCubit>().isInterested(event.id);
+                    return IconButton(
+                      onPressed: () {
+                        context.read<EventCubit>().toggleInterestedEvent(event);
+                      },
+                      icon: Icon(
+                        isInterested ? Icons.star : Icons.star_border_outlined,
+                        color:
+                            isInterested
+                                ? Colors.amber
+                                : ThemeManager.primaryColor,
+                        size: 35,
+                      ),
+                    );
                   },
-                  icon: Icon(
-                    isIntersted?Icons.star:Icons.star_border_outlined,
-                    color: isIntersted?Colors.amber:ThemeManager.primaryColor,
-                    size: 35,
-                  ),
                 ),
               ],
             ),

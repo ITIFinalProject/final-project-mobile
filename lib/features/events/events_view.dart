@@ -144,45 +144,51 @@ class _EventsViewState extends State<EventsView> with RouteAware {
                     return Column(
                       children:
                           filteredEvents.map((event) {
-                            final isInterested = context
-                                .read<EventCubit>()
-                                .isInterested(event.id);
+                            // final isInterested = context
+                            //     .read<EventCubit>()
+                            //     .isInterested(event.id);
                             return Padding(
                               padding: const EdgeInsets.only(bottom: 12),
                               child: CardEvent(
-                                onToggleInterested: () {
-                                  context
-                                      .read<EventCubit>()
-                                      .toggleInterestedEvent(event);
-                                  setState(() {}); //
-                                },
-                                isInterested: isInterested,
+                                // onToggleInterested: () {
+                                //   context
+                                //       .read<EventCubit>()
+                                //       .toggleInterestedEvent(event);
+                                //   setState(() {}); //
+                                // },
+                                // isInterested: isInterested,
                                 event: event,
                                 onDelete: () {
                                   context.read<EventCubit>().deleteEvent(
                                     event.id,
                                   );
                                 },
-                                onEdit: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) {
-                                        return EditEventView(event: event);
-                                      },
-                                    ),
-                                  );
+                                // onEdit: () {
+                                //   Navigator.push(
+                                //     context,
+                                //     MaterialPageRoute(
+                                //       builder: (context) {
+                                //         return EditEventView(event: event);
+                                //       },
+                                //     ),
+                                //   );
+                                // },
+                                onJoin: () async{
+                                  await context.read<EventCubit>().joinEvent(event);
+                                  await context.read<EventCubit>().fetchEvents(); // لإعادة تحميل الأحداث
+
                                 },
-                                onJoin: () {
-                                  context.read<EventCubit>().joinEvent(event);
-                                },
-                                onAddMemory: (){
-                                  Navigator.push(context,MaterialPageRoute(builder: (context)=>AddMemory(event: event)));
-                                },
+                                // onAddMemory: (){
+                                //   Navigator.push(context,MaterialPageRoute(builder: (context)=>AddMemory(event: event)));
+                                // },
                               ),
                             );
                           }).toList(),
                     );
+                  }else if (state is EventJoinSuccess) {
+                    // ✅ بدل ما تسكت هنا، اعمل إعادة تحميل
+                    context.read<EventCubit>().fetchEvents();
+                    return Center(child: CircularProgressIndicator()); // مؤقت
                   } else if (state is EventError) {
                     return Center(child: Text(state.message));
                   }
@@ -210,6 +216,12 @@ class _EventsViewState extends State<EventsView> with RouteAware {
   void didChangeDependencies() {
     super.didChangeDependencies();
     routeObserver.subscribe(this, ModalRoute.of(context)!);
+  }
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      context.read<EventCubit>().fetchEvents();
+    }
   }
 
   @override
