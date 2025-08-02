@@ -1,10 +1,12 @@
+
+import 'package:eventify_app/core/notication_service.dart';
 import 'package:eventify_app/core/routes.dart';
 import 'package:eventify_app/core/theme.dart';
-import 'package:eventify_app/features/add_event/logic/invite_state_cubit/invite_cubit.dart';
 import 'package:eventify_app/features/add_memory/cubit/memory_cubit.dart';
 import 'package:eventify_app/features/auth/cubit/auth_cubit.dart';
 import 'package:eventify_app/features/home/cubit/home_cubit.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -18,7 +20,7 @@ import 'features/profile/cubit/theme_cubit.dart';
 import 'generated/l10n.dart';
 
 final RouteObserver<ModalRoute> routeObserver = RouteObserver<ModalRoute>();
-
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,6 +31,9 @@ void main() async {
   );
 
   await dotenv.load(fileName: ".env");
+  final notification = NotificationService();
+  await notification.initFCM();
+  FirebaseMessaging.onBackgroundMessage(handleOnBackground);
   runApp(const MyApp());
 }
 
@@ -58,6 +63,7 @@ class MyApp extends StatelessWidget {
           return BlocBuilder<ThemeCubit, ThemeMode>(
             builder: (context, themeMode) {
               return MaterialApp(
+                navigatorKey: navigatorKey,
                 navigatorObservers: [routeObserver],
                 debugShowCheckedModeBanner: false,
                 routes: AppRoutes.routes,
@@ -80,4 +86,10 @@ class MyApp extends StatelessWidget {
       ),
     );
   }
+
+
 }
+Future<void> handleOnBackground (RemoteMessage message)async{
+print("🚪 Notification  ${message.notification?.title}");
+}
+

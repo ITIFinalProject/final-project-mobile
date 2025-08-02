@@ -83,6 +83,7 @@ import 'package:eventify_app/features/profile/profile_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../events/event_cubit/event_cubit.dart';
 import '../home/home_view.dart';
 
 class LayoutView extends StatefulWidget {
@@ -176,6 +177,7 @@ class _LayoutViewState extends State<LayoutView> {
             ],
             onTap: (index) {
               currentIndex = index;
+              if( currentIndex ==1){context.read<EventCubit>().fetchEvents();}
               setState(() {});
             },
           );

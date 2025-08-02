@@ -34,6 +34,8 @@ dependencies:
   equatable: ^2.0.5
   intl_utils: ^2.8.5 
   uuid: ^4.0.0
+  
+  
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -62,9 +64,14 @@ dependencies:
   flutter_svg: ^2.1.0
   shared_preferences: ^2.5.3
   video_player: ^2.9.5
+  firebase_messaging: ^15.2.8
+  googleapis_auth: ^2.0.0
+  flutter_typeahead: ^5.2.0
+  url_launcher: ^6.3.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -87,7 +94,8 @@ flutter:
   assets:
     - assets/images/
     - .env
-    # An image asset can refer to one or more resolution-specific "variants", see
+    - secrets/key.json
+   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 
   # For details regarding adding assets from package dependencies, see
