@@ -264,7 +264,9 @@ class CreateEventCubit extends Cubit<CreateEventState> {
           body: "Don't miss the fun — check your invitation now.",
           data: {
             "eventId": event.id,
-            "type": "event_invitation"
+            "type": "event_invitation",
+            "eventTitle":event.title,
+            "guestId":event.id,
           }
         );
       }

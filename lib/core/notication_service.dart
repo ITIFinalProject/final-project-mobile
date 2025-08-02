@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,9 +11,9 @@ import 'package:http/http.dart' as http;
 
 import '../main.dart';
 
-class NotificationService{
+class NotificationService {
   final FirebaseMessaging messaging = FirebaseMessaging.instance;
-  initFCM()async{
+  initFCM() async {
     await messaging.requestPermission();
 
     String? token = await messaging.getToken();
@@ -27,27 +28,30 @@ class NotificationService{
         // عرض Dialog للمستخدم
         showDialog(
           context: navigatorKey.currentContext!,
-          builder: (_) => AlertDialog(
-            title: Text("You have been invited to event $eventTitle"),
-            content: Text("Do you want to join yo us"),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  print('rejected');
-                  Navigator.pop(navigatorKey.currentContext!);
-                },
-                child: Text("cancel"),
+          builder:
+              (_) => AlertDialog(
+                title: Text("You have been invited to event $eventTitle"),
+                content: Text("Do you want to join yo us"),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      print('rejected');
+                      _handleInvitation(data['guestId'], false);
+                      Navigator.pop(navigatorKey.currentContext!);
+                    },
+                    child: Text("cancel"),
+                  ),
+                  TextButton(
+                    onPressed: () async {
+                      print('accepted');
+                      // await joinEvent(eventId);
+                      _handleInvitation(data['guestId'], true);
+                      Navigator.pop(navigatorKey.currentContext!);
+                    },
+                    child: Text("Accept"),
+                  ),
+                ],
               ),
-              TextButton(
-                onPressed: () async {
-                  print('accepted');
-                  // await joinEvent(eventId);
-                  Navigator.pop(navigatorKey.currentContext!);
-                },
-                child: Text("Accept"),
-              ),
-            ],
-          ),
         );
       }
     });
@@ -64,32 +68,44 @@ class NotificationService{
         // عرض Dialog للمستخدم
         showDialog(
           context: navigatorKey.currentContext!,
-          builder: (_) => AlertDialog(
-            title: Text("You have been invited to event $eventTitle"),
-            content: Text("Do you want to join yo us"),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  print('rejected');
-                  Navigator.pop(navigatorKey.currentContext!);
-                },
-                child: Text("cancel"),
+          builder:
+              (_) => AlertDialog(
+                title: Text("You have been invited to event $eventTitle"),
+                content: Text("Do you want to join yo us"),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      print('rejected');
+                      _handleInvitation(data['guestId'], false);
+
+                      Navigator.pop(navigatorKey.currentContext!);
+                    },
+                    child: Text("cancel"),
+                  ),
+                  TextButton(
+                    onPressed: () async {
+                      print('accepted');
+                      _handleInvitation(data['guestId'], true);
+                      Navigator.pop(navigatorKey.currentContext!);
+                    },
+                    child: Text("Accept"),
+                  ),
+                ],
               ),
-              TextButton(
-                onPressed: () async {
-                  print('accepted');
-                  // await joinEvent(eventId);
-                  Navigator.pop(navigatorKey.currentContext!);
-                },
-                child: Text("Accept"),
-              ),
-            ],
-          ),
         );
       }
     });
-
   }
+
+  Future<void> _handleInvitation(String docId, bool accepted) async {
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(docId)
+        .collection('notifications')
+        .doc(docId)
+        .update({'status': accepted ? 'accepted' : 'rejected'});
+  }
+
   Future<AccessCredentials> _getAccessToken() async {
     final serviceAccountPath = dotenv.env['PATH_TO_SECRET'];
 
@@ -151,6 +167,4 @@ class NotificationService{
       return false;
     }
   }
-
-
 }

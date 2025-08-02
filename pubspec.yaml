@@ -63,6 +63,7 @@ dependencies:
   video_player: ^2.9.5
   firebase_messaging: ^15.2.8
   googleapis_auth: ^2.0.0
+  flutter_typeahead: ^5.2.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

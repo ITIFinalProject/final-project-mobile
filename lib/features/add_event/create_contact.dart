@@ -314,7 +314,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:eventify_app/features/add_event/widgets/custom_text.dart';
 import 'package:eventify_app/features/add_event/widgets/custom_text_form_field.dart';
 import '../../../core/theme.dart';
-
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 class CreateContact extends StatefulWidget {
   // final int capacity;
   final EventModel event;
@@ -375,22 +375,58 @@ class _CreateContactState extends State<CreateContact> {
                     padding: const EdgeInsets.symmetric(horizontal: 25),
                     child: Row(
                       children: [
+                        // Expanded(
+                        //   child: CustomTextFormField(
+                        //     controller: emailController,
+                        //     hint: 'Enter guest email',
+                        //     validator: (val) {
+                        //       if (val == null || val.isEmpty) {
+                        //         return 'Please enter email';
+                        //       } else if (!RegExp(
+                        //         r"^[^@]+@[^@]+\.[^@]+",
+                        //       ).hasMatch(val)) {
+                        //         return 'Invalid email';
+                        //       }
+                        //       return null;
+                        //     },
+                        //   ),
+                        // ),
                         Expanded(
-                          child: CustomTextFormField(
-                            controller: emailController,
-                            hint: 'Enter guest email',
-                            validator: (val) {
-                              if (val == null || val.isEmpty) {
-                                return 'Please enter email';
-                              } else if (!RegExp(
-                                r"^[^@]+@[^@]+\.[^@]+",
-                              ).hasMatch(val)) {
-                                return 'Invalid email';
-                              }
-                              return null;
+                          child: TypeAheadField<Map<String, dynamic>>(
+                            suggestionsCallback: (pattern) async {
+                              if (pattern.isEmpty) return [];
+
+                              final snapshot = await FirebaseFirestore.instance
+                                  .collection('users')
+                                  .where('email', isGreaterThanOrEqualTo: pattern)
+                                  .where('email', isLessThanOrEqualTo: pattern + '\uf8ff')
+                                  .get();
+
+                              return snapshot.docs.map((doc) => doc.data()).toList();
                             },
+                            itemBuilder: (context, Map<String, dynamic> suggestion) {
+                              return ListTile(
+                                title: Text(suggestion['name'] ?? ''),
+                                subtitle: Text(suggestion['email']),
+                              );
+                            },
+                            onSelected: (suggestion) {
+                              if (!guestEmails.contains(suggestion['email']) &&
+                                  guestEmails.length < widget.event.capacity) {
+                                setState(() {
+                                  guestEmails.add(suggestion['email']);
+                                  emailController.clear();
+                                });
+                              } else if (guestEmails.length >= widget.event.capacity) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text("Capacity reached")),
+                                );
+                              }
+                            },
+
                           ),
                         ),
+
                         IconButton(
                           icon: Icon(
                             Icons.add_circle,
