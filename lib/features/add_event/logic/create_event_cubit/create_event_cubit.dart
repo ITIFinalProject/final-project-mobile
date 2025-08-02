@@ -258,6 +258,11 @@ class CreateEventCubit extends Cubit<CreateEventState> {
     for (final guest in guests) {
       if (guest.fcmToken != null && guest.fcmToken!.isNotEmpty) {
         // 1. Send FCM Notification
+        final notifDoc = FirebaseFirestore.instance
+            .collection('users')
+            .doc(guest.uid)
+            .collection('notifications')
+            .doc();
         await NotificationService().sendPushNotification(
           deviceToken: guest.fcmToken!,
           title: " You're Invited to ${event.title}! 🎉",
@@ -268,17 +273,20 @@ class CreateEventCubit extends Cubit<CreateEventState> {
             "eventTitle":event.title,
             "guestId":guest.uid,
             "guestName":guest.name,
-            "hostId":event.hostId
+            "hostId":event.hostId,
+            'notificationId':notifDoc.id
           }
         );
       }
 
       // 2. Save Notification in Firestore
-      await FirebaseFirestore.instance
+      final notifDoc = FirebaseFirestore.instance
           .collection('users')
           .doc(guest.uid)
           .collection('notifications')
-          .add({
+          .doc(); // ينشئ مستند ومعاه ID
+
+      await notifDoc.set({
         'createdAt': FieldValue.serverTimestamp(),
         'eventId': event.id,
         'eventTitle': event.title,
@@ -294,7 +302,9 @@ class CreateEventCubit extends Cubit<CreateEventState> {
         'type': 'invitation',
         'read': false,
         'status': 'pending',
+        'notificationId': notifDoc.id, // ⬅️ احفظ الـ ID داخل المستند نفسه
       });
+
     }
   }
 

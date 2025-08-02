@@ -23,7 +23,6 @@ class NotificationService {
       // print("🚪 Notification opened ${message.notification?.title}");
       if (message.data.isNotEmpty) {
         final data = message.data;
-        final eventId = data['eventId'];
         final eventTitle = data['eventTitle'];
 
         // عرض Dialog للمستخدم
@@ -98,25 +97,30 @@ class NotificationService {
   }
 
   Future<void> _handleInvitation(Map docId, bool accepted) async {
-    var docRef = await FirebaseFirestore.instance
+    final status = accepted ? 'accepted' : 'rejected';
+
+    // 1. Update the notification status
+    final notifRef = FirebaseFirestore.instance
         .collection('users')
         .doc(docId['guestId'])
         .collection('notifications')
-        .doc(docId['guestId']);
+        .doc(docId['notificationId']); // ✅ Use the correct document ID
 
-    final status = accepted ? 'accepted' : 'rejected';
-    await docRef.update({'status': status});
-    var docRefHost =
-        await FirebaseFirestore.instance
-            .collection('users')
-            .doc(docId['hostId'])
-            .get();
-    var user = UserModel.fromFireStore(docRefHost.data()!);
+    await notifRef.update({'status': status});
+
+    // 2. Send notification to the host
+    final docRefHost = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(docId['hostId'])
+        .get();
+
+    final user = UserModel.fromFireStore(docRefHost.data()!);
+
     await NotificationService().sendPushNotification(
       deviceToken: user.fcmToken!,
       title: "Invitation $status",
       body:
-          "${docId['guestName']} has $status your invitation to event ${docId['eventTitle']}.",
+      "${docId['guestName']} has $status your invitation to event ${docId['eventTitle']}.",
     );
   }
 
