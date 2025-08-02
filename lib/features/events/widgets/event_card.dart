@@ -1,4 +1,3 @@
-
 // import 'package:eventify_app/core/routes.dart';
 // import 'package:eventify_app/core/theme.dart';
 // import 'package:eventify_app/models.dart/event_model.dart';
@@ -74,7 +73,7 @@
 //                   right: 10,
 //                   child: GestureDetector(
 //                     onTap: () {
-                
+
 //                     },
 //                     child: Container(
 //                       decoration: BoxDecoration(
@@ -275,21 +274,26 @@ import 'package:eventify_app/generated/l10n.dart';
 import 'package:eventify_app/models.dart/event_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class CardEvent extends StatefulWidget {
   final EventModel event;
   final VoidCallback? onEdit;
   final VoidCallback? onDelete;
-  final bool isInterested;   // ✅ لو المستخدم مهتم بالحدث (true) أو لا
-  final VoidCallback onToggleInterested; // ✅ دالة عند الضغط على النجمة
+  final bool isInterested;
+  final VoidCallback onJoin;
+  final VoidCallback onAddMemory;
+  final VoidCallback onToggleInterested;
 
   const CardEvent({
     super.key,
     required this.event,
     this.onEdit,
     this.onDelete,
-     required this.isInterested ,
+    required this.isInterested,
     required this.onToggleInterested,
+    required this.onJoin,
+    required this.onAddMemory,
   });
 
   @override
@@ -304,7 +308,11 @@ class _CardEventState extends State<CardEvent> {
 
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, AppRoutes.eventPreview, arguments: widget.event);
+        Navigator.pushNamed(
+          context,
+          AppRoutes.eventPreview,
+          arguments: widget.event,
+        );
       },
       child: Card(
         elevation: 3,
@@ -321,40 +329,46 @@ class _CardEventState extends State<CardEvent> {
                   borderRadius: const BorderRadius.vertical(
                     top: Radius.circular(18),
                   ),
-                  child: widget.event.bannerUrl != null && widget.event.bannerUrl!.isNotEmpty
-                      ? Image.network(
-                          widget.event.bannerUrl!,
-                          height: 180,
-                          width: double.infinity,
-                          fit: BoxFit.cover,
-                          loadingBuilder: (context, child, loadingProgress) {
-                            if (loadingProgress == null) return child;
-                            return Container(
-                              height: 180,
-                              alignment: Alignment.center,
-                              child: CircularProgressIndicator(
-                                color: ThemeManager.primaryColor,
-                              ),
-                            );
-                          },
-                          errorBuilder: (context, error, stackTrace) {
-                            return Container(
-                              height: 180,
-                              color: Colors.grey[300],
-                              child: const Icon(
-                                Icons.broken_image,
-                                size: 50,
-                                color: Colors.grey,
-                              ),
-                            );
-                          },
-                        )
-                      : (widget.event.templateIndex!=null)?Image.asset(
-                          'assets/images/template${widget.event.templateIndex}.jpg',
-                          height: 180,
-                          width: double.infinity,
-                          fit: BoxFit.cover,
-                        ):Image.network('https://i.pinimg.com/1200x/2b/7f/a9/2b7fa911454725f7fd5b9d2f4dd41046.jpg'),
+                  child:
+                      widget.event.bannerUrl != null &&
+                              widget.event.bannerUrl!.isNotEmpty
+                          ? Image.network(
+                            widget.event.bannerUrl!,
+                            height: 180,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                            loadingBuilder: (context, child, loadingProgress) {
+                              if (loadingProgress == null) return child;
+                              return Container(
+                                height: 180,
+                                alignment: Alignment.center,
+                                child: CircularProgressIndicator(
+                                  color: ThemeManager.primaryColor,
+                                ),
+                              );
+                            },
+                            errorBuilder: (context, error, stackTrace) {
+                              return Container(
+                                height: 180,
+                                color: Colors.grey[300],
+                                child: const Icon(
+                                  Icons.broken_image,
+                                  size: 50,
+                                  color: Colors.grey,
+                                ),
+                              );
+                            },
+                          )
+                          : (widget.event.templateIndex != null)
+                          ? Image.asset(
+                            'assets/images/template${widget.event.templateIndex}.jpg',
+                            height: 180,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                          )
+                          : Image.network(
+                            'https://i.pinimg.com/1200x/2b/7f/a9/2b7fa911454725f7fd5b9d2f4dd41046.jpg',
+                          ),
                 ),
 
                 // ⭐ زر النجمة
@@ -368,9 +382,9 @@ class _CardEventState extends State<CardEvent> {
                   ),
                   icon: Icon(
                     widget.isInterested ? Icons.star : Icons.star_border,
-                    color: widget.isInterested ? Colors.yellow[700] : Colors.white,
+                    color:
+                        widget.isInterested ? Colors.yellow[700] : Colors.white,
                     size: 30,
-                    
                   ),
                   onPressed: widget.onToggleInterested,
                 ),
@@ -399,11 +413,14 @@ class _CardEventState extends State<CardEvent> {
                     children: [
                       Row(
                         children: [
-                          const Icon(Icons.calendar_today,
-                              size: 18, color: ThemeManager.primaryColor),
+                          const Icon(
+                            Icons.calendar_today,
+                            size: 18,
+                            color: ThemeManager.primaryColor,
+                          ),
                           const SizedBox(width: 6),
                           Text(
-                            widget.event.date.split('-')[0],
+                            widget.event.date.split('_')[0],
                             style: const TextStyle(
                               fontSize: 14,
                               color: ThemeManager.primaryColor,
@@ -413,8 +430,11 @@ class _CardEventState extends State<CardEvent> {
                       ),
                       Row(
                         children: [
-                          const Icon(Icons.access_time,
-                              size: 18, color: ThemeManager.primaryColor),
+                          const Icon(
+                            Icons.access_time,
+                            size: 18,
+                            color: ThemeManager.primaryColor,
+                          ),
                           const SizedBox(width: 6),
                           Text(
                             widget.event.time.split('-')[0],
@@ -432,8 +452,11 @@ class _CardEventState extends State<CardEvent> {
                   // 🔵 المكان
                   Row(
                     children: [
-                      const Icon(Icons.location_on,
-                          size: 18, color: ThemeManager.primaryColor),
+                      const Icon(
+                        Icons.location_on,
+                        size: 18,
+                        color: ThemeManager.primaryColor,
+                      ),
                       const SizedBox(width: 6),
                       Expanded(
                         child: Text(
@@ -455,8 +478,10 @@ class _CardEventState extends State<CardEvent> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         TextButton.icon(
-                          icon: const Icon(Icons.edit,
-                              color: ThemeManager.primaryColor),
+                          icon: const Icon(
+                            Icons.edit,
+                            color: ThemeManager.primaryColor,
+                          ),
                           onPressed: widget.onEdit,
                           style: TextButton.styleFrom(
                             backgroundColor: Color(0xFF1B3C53).withOpacity(0.1),
@@ -471,8 +496,10 @@ class _CardEventState extends State<CardEvent> {
                         ),
                         const SizedBox(width: 8),
                         TextButton.icon(
-                          icon: const Icon(Icons.delete,
-                              color: Colors.redAccent),
+                          icon: const Icon(
+                            Icons.delete,
+                            color: Colors.redAccent,
+                          ),
                           onPressed: widget.onDelete,
                           style: TextButton.styleFrom(
                             backgroundColor: Colors.red.withOpacity(0.1),
@@ -485,7 +512,6 @@ class _CardEventState extends State<CardEvent> {
                       ],
                     ),
                   ] else ...[
-                    // 🔵 لو الحدث مش بتاعي → زر Join
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
@@ -502,19 +528,30 @@ class _CardEventState extends State<CardEvent> {
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: TextButton.icon(
-                            icon: const Icon(Icons.event_seat_outlined,
-                                color: Colors.white),
-                            onPressed: widget.onEdit,
+                            icon: Icon(
+                              isEventStartedOrPast(widget.event.date)
+                                  ? Icons.add_a_photo_outlined
+                                  : Icons.event_seat_outlined,
+                              color: Colors.white,
+                            ),
+                            onPressed:
+                                isEventStartedOrPast(widget.event.date)
+                                    ? widget.onAddMemory
+                                    : widget.onJoin,
                             style: TextButton.styleFrom(
                               backgroundColor: Colors.transparent,
                               padding: const EdgeInsets.symmetric(
-                                  horizontal: 16, vertical: 10),
+                                horizontal: 16,
+                                vertical: 10,
+                              ),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12),
                               ),
                             ),
-                            label:  Text(
-                              S.of(context).join,
+                            label: Text(
+                              isEventStartedOrPast(widget.event.date)
+                                  ? "Add Memory"
+                                  : "Join",
                               style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
@@ -532,5 +569,26 @@ class _CardEventState extends State<CardEvent> {
         ),
       ),
     );
+  }
+
+  bool isEventStartedOrPast(String dateString) {
+    try {
+      String date;
+      if (dateString.contains('_')) {
+        date = dateString.split(' _').first.trim();
+      } else {
+        date = dateString;
+      }
+      final startDate = DateFormat('dd-MM-yyyy').parse(date);
+      final today = DateTime.now();
+
+      return today.isAfter(startDate) || isSameDay(today, startDate);
+    } catch (_) {
+      return false;
+    }
+  }
+
+  bool isSameDay(DateTime a, DateTime b) {
+    return a.year == b.year && a.month == b.month && a.day == b.day;
   }
 }

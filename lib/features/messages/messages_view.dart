@@ -1,5 +1,6 @@
 import 'package:eventify_app/core/theme.dart';
 import 'package:eventify_app/features/events/event_cubit/event_cubit.dart';
+import 'package:eventify_app/features/events/widgets/card_no_events.dart';
 import 'package:eventify_app/features/messages/chat_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -35,7 +36,7 @@ class _MessagesViewState extends State<MessagesView> {
           } else if (state is EventLoaded) {
             final events = state.events;
             if (events.isEmpty) {
-              return Center(child: Text(S.of(context).no_joined_events_yet));
+              return CardNoEvents(text: "No joined events yet." , title: 'Event Messages',);
             } else {
               return ListView.builder(
                 itemCount: events.length,

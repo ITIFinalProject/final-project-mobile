@@ -1,12 +1,16 @@
 import 'package:eventify_app/core/theme.dart';
 import 'package:eventify_app/features/add_event/edit%20event/edit_event_view.dart';
+import 'package:eventify_app/features/events/widgets/card_no_events.dart';
 import 'package:eventify_app/features/events/widgets/event_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:eventify_app/generated/l10n.dart';
+
+import '../../core/routes.dart';
 import '../../main.dart';
+import '../add_memory/view/add_memory.dart';
 import 'event_cubit/event_cubit.dart';
 import 'event_cubit/event_state.dart';
 
@@ -117,19 +121,33 @@ class _EventsViewState extends State<EventsView> with RouteAware {
                             ? state.events
                             : state.events.where((event) {
                               try {
-                                final parts = event.date.split(' - ');
-                                final eventDate = DateFormat(
-                                  'dd/MM/yyyy',
-                                ).parse(parts[0]);
-                                return eventDate.year == selectedDate!.year &&
-                                    eventDate.month == selectedDate!.month &&
-                                    eventDate.day == selectedDate!.day;
+                                final parts = event.date.contains('_');
+                                if (parts) {
+                                  final datePart = event.date.split('_');
+                                  final eventDate = DateFormat(
+                                    'dd-MM-yyyy',
+                                  ).parse(datePart.first.trim());
+                                  return eventDate.year == selectedDate!.year &&
+                                      eventDate.month == selectedDate!.month &&
+                                      eventDate.day == selectedDate!.day;
+                                } else {
+                                  final datePart = event.date;
+                                  final eventDate = DateFormat(
+                                    'dd-MM-yyyy',
+                                  ).parse(datePart);
+                                  return eventDate.year == selectedDate!.year &&
+                                      eventDate.month == selectedDate!.month &&
+                                      eventDate.day == selectedDate!.day;
+                                }
                               } catch (e) {
-                                return false; // Skip invalid dates
+                                return false;
                               }
                             }).toList();
                     if (filteredEvents.isEmpty) {
-                      return showNoEvents();
+                      return CardNoEvents(
+                        text: 'Create an event and make some memorizes',
+                        title: 'No Events in that Day',
+                      );
                     }
                     return Column(
                       children:
@@ -144,7 +162,7 @@ class _EventsViewState extends State<EventsView> with RouteAware {
                                   context
                                       .read<EventCubit>()
                                       .toggleInterestedEvent(event);
-                                        setState(() {}); //
+                                  setState(() {}); //
                                 },
                                 isInterested: isInterested,
                                 event: event,
@@ -152,7 +170,6 @@ class _EventsViewState extends State<EventsView> with RouteAware {
                                   context.read<EventCubit>().deleteEvent(
                                     event.id,
                                   );
-                                  
                                 },
                                 onEdit: () {
                                   Navigator.push(
@@ -163,6 +180,12 @@ class _EventsViewState extends State<EventsView> with RouteAware {
                                       },
                                     ),
                                   );
+                                },
+                                onJoin: () {
+                                  context.read<EventCubit>().joinEvent(event);
+                                },
+                                onAddMemory: (){
+                                  Navigator.push(context,MaterialPageRoute(builder: (context)=>AddMemory(event: event)));
                                 },
                               ),
                             );
@@ -203,50 +226,50 @@ class _EventsViewState extends State<EventsView> with RouteAware {
     super.dispose();
   }
 
-  showNoEvents() {
-    return Card(
-      color: ThemeManager.lightPinkColor,
-      margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15),
-        side: BorderSide(color: ThemeManager.secondaryColor),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-        child: Row(
-          children: [
-            CircleAvatar(
-              radius: 28,
-              backgroundColor: Color(0xFFF9F3EF),
-              child: const Icon(
-                Icons.calendar_today,
-                color: Color(0xFF1B3C53),
-                size: 30,
-              ),
-            ),
-            const SizedBox(width: 50),
-             Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    S.of(context).no_events,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF1B3C53),
-                    ),
-                  ),
-                  SizedBox(height: 8),
-                  Text(
-                    S.of(context).no_events_desc,
-                    style: TextStyle(fontSize: 13, color: Color(0xFF456882)),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+  // showNoEvents() {
+  //   return Card(
+  //     color: ThemeManager.lightPinkColor,
+  //     margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+  //     shape: RoundedRectangleBorder(
+  //       borderRadius: BorderRadius.circular(15),
+  //       side: BorderSide(color: ThemeManager.secondaryColor),
+  //     ),
+  //     child: Padding(
+  //       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+  //       child: Row(
+  //         children: [
+  //           CircleAvatar(
+  //             radius: 28,
+  //             backgroundColor: Color(0xFFF9F3EF),
+  //             child: const Icon(
+  //               Icons.calendar_today,
+  //               color: Color(0xFF1B3C53),
+  //               size: 30,
+  //             ),
+  //           ),
+  //           const SizedBox(width: 50),
+  //           const Expanded(
+  //             child: Column(
+  //               crossAxisAlignment: CrossAxisAlignment.start,
+  //               children: [
+  //                 Text(
+  //                   'No Events',
+  //                   style: TextStyle(
+  //                     fontWeight: FontWeight.bold,
+  //                     color: Color(0xFF1B3C53),
+  //                   ),
+  //                 ),
+  //                 SizedBox(height: 8),
+  //                 Text(
+  //                   "Create an event and make some memories.",
+  //                   style: TextStyle(fontSize: 13, color: Color(0xFF456882)),
+  //                 ),
+  //               ],
+  //             ),
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
 }

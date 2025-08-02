@@ -257,9 +257,9 @@ class _EditEventViewState extends State<EditEventView> {
     capacityController = TextEditingController(
       text: widget.event.capacity.toString(),
     );
-    if(widget.event.date.contains('-')) {
-      startDateController = TextEditingController(text: widget.event.date.split('-')[0]);
-      endDateController = TextEditingController(text: widget.event.date.split('-')[1]);
+    if(widget.event.date.contains('_')) {
+      startDateController = TextEditingController(text: widget.event.date.split('_')[0]);
+      endDateController = TextEditingController(text: widget.event.date.split('_')[1]);
     } else {
       startDateController = TextEditingController(text: widget.event.date);
       endDateController = TextEditingController(text: widget.event.date);
@@ -577,7 +577,7 @@ class _EditEventViewState extends State<EditEventView> {
         return;
       }
       String time = '${startTimeController.text} - ${endTimeController.text}';
-      String dateTime = (startDateController.text == endDateController.text)?startDateController.text:'${startDateController.text} - ${endDateController.text}';
+      String dateTime = (startDateController.text == endDateController.text)?startDateController.text:'${startDateController.text} _ ${endDateController.text}';
       context.read<CreateEventCubit>().updateEvent(
         eventId: widget.event.id,
         hostName: widget.event.hostName,
@@ -596,9 +596,9 @@ class _EditEventViewState extends State<EditEventView> {
   }
     bool _isDateTimeRangeValid() {
     try {
-      final startDate = DateFormat('dd/MM/yyyy').parse(
+      final startDate = DateFormat('dd-MM-yyyy').parse(
           startDateController.text);
-      final endDate = DateFormat('dd/MM/yyyy').parse(endDateController.text);
+      final endDate = DateFormat('dd-MM-yyyy').parse(endDateController.text);
       final startTime = DateFormat('hh:mm a').parse(startTimeController.text);
       final endTime = DateFormat('hh:mm a').parse(endTimeController.text);
 
@@ -624,7 +624,7 @@ print('End: $end');
       lastDate: DateTime(2026),
     );
     if (_date != null) {
-      startDateController.text = DateFormat('dd/MM/yyyy').format(_date);
+      startDateController.text = DateFormat('dd-MM-yyyy').format(_date);
       setState(() {});
     }
   }
@@ -636,7 +636,7 @@ print('End: $end');
       lastDate: DateTime(2026),
     );
     if (_date != null) {
-      endDateController.text = DateFormat('dd/MM/yyyy').format(_date);
+      endDateController.text = DateFormat('dd-MM-yyyy').format(_date);
       setState(() {});
     }
   }
