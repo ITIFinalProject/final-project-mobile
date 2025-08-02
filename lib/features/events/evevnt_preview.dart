@@ -800,30 +800,31 @@ class EventPreviewPage extends StatelessWidget {
                   bottomLeft: Radius.circular(24),
                   bottomRight: Radius.circular(24),
                 ),
-                child: imageUrl != null && imageUrl.isNotEmpty
-                    ? Image.network(
-                  imageUrl,
-                  width: size.width,
-                  height: size.height * 0.4,
-                  fit: BoxFit.cover,
-                  loadingBuilder: (context, child, loadingProgress) {
-                    if (loadingProgress == null) return child;
-                    return Center(
-                      child: CircularProgressIndicator(
-                        color: ThemeManager.primaryColor,
-                      ),
-                    );
-                  },
-                  errorBuilder: (context, error, stackTrace) {
-                    return Icon(Icons.error, color: Colors.red);
-                  },
-                )
-                    : Image.asset(
-                  'assets/images/template${event.templateIndex}.jpg',
-                  width: size.width,
-                  height: size.height * 0.4,
-                  fit: BoxFit.cover,
-                ),
+                child:
+                    imageUrl != null && imageUrl.isNotEmpty
+                        ? Image.network(
+                          imageUrl,
+                          width: size.width,
+                          height: size.height * 0.4,
+                          fit: BoxFit.cover,
+                          loadingBuilder: (context, child, loadingProgress) {
+                            if (loadingProgress == null) return child;
+                            return Center(
+                              child: CircularProgressIndicator(
+                                color: ThemeManager.primaryColor,
+                              ),
+                            );
+                          },
+                          errorBuilder: (context, error, stackTrace) {
+                            return Icon(Icons.error, color: Colors.red);
+                          },
+                        )
+                        : Image.asset(
+                          'assets/images/template${event.templateIndex}.jpg',
+                          width: size.width,
+                          height: size.height * 0.4,
+                          fit: BoxFit.cover,
+                        ),
               ),
               Container(
                 padding: const EdgeInsets.all(16),
@@ -889,8 +890,10 @@ class EventPreviewPage extends StatelessWidget {
                                 'https://www.google.com/maps/search/?api=1&query=$query'; // Corrected Google Maps URL
                             launchUrl(Uri.parse(googleMapsUrl));
                           },
-                          icon:
-                          Icon(Icons.map, color: ThemeManager.primaryColor),
+                          icon: Icon(
+                            Icons.map,
+                            color: ThemeManager.primaryColor,
+                          ),
                           label: Text("Open in Maps"),
                         ),
                       const SizedBox(height: 24),
@@ -933,7 +936,7 @@ class EventPreviewPage extends StatelessWidget {
                               style: TextStyle(fontWeight: FontWeight.bold),
                             ),
                             ...event.guests!.map(
-                                  (guest) => ListTile(
+                              (guest) => ListTile(
                                 leading: Icon(Icons.person_outline),
                                 title: Text(guest.name!),
                               ),
@@ -945,11 +948,10 @@ class EventPreviewPage extends StatelessWidget {
                         builder: (context, authState) {
                           if (authState is AuthSuccess) {
                             final currentUser = authState.user;
-                            if (event.hostId==
-                               currentUser.uid) {
+                            if (event.hostId == currentUser.uid) {
                               return Row(
                                 mainAxisAlignment:
-                                MainAxisAlignment.spaceAround,
+                                    MainAxisAlignment.spaceAround,
                                 spacing: 10,
                                 children: [
                                   Expanded(
@@ -958,8 +960,9 @@ class EventPreviewPage extends StatelessWidget {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (context) =>
-                                                EditEventView(event: event),
+                                            builder:
+                                                (context) =>
+                                                    EditEventView(event: event),
                                           ),
                                         );
                                       },
@@ -970,12 +973,13 @@ class EventPreviewPage extends StatelessWidget {
                                       label: const Text("Edit"),
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor:
-                                        ThemeManager.primaryColor,
+                                            ThemeManager.primaryColor,
                                         foregroundColor:
-                                        ThemeManager.lightPinkColor,
+                                            ThemeManager.lightPinkColor,
                                         shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                          BorderRadius.circular(30),
+                                          borderRadius: BorderRadius.circular(
+                                            30,
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -983,30 +987,58 @@ class EventPreviewPage extends StatelessWidget {
                                   Expanded(
                                     child: ElevatedButton.icon(
                                       onPressed: () {
-
-                                          showDialog(context: context, builder: (context) =>
-                                              BlocBuilder<EventCubit, EventState>(
+                                        showDialog(
+                                          context: context,
+                                          builder:
+                                              (context) => BlocBuilder<
+                                                EventCubit,
+                                                EventState
+                                              >(
                                                 builder: (context, state) {
-                                                  if(state is EventDeleted){
-                                                    context.read<EventCubit>().fetchEvents();
-                                                  }else{
+                                                  if (state is EventDeleted) {
+                                                    context
+                                                        .read<EventCubit>()
+                                                        .fetchEvents();
+                                                  } else {
                                                     return AlertDialog(
-                                                      content: Text('Are you sure you want to delete this event'),
-                                                      title: Text('Delete Event'),
+                                                      content: Text(
+                                                        'Are you sure you want to delete this event',
+                                                      ),
+                                                      title: Text(
+                                                        'Delete Event',
+                                                      ),
                                                       actions: [
-                                                        TextButton(onPressed: (){
-                                                          context.read<EventCubit>().deleteEvent(event.id);
-                                                          Navigator.pushReplacementNamed(context, AppRoutes.layout);
-                                                        }, child: Text('Ok')),
-                                                        TextButton(onPressed: (){
-                                                          Navigator.pop(context);
-                                                        }, child: Text('Cancel')),
+                                                        TextButton(
+                                                          onPressed: () {
+                                                            context
+                                                                .read<
+                                                                  EventCubit
+                                                                >()
+                                                                .deleteEvent(
+                                                                  event.id,
+                                                                );
+                                                            Navigator.pushReplacementNamed(
+                                                              context,
+                                                              AppRoutes.layout,
+                                                            );
+                                                          },
+                                                          child: Text('Ok'),
+                                                        ),
+                                                        TextButton(
+                                                          onPressed: () {
+                                                            Navigator.pop(
+                                                              context,
+                                                            );
+                                                          },
+                                                          child: Text('Cancel'),
+                                                        ),
                                                       ],
                                                     );
                                                   }
                                                   return SizedBox.shrink();
                                                 },
-                                              ));
+                                              ),
+                                        );
                                       },
                                       icon: const Icon(
                                         Icons.delete,
@@ -1016,10 +1048,11 @@ class EventPreviewPage extends StatelessWidget {
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: Colors.red[100],
                                         foregroundColor:
-                                        ThemeManager.lightPinkColor,
+                                            ThemeManager.lightPinkColor,
                                         shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                          BorderRadius.circular(30),
+                                          borderRadius: BorderRadius.circular(
+                                            30,
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -1037,11 +1070,17 @@ class EventPreviewPage extends StatelessWidget {
                                     );
                                   } else if (eventState is EventJoinError) {
                                     ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(content: Text(eventState.message)),
+                                      SnackBar(
+                                        content: Text(eventState.message),
+                                      ),
                                     );
                                   } else if (eventState is EventError) {
                                     ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(content: Text("Error: ${eventState.message}")),
+                                      SnackBar(
+                                        content: Text(
+                                          "Error: ${eventState.message}",
+                                        ),
+                                      ),
                                     );
                                   }
                                 },
@@ -1049,12 +1088,14 @@ class EventPreviewPage extends StatelessWidget {
                                   if (eventState is EventLoading) {
                                     return const Center(
                                       child: CircularProgressIndicator(
-                                          color: ThemeManager.primaryColor),
+                                        color: ThemeManager.primaryColor,
+                                      ),
                                     );
                                   } else if (eventState is EventJoinedLoaded) {
-                                    final joinedEvents = eventState.joinedEvents;
+                                    final joinedEvents =
+                                        eventState.joinedEvents;
                                     final hasJoined = joinedEvents.any(
-                                          (e) => e.id == event.id,
+                                      (e) => e.id == event.id,
                                     );
 
                                     if (hasJoined && isUpcoming) {
@@ -1063,25 +1104,28 @@ class EventPreviewPage extends StatelessWidget {
                                       return _activeButton(
                                         "Add Memory",
                                         Icons.add_photo_alternate,
-                                            () {
+                                        () {
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                              builder: (context) =>
-                                                  AddMemory(event: event),
+                                              builder:
+                                                  (context) =>
+                                                      AddMemory(event: event),
                                             ),
                                           );
                                         },
                                       );
+                                    } else if (!hasJoined && isPast) {
+                                      return _disabledButton("Event is Finished");
                                     } else {
                                       // If user hasn't joined and event is upcoming or past but not joined
                                       return _activeButton(
                                         "Join Event",
                                         Icons.event_available,
-                                            () {
-                                          context
-                                              .read<EventCubit>()
-                                              .joinEvent(event);
+                                        () {
+                                          context.read<EventCubit>().joinEvent(
+                                            event,
+                                          );
                                           context
                                               .read<EventCubit>()
                                               .fetchJoinedEvents();
@@ -1092,10 +1136,10 @@ class EventPreviewPage extends StatelessWidget {
                                     return _activeButton(
                                       "Join Event",
                                       Icons.event_available,
-                                          () {
-                                        context
-                                            .read<EventCubit>()
-                                            .joinEvent(event);
+                                      () {
+                                        context.read<EventCubit>().joinEvent(
+                                          event,
+                                        );
                                         context
                                             .read<EventCubit>()
                                             .fetchJoinedEvents();
@@ -1107,8 +1151,7 @@ class EventPreviewPage extends StatelessWidget {
                             }
                           } else {
                             // If AuthState is not AuthSuccess (e.g., AuthInitial, AuthLoading, AuthError)
-                            return const SizedBox
-                                .shrink(); // Or a login prompt
+                            return const SizedBox.shrink(); // Or a login prompt
                           }
                         },
                       ),
