@@ -393,7 +393,6 @@ class _CreateContactState extends State<CreateContact> {
                         // ),
                         Expanded(
                           child: TypeAheadField<Map<String, dynamic>>(
-
                             suggestionsCallback: (pattern) async {
                               if (pattern.isEmpty) return [];
 
