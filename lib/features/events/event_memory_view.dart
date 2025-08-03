@@ -4,6 +4,7 @@ import 'package:eventify_app/features/add_memory/view/add_memory.dart';
 import 'package:eventify_app/features/events/event_cubit/event_cubit.dart';
 import 'package:eventify_app/features/events/event_cubit/event_state.dart';
 import 'package:eventify_app/features/events/widgets/card_no_events.dart';
+import 'package:eventify_app/features/profile/cubit/theme_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -23,12 +24,22 @@ class _EventMemoryViewState extends State<EventMemoryView> {
 
   @override
   Widget build(BuildContext context) {
+    final thememode = context.watch<ThemeCubit>().state;
+    final isDarkMode = thememode == ThemeMode.dark;
+
     return Scaffold(
       appBar: AppBar(title: const Text('Event Memories')),
       body: BlocBuilder<EventCubit, EventState>(
         builder: (context, state) {
           if (state is EventLoading) {
-            return const Center(child: CircularProgressIndicator());
+            return Center(
+              child: CircularProgressIndicator(
+                color:
+                    isDarkMode
+                        ? ThemeManager.lightPinkColor
+                        : ThemeManager.primaryColor,
+              ),
+            );
           } else if (state is EventLoaded) {
             final events = state.events;
             if (events.isEmpty) {
@@ -42,8 +53,13 @@ class _EventMemoryViewState extends State<EventMemoryView> {
               itemCount: events.length,
               itemBuilder: (context, index) {
                 final event = events[index];
-                return Padding(
-                  padding: const EdgeInsets.all(10),
+                return Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                    side: BorderSide(color: ThemeManager.primaryColor),
+                  ),
+                  color: ThemeManager.lightPinkColor,
+                  margin: EdgeInsets.all(10),
                   child: ListTile(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15),

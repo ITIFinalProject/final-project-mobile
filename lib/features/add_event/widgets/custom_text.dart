@@ -11,13 +11,16 @@ class CustomText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+     final thememode = context.watch<ThemeCubit>().state;
+    final isDarkMode = thememode == ThemeMode.dark;
+
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
       child: Text(
         title,
         style: TextStyle(fontSize: 18,
             fontWeight: FontWeight.normal,
-            color: ThemeManager.primaryColor),
+            color: isDarkMode?ThemeManager.lightPinkColor:ThemeManager.primaryColor),
         textAlign: TextAlign.start,
       ),
     );

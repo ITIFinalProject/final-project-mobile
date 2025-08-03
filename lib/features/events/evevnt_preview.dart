@@ -728,6 +728,8 @@ import 'package:eventify_app/core/theme.dart';
 import 'package:eventify_app/features/add_memory/view/add_memory.dart';
 import 'package:eventify_app/features/auth/cubit/auth_cubit.dart';
 import 'package:eventify_app/features/auth/models/user_model.dart';
+import 'package:eventify_app/features/events/widgets/card_no_events.dart';
+import 'package:eventify_app/features/profile/cubit/theme_cubit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -745,11 +747,14 @@ class EventPreviewPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final thememode = context.watch<ThemeCubit>().state;
+    final isDarkMode = thememode == ThemeMode.dark;
+
     final args = ModalRoute.of(context)?.settings.arguments;
 
     if (args == null || args is! EventModel) {
       return const Scaffold(
-        body: Center(child: Text("No event data provided.")),
+        body: CardNoEvents(text: "No event data provided.", title: "No data"),
       );
     }
     var event = args;
@@ -789,8 +794,16 @@ class EventPreviewPage extends StatelessWidget {
         }
       },
       child: Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(backgroundColor: ThemeManager.primaryColor),
+        backgroundColor:
+            isDarkMode
+                ? ThemeManager.primaryColor
+                : ThemeManager.lightPinkColor,
+        appBar: AppBar(
+          backgroundColor:
+              isDarkMode
+                  ? ThemeManager.lightPinkColor.withOpacity(0.9)
+                  : ThemeManager.primaryColor.withOpacity(0.9),
+        ),
         body: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -811,7 +824,10 @@ class EventPreviewPage extends StatelessWidget {
                             if (loadingProgress == null) return child;
                             return Center(
                               child: CircularProgressIndicator(
-                                color: ThemeManager.primaryColor,
+                                color:
+                                    isDarkMode
+                                        ? ThemeManager.lightPinkColor
+                                        : ThemeManager.primaryColor,
                               ),
                             );
                           },
@@ -829,7 +845,7 @@ class EventPreviewPage extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: isDarkMode ? ThemeManager.primaryColor : Colors.white,
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
@@ -852,7 +868,10 @@ class EventPreviewPage extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
-                              color: Color(0xff1b3c53),
+                              color:
+                                  isDarkMode
+                                      ? ThemeManager.lightPinkColor
+                                      : ThemeManager.primaryColor,
                             ),
                           ),
                         ],
@@ -867,7 +886,10 @@ class EventPreviewPage extends StatelessWidget {
                         children: [
                           Icon(
                             Icons.location_on_outlined,
-                            color: ThemeManager.secondaryColor,
+                            color:
+                                isDarkMode
+                                    ? ThemeManager.lightPinkColor
+                                    : ThemeManager.primaryColor,
                           ),
                           SizedBox(width: 8),
                           Expanded(
@@ -875,13 +897,16 @@ class EventPreviewPage extends StatelessWidget {
                               event.location,
                               style: TextStyle(
                                 fontSize: 14,
-                                color: Color(0xff1b3c53),
+                                color:
+                                    isDarkMode
+                                        ? ThemeManager.lightPinkColor
+                                        : ThemeManager.primaryColor,
                               ),
                             ),
                           ),
                         ],
                       ),
-                      const SizedBox(height: 24),
+                      const SizedBox(height: 10),
                       if (event.location.isNotEmpty)
                         TextButton.icon(
                           onPressed: () {
@@ -892,29 +917,51 @@ class EventPreviewPage extends StatelessWidget {
                           },
                           icon: Icon(
                             Icons.map,
-                            color: ThemeManager.primaryColor,
+                            color:
+                                isDarkMode
+                                    ? ThemeManager.darkPinkColor
+                                    : ThemeManager.secondaryColor,
                           ),
-                          label: Text("Open in Maps"),
+                          label: Text(
+                            "Open in Maps",
+                            style: TextStyle(
+                              color:
+                                  isDarkMode
+                                      ? ThemeManager.darkPinkColor
+                                      : ThemeManager.secondaryColor,
+                            ),
+                          ),
                         ),
                       const SizedBox(height: 24),
-                      const Text(
+                      Text(
                         "Hosted by:",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          color: ThemeManager.primaryColor,
+                          color:
+                              isDarkMode
+                                  ? ThemeManager.lightPinkColor
+                                  : ThemeManager.primaryColor,
                         ),
                       ),
                       const SizedBox(height: 8),
                       Text(
                         event.hostName,
-                        style: TextStyle(color: ThemeManager.secondaryColor),
+                        style: TextStyle(
+                          color:
+                              isDarkMode
+                                  ? ThemeManager.lightPinkColor
+                                  : ThemeManager.primaryColor,
+                        ),
                       ),
                       const SizedBox(height: 24),
-                      const Text(
+                      Text(
                         "Event Description:",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          color: ThemeManager.primaryColor,
+                          color:
+                              isDarkMode
+                                  ? ThemeManager.lightPinkColor
+                                  : ThemeManager.primaryColor,
                         ),
                       ),
                       const SizedBox(height: 8),
@@ -922,7 +969,10 @@ class EventPreviewPage extends StatelessWidget {
                         event.description,
                         style: TextStyle(
                           fontSize: 14,
-                          color: ThemeManager.secondaryColor,
+                          color:
+                              isDarkMode
+                                  ? ThemeManager.lightPinkColor
+                                  : ThemeManager.primaryColor,
                         ),
                       ),
                       const SizedBox(height: 10),
@@ -937,8 +987,22 @@ class EventPreviewPage extends StatelessWidget {
                             ),
                             ...event.guests!.map(
                               (guest) => ListTile(
-                                leading: Icon(Icons.person_outline),
-                                title: Text(guest.name!),
+                                leading: Icon(
+                                  Icons.person_outline,
+                                  color:
+                                      isDarkMode
+                                          ? ThemeManager.lightPinkColor
+                                          : ThemeManager.primaryColor,
+                                ),
+                                title: Text(
+                                  guest.name!,
+                                  style: TextStyle(
+                                    color:
+                                        isDarkMode
+                                            ? ThemeManager.lightPinkColor
+                                            : ThemeManager.primaryColor,
+                                  ),
+                                ),
                               ),
                             ),
                           ],
@@ -966,14 +1030,27 @@ class EventPreviewPage extends StatelessWidget {
                                           ),
                                         );
                                       },
-                                      icon: const Icon(
+                                      icon: Icon(
                                         Icons.edit,
-                                        color: ThemeManager.lightPinkColor,
+                                        color:
+                                            isDarkMode
+                                                ? ThemeManager.primaryColor
+                                                : ThemeManager.lightPinkColor,
                                       ),
-                                      label: const Text("Edit"),
+                                      label: Text(
+                                        "Edit",
+                                        style: TextStyle(
+                                          color:
+                                              isDarkMode
+                                                  ? ThemeManager.primaryColor
+                                                  : ThemeManager.lightPinkColor,
+                                        ),
+                                      ),
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor:
-                                            ThemeManager.primaryColor,
+                                            isDarkMode
+                                                ? ThemeManager.lightPinkColor
+                                                : ThemeManager.primaryColor,
                                         foregroundColor:
                                             ThemeManager.lightPinkColor,
                                         shape: RoundedRectangleBorder(
@@ -1003,9 +1080,19 @@ class EventPreviewPage extends StatelessWidget {
                                                     return AlertDialog(
                                                       content: Text(
                                                         'Are you sure you want to delete this event',
+                                                        style: TextStyle(
+                                                          color:
+                                                              ThemeManager
+                                                                  .secondaryColor,
+                                                        ),
                                                       ),
                                                       title: Text(
                                                         'Delete Event',
+                                                        style: TextStyle(
+                                                          color:
+                                                              ThemeManager
+                                                                  .primaryColor,
+                                                        ),
                                                       ),
                                                       actions: [
                                                         TextButton(
@@ -1022,7 +1109,14 @@ class EventPreviewPage extends StatelessWidget {
                                                               AppRoutes.layout,
                                                             );
                                                           },
-                                                          child: Text('Ok'),
+                                                          child: Text(
+                                                            'Ok',
+                                                            style: TextStyle(
+                                                              color:
+                                                                  ThemeManager
+                                                                      .primaryColor,
+                                                            ),
+                                                          ),
                                                         ),
                                                         TextButton(
                                                           onPressed: () {
@@ -1030,7 +1124,13 @@ class EventPreviewPage extends StatelessWidget {
                                                               context,
                                                             );
                                                           },
-                                                          child: Text('Cancel'),
+                                                          child: Text(
+                                                            'Cancel',
+                                                            style: TextStyle(
+                                                              color:
+                                                                  Colors.grey,
+                                                            ),
+                                                          ),
                                                         ),
                                                       ],
                                                     );
@@ -1044,7 +1144,10 @@ class EventPreviewPage extends StatelessWidget {
                                         Icons.delete,
                                         color: Colors.red,
                                       ),
-                                      label: const Text("Delete"),
+                                      label: const Text(
+                                        "Delete",
+                                        style: TextStyle(color: Colors.red),
+                                      ),
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: Colors.red[100],
                                         foregroundColor:
@@ -1116,7 +1219,9 @@ class EventPreviewPage extends StatelessWidget {
                                         },
                                       );
                                     } else if (!hasJoined && isPast) {
-                                      return _disabledButton("Event is Finished");
+                                      return _disabledButton(
+                                        "Event is Finished",
+                                      );
                                     } else {
                                       // If user hasn't joined and event is upcoming or past but not joined
                                       return _activeButton(

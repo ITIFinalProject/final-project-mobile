@@ -174,6 +174,8 @@ class _ChatPageState extends State<ChatPage> {
             child: Text(S.of(context).login_required_message)),
       );
     }
+ final thememode = context.watch<ThemeCubit>().state;
+    final isDarkMode = thememode == ThemeMode.dark;
 
     return Scaffold(
       appBar: AppBar(title: Text(eventName ??  S.of(context).chat)),
@@ -184,7 +186,12 @@ class _ChatPageState extends State<ChatPage> {
               bloc: chatCubit,
               builder: (context, state) {
                 if (state is EventChatLoading) {
-                  return Center(child: CircularProgressIndicator());
+                  return Center(child: CircularProgressIndicator(
+                    color:  
+                    isDarkMode
+                        ? ThemeManager.lightPinkColor
+                        : ThemeManager.primaryColor,
+                  ));
                 } else if (state is EventChatLoaded) {
                   final messages = state.messages;
                   return ListView.builder(
