@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:eventify_app/core/routes.dart';
 import 'package:eventify_app/core/theme.dart';
 import 'package:eventify_app/features/add_event/widgets/custom_text.dart';
+import 'package:eventify_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 class BuildPreview extends StatelessWidget {
@@ -48,7 +49,7 @@ class BuildPreview extends StatelessWidget {
                   )
               ),
 
-              child: Center(child: Text('Your Event Cover Here',
+              child: Center(child: Text(S.of(context).your_event_cover_here,
                 style: TextStyle(
                   color: ThemeManager.secondaryColor, fontSize: 18,),)),
             ),
@@ -56,12 +57,12 @@ class BuildPreview extends StatelessWidget {
               spacing: 10,
               children: [
                 Expanded(child: CustomElevatedButton(
-                  title: 'Upload Image', onPressed: pickImage,)),
+                  title: S.of(context).upload_image, onPressed: pickImage,)),
 
                 Expanded(
                   child: CustomElevatedButton(
                     onPressed: toggleShownTemplates,
-                    title: 'Choose Template',
+                    title: S.of(context).choose_template,
                   ),
                 ),
 
@@ -112,7 +113,7 @@ class BuildPreview extends StatelessWidget {
               'selectedTemplate': selectedTemplate,
             });
           },
-          title: ('Next: Event Details'),
+          title: (S.of(context).next_event_details),
         ),
       ],
         );

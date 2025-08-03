@@ -1,6 +1,7 @@
 import 'package:eventify_app/core/routes.dart';
 import 'package:eventify_app/features/add_event/edit%20event/edit_event_view.dart';
 import 'package:eventify_app/features/events/widgets/card_no_events.dart';
+import 'package:eventify_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:eventify_app/core/theme.dart';
@@ -29,14 +30,14 @@ class _InterestedEventsViewState extends State<InterestedEventsView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Interested Events")),
+      appBar: AppBar(title:  Text(S.of(context).interestedEvents)),
 
       body: BlocConsumer<EventCubit, EventState>(
         listener: (context, state) {
           if (state is EventJoinSuccess) {
             ScaffoldMessenger.of(
               context,
-            ).showSnackBar(SnackBar(content: Text("Joined Successfully")));
+            ).showSnackBar(SnackBar(content: Text(S.of(context).joinedSuccessfully)));
           } else if (state is EventJoinError) {
             ScaffoldMessenger.of(
               context,
@@ -49,8 +50,8 @@ class _InterestedEventsViewState extends State<InterestedEventsView> {
           } else if (state is EventInterestedLoaded) {
             if (state .interestedEvents.isEmpty) {
               return CardNoEvents(
-                text: "No interested events yet.",
-                title: 'Interested Events',
+                text: S.of(context).noInterestedEvents,
+                title: S.of(context).interestedEvents,
               );
             } else {
               return ListView.builder(

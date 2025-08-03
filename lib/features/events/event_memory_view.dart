@@ -4,6 +4,7 @@ import 'package:eventify_app/features/add_memory/view/add_memory.dart';
 import 'package:eventify_app/features/events/event_cubit/event_cubit.dart';
 import 'package:eventify_app/features/events/event_cubit/event_state.dart';
 import 'package:eventify_app/features/events/widgets/card_no_events.dart';
+import 'package:eventify_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -24,7 +25,7 @@ class _EventMemoryViewState extends State<EventMemoryView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Event Memories')),
+      appBar: AppBar(title:  Text(S.of(context).eventMemories)),
       body: BlocBuilder<EventCubit, EventState>(
         builder: (context, state) {
           if (state is EventLoading) {
@@ -33,8 +34,8 @@ class _EventMemoryViewState extends State<EventMemoryView> {
             final events = state.events;
             if (events.isEmpty) {
               return CardNoEvents(
-                text: 'No ended events yet.',
-                title: 'Event Memory',
+                text: S.of(context).noEndedEventsYet,
+                title: S.of(context).eventMemory,
               );
             }
 

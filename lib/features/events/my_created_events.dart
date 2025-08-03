@@ -70,8 +70,8 @@ class _MyCreatedEventsState extends State<MyCreatedEvents> with RouteAware {
           } else if (state is EventLoaded) {
             if (state.events.isEmpty) {
               return CardNoEvents(
-                text: '"You haven’t created any events yet."',
-                title: 'No Events Created',
+                text: S.of(context).no_created_events,
+                title: S.of(context).no_events_created,
               );
             }
             return ListView.builder(
@@ -116,15 +116,15 @@ class _MyCreatedEventsState extends State<MyCreatedEvents> with RouteAware {
               Navigator.pop(context);
             }else{
             return AlertDialog(
-              content: Text('Are you sure you want to delete this event'),
-              title: Text('Delete Event'),
+              content: Text(S.of(context).confirm_delete_event),
+              title: Text(S.of(context).delete_event),
               actions: [
                 TextButton(onPressed: (){
                   context.read<EventCubit>().deleteEvent(eventId);
-                }, child: Text('Ok')),
+                }, child: Text(S.of(context).ok)),
                 TextButton(onPressed: (){
                   Navigator.pop(context);
-                }, child: Text('Cancel')),
+                }, child: Text(S.of(context).cancel)),
               ],
             );
           }

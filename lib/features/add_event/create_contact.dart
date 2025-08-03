@@ -308,6 +308,7 @@ import 'package:eventify_app/features/add_event/logic/create_event_cubit/create_
 import 'package:eventify_app/features/add_event/logic/invite_state_cubit/invite_cubit.dart';
 import 'package:eventify_app/features/add_event/logic/invite_state_cubit/invite_state.dart';
 import 'package:eventify_app/features/auth/models/user_model.dart';
+import 'package:eventify_app/generated/l10n.dart';
 import 'package:eventify_app/models.dart/event_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -340,7 +341,7 @@ class _CreateContactState extends State<CreateContact> {
       listener: (context, state) {
         if (state is CreateEventSuccess) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text("Invitations sent successfully ✅")),
+            SnackBar(content: Text(S.of(context).invitations_sent)),
           );
           Navigator.pop(context);
         } else if (state is CreateEventError) {
@@ -352,7 +353,7 @@ class _CreateContactState extends State<CreateContact> {
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
-            title: Text('Create Contact'),
+            title: Text(S.of(context).create_contact),
             centerTitle: true,
             leading: Icon(
               Icons.person_add_alt_rounded,
@@ -371,7 +372,7 @@ class _CreateContactState extends State<CreateContact> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  CustomText(title: 'Guest Email'),
+                  CustomText(title: S.of(context).guest_email),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25),
                     child: Row(
@@ -420,7 +421,7 @@ class _CreateContactState extends State<CreateContact> {
                                 });
                               } else if (guestEmails.length >= widget.event.capacity) {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text("Capacity reached")),
+                                  SnackBar(content: Text(S.of(context).capacity_reached)),
                                 );
                               }
                             },
@@ -444,7 +445,7 @@ class _CreateContactState extends State<CreateContact> {
                             } else if (guestEmails.length >=
                                 widget.event.capacity) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text("Capacity reached ")),
+                                SnackBar(content: Text(S.of(context).capacity_reached)),
                               );
                             }
                           },
@@ -478,7 +479,7 @@ class _CreateContactState extends State<CreateContact> {
                         children: [
                           CustomElevatedButton(
                             onPressed: () => Navigator.pop(context),
-                            title: ('Cancel'),
+                            title: (S.of(context).cancel),
                           ),
                           (state is CreateEventLoading)?Center(
                             child: CircularProgressIndicator(),
@@ -519,7 +520,7 @@ class _CreateContactState extends State<CreateContact> {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
                                       content: Text(
-                                        "Please add at least one guest",
+                                        S.of(context).please_add_one_guest
                                       ),
                                     ),
                                   );
@@ -553,7 +554,7 @@ class _CreateContactState extends State<CreateContact> {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
                                         content: Text(
-                                          "No valid registered users found.",
+                                          S.of(context).no_valid_users_found,
                                         ),
                                       ),
                                     );
@@ -584,14 +585,14 @@ class _CreateContactState extends State<CreateContact> {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
                                       content: Text(
-                                        "Error fetching guest data",
+                                        S.of(context).error_fetching_guest_data
                                       ),
                                     ),
                                   );
                                 };
                               
                             },
-                            title: ('Save'),
+                            title: (S.of(context).save),
                           ),
                         ],
                       ),

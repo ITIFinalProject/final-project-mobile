@@ -427,7 +427,7 @@ class _EventsViewState extends State<EventsView> with RouteAware, WidgetsBinding
                 listener: (context, state) {
                   if (state is EventJoinSuccess) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text("Joined Successfully")),
+                     SnackBar(content: Text(S.of(context).joinedSuccessfully)),
                     );
                     // Crucially, refetch all events to update the list
                     _fetchData(); // Trigger full refresh
@@ -441,7 +441,7 @@ class _EventsViewState extends State<EventsView> with RouteAware, WidgetsBinding
                     );
                   } else if (state is EventDeleted) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text("Event Deleted Successfully")),
+                      SnackBar(content: Text(S.of(context).eventDeletedSuccessfully)),
                     );
                     _fetchData(); // Refresh data after deletion
                     Navigator.pop(context); // Pop the delete dialog if it was showing
@@ -524,8 +524,8 @@ class _EventsViewState extends State<EventsView> with RouteAware, WidgetsBinding
 
                   if (finalFilteredEvents.isEmpty) {
                     return CardNoEvents(
-                      text: 'Create an event and make some memories',
-                      title: 'No Events for that Day',
+                      text: S.of(context).createEventAndMakeMemories,
+                      title: S.of(context).noEventsForThatDay,
                     );
                   }
 
@@ -598,20 +598,20 @@ class _EventsViewState extends State<EventsView> with RouteAware, WidgetsBinding
                 return const Center(child: CircularProgressIndicator());
               }
               return AlertDialog(
-                content: const Text('Are you sure you want to delete this event?'),
-                title: const Text('Delete Event'),
+                content:  Text(S.of(context).confirm_delete_event),
+                title:  Text(S.of(context).delete_event),
                 actions: [
                   TextButton(
                     onPressed: () {
                       innerContext.read<EventCubit>().deleteEvent(eventId);
                     },
-                    child: const Text('Delete', style: TextStyle(color: Colors.red)),
+                    child:  Text(S.of(context).delete, style: TextStyle(color: Colors.red)),
                   ),
                   TextButton(
                     onPressed: () {
                       Navigator.of(innerContext).pop();
                     },
-                    child: const Text('Cancel'),
+                    child:  Text(S.of(context).cancel),
                   ),
                 ],
               );

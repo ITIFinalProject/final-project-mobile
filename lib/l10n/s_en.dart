@@ -39,7 +39,57 @@ class SEn extends S {
   String get events => 'Events';
 
   @override
+  String get edit_event => 'Edit Event';
+
+  @override
+  String get event_updated_successfully => 'Event Updated Successfully';
+
+  @override
+  String get end_datetime_must_be_after_start_datetime =>
+      'End date/time must be after start date/time';
+
+  @override
   String get no_events => 'No Events';
+
+  @override
+  String start_text(Object start) {
+    return 'Start: $start';
+  }
+
+  @override
+  String get please_enter_number_of_attendees =>
+      'Please enter number of attendees';
+
+  @override
+  String get please_enter_host_name => 'Please enter host name';
+
+  @override
+  String get no_created_events => 'You haven’t created any events yet.';
+
+  @override
+  String get no_events_created => 'No Events Created';
+
+  @override
+  String get confirm_delete_event =>
+      'Are you sure you want to delete this event?';
+
+  @override
+  String get delete_event => 'Delete Event';
+
+  @override
+  String get ok => 'Ok';
+
+  @override
+  String get interestedEvents => 'Interested Events';
+
+  @override
+  String get joinedSuccessfully => 'Joined Successfully';
+
+  @override
+  String get noInterestedEvents => 'No interested events yet.';
+
+  @override
+  String get eventDeletedSuccessfully => 'Event Deleted Successfully';
 
   @override
   String get update_event => 'Update Event';
@@ -87,6 +137,9 @@ class SEn extends S {
   String get select_event_category => 'Select event category';
 
   @override
+  String get pleaseselect_event_category => 'Please Select event category';
+
+  @override
   String get event_description => 'Event Description';
 
   @override
@@ -112,7 +165,13 @@ class SEn extends S {
   String get public => 'Public';
 
   @override
+  String get pick_location => 'Pick Location';
+
+  @override
   String get event_timing => 'Event Timing';
+
+  @override
+  String get addguests => '4 of 5: Add Guests';
 
   @override
   String get start_date => 'Start Date';
@@ -121,13 +180,92 @@ class SEn extends S {
   String get start_time => 'Start Time';
 
   @override
+  String get search_contacts => 'Search contacts';
+
+  @override
+  String get no_number => 'No number';
+
+  @override
+  String get done => 'Done';
+
+  @override
+  String get see_all => 'See All';
+
+  @override
+  String get next_review_send => 'Next: Review & Send';
+
+  @override
+  String get invitations_sent => 'Invitations sent successfully';
+
+  @override
+  String get create_contact => 'Create Contact';
+
+  @override
+  String get guest_email => 'Guest Email';
+
+  @override
+  String get capacity_reached => 'Capacity reached';
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
+  String get please_add_one_guest => 'Please add at least one guest';
+
+  @override
+  String get no_valid_users_found => 'No valid registered users found.';
+
+  @override
+  String get error_fetching_guest_data => 'Error fetching guest data';
+
+  @override
+  String get save => 'Save';
+
+  @override
+  String get failed_to_create_event => 'Failed to create event';
+
+  @override
+  String get event_details_step => '2 of 5: Event Details';
+
+  @override
   String get end_date => 'End Date';
+
+  @override
+  String get please_enter_your_start_date => 'please enter your start date';
+
+  @override
+  String get please_enter_your_end_date => 'please enter your end date';
+
+  @override
+  String get please_enter_your_start_time => 'please enter your start time';
+
+  @override
+  String get please_enter_your_end_time => 'please enter your end time';
+
+  @override
+  String get yyyymmdd => 'yyyy-MM-dd';
 
   @override
   String get end_time => 'End Time';
 
   @override
   String get location => 'Location';
+
+  @override
+  String get enter_event_location => 'Enter Event Location';
+
+  @override
+  String get please_enter_your_event_location =>
+      'Please enter your event Location';
+
+  @override
+  String get category => 'Category';
+
+  @override
+  String get select_category => 'Select Category';
+
+  @override
+  String get please_select_category => 'Please select category';
 
   @override
   String get open_google_maps => 'Open Google maps';
@@ -226,6 +364,15 @@ class SEn extends S {
   String get my_events => 'My Events';
 
   @override
+  String get capacity => 'Capacity';
+
+  @override
+  String get please_enter_capacity => 'Please enter capacity';
+
+  @override
+  String get enter_valid_number => 'Enter valid number';
+
+  @override
   String get edit => 'Edit';
 
   @override
@@ -295,4 +442,20 @@ class SEn extends S {
 
   @override
   String get customize_step_title => '1 of 5: Customize';
+
+  @override
+  String get createEventAndMakeMemories =>
+      'Create an event and make some memories';
+
+  @override
+  String get noEventsForThatDay => 'No Events for that Day';
+
+  @override
+  String get eventMemories => 'Event Memories';
+
+  @override
+  String get noEndedEventsYet => 'No ended events yet.';
+
+  @override
+  String get eventMemory => 'Event Memory';
 }

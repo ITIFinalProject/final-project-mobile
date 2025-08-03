@@ -4,6 +4,7 @@ import 'package:eventify_app/core/routes.dart';
 import 'package:eventify_app/features/add_event/create_contact.dart';
 import 'package:eventify_app/features/add_event/widgets/custom_text.dart';
 import 'package:eventify_app/features/add_event/widgets/custom_text_form_field.dart';
+import 'package:eventify_app/generated/l10n.dart';
 import 'package:eventify_app/models.dart/event_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -72,13 +73,13 @@ class _EventDetailsViewState extends State<EventDetailsView> {
         } else if (state is CreateEventError) {
           ScaffoldMessenger.of(
             context,
-          ).showSnackBar(SnackBar(content: Text("Failed to create event")));
+          ).showSnackBar(SnackBar(content: Text(S.of(context).failed_to_create_event)));
         }
       },
       builder: (BuildContext context, CreateEventState state) {
         return Scaffold(
           appBar: AppBar(
-            title: Text('2 of 5: Event Details'),
+            title: Text(S.of(context).event_details_step),
             centerTitle: true,
           ),
           body: SingleChildScrollView(
@@ -87,18 +88,18 @@ class _EventDetailsViewState extends State<EventDetailsView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  CustomText(title: 'Event Title'),
+                  CustomText(title: S.of(context).event_title),
                   CustomTextFormField(
                     controller: titleController,
-                    hint: 'Enter event title',
+                    hint: S.of(context).enter_event_title,
                     validator: (val) {
                       if (val == null || val.isEmpty) {
-                        return 'Please enter your event title';
+                        return S.of(context).please_enter_your_event_title;
                       }
                       return null;
                     },
                   ),
-                  CustomText(title: 'Event Category'),
+                  CustomText(title: S.of(context).event_category),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25),
                     child: DropdownButtonFormField<String>(
@@ -109,7 +110,7 @@ class _EventDetailsViewState extends State<EventDetailsView> {
                       ),
                       borderRadius: BorderRadius.circular(15),
                       decoration: CustomInputDecoration.getDecoration(
-                        hintText: 'Select event category',
+                        hintText: S.of(context).select_event_category,
                       ),
 
                       items:
@@ -126,25 +127,25 @@ class _EventDetailsViewState extends State<EventDetailsView> {
                       },
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'please select your event category';
+                          return S.of(context).pleaseselect_event_category;
                         }
                         return null;
                       },
                     ),
                   ),
-                  CustomText(title: 'Event Description'),
+                  CustomText(title: S.of(context).event_description),
                   CustomTextFormField(
                     controller: descriptionController,
                     lines: 2,
-                    hint: 'Write your event description',
+                    hint: S.of(context).write_your_event_description,
                     validator: (val) {
                       if (val == null || val.isEmpty) {
-                        return 'Please enter your event description';
+                        return S.of(context).please_enter_your_event_description;
                       }
                       return null;
                     },
                   ),
-                  CustomText(title: 'Event Type'),
+                  CustomText(title: S.of(context).event_type),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25),
                     child: DropdownButtonFormField<String>(
@@ -155,7 +156,7 @@ class _EventDetailsViewState extends State<EventDetailsView> {
                       ),
                       borderRadius: BorderRadius.circular(15),
                       decoration: CustomInputDecoration.getDecoration(
-                        hintText: 'Select event type',
+                        hintText: S.of(context).select_event_type,
                       ),
 
                       items:
@@ -172,13 +173,13 @@ class _EventDetailsViewState extends State<EventDetailsView> {
                       },
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'please select your event type';
+                          return S.of(context).please_select_event_type;
                         }
                         return null;
                       },
                     ),
                   ),
-                  CustomText(title: 'Event Timing'),
+                  CustomText(title: S.of(context).event_timing),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -187,15 +188,15 @@ class _EventDetailsViewState extends State<EventDetailsView> {
                           mainAxisSize: MainAxisSize.min,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            CustomText(title: 'Start Date'),
+                            CustomText(title: S.of(context).start_date),
                             CustomTextFormField(
                               validator: (val) {
                                 if (val == null || val.isEmpty) {
-                                  return 'please enter your start date';
+                                  return S.of(context).please_enter_your_start_date;
                                 }
                                 return null;
                               },
-                              hint: 'yyyy-MM-dd',
+                              hint: S.of(context).yyyymmdd,
                               controller: startDateController,
                               onTapped: clickStartDate,
                               prefixIcon: Icons.calendar_month,
@@ -208,11 +209,11 @@ class _EventDetailsViewState extends State<EventDetailsView> {
                           mainAxisSize: MainAxisSize.min,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            CustomText(title: 'Start Time'),
+                            CustomText(title: S.of(context).start_time),
                             CustomTextFormField(
                               validator: (val) {
                                 if (val == null || val.isEmpty) {
-                                  return 'please enter your start time';
+                                  return S.of(context).please_enter_your_start_time;
                                 }
                                 return null;
                               },
@@ -234,15 +235,15 @@ class _EventDetailsViewState extends State<EventDetailsView> {
                           mainAxisSize: MainAxisSize.min,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            CustomText(title: 'End Date'),
+                            CustomText(title: S.of(context).end_date),
                             CustomTextFormField(
                               validator: (val) {
                                 if (val == null || val.isEmpty) {
-                                  return 'please enter your end date';
+                                  return S.of(context).please_enter_your_end_date;
                                 }
                                 return null;
                               },
-                              hint: 'yyyy-MM-dd',
+                              hint: S.of(context).yyyymmdd,
                               controller: endDateController,
                               onTapped: clickEndDate,
                               prefixIcon: Icons.calendar_month,
@@ -255,11 +256,11 @@ class _EventDetailsViewState extends State<EventDetailsView> {
                           mainAxisSize: MainAxisSize.min,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            CustomText(title: 'End Time'),
+                            CustomText(title: S.of(context).end_time),
                             CustomTextFormField(
                               validator: (val) {
                                 if (val == null || val.isEmpty) {
-                                  return 'please enter your end time';
+                                  return S.of(context).please_enter_your_end_time;
                                 }
                                 return null;
                               },
@@ -273,40 +274,40 @@ class _EventDetailsViewState extends State<EventDetailsView> {
                       ),
                     ],
                   ),
-                  CustomText(title: 'Location'),
+                  CustomText(title: S.of(context).location),
                   CustomTextFormField(
                     validator: (val) {
                       if (val == null || val.isEmpty) {
-                        return 'Please enter your event location';
+                        return S.of(context).please_enter_your_event_location;
                       }
                       return null;
                     },
-                    hint: 'Location',
+                    hint: S.of(context).location,
                     controller: locationController,
                     prefixIcon: Icons.location_on,
                   ),
                   CustomElevatedButton(
-                    title: 'Open Google maps',
+                    title: S.of(context).open_google_maps,
                     onPressed: openMapToGetLocation,
                   ),
-                  CustomText(title: 'Attendees'),
+                  CustomText(title: S.of(context).attendees),
                   CustomTextFormField(
                     controller: attendeesController,
-                    hint: 'Enter number of attendees',
+                    hint: S.of(context).enter_number_of_attendees,
                     validator: (val) {
                       if (val == null || val.isEmpty) {
-                        return 'Please enter number of attendees';
+                        return S.of(context).please_enter_number_of_attendees;
                       }
                       return null;
                     },
                   ),
-                  CustomText(title: 'Hosted By'),
+                  CustomText(title: S.of(context).hosted_by),
                   CustomTextFormField(
                     controller: hostNameController,
-                    hint: 'Enter host name',
+                    hint: S.of(context).enter_host_name,
                     validator: (val) {
                       if (val == null || val.isEmpty) {
-                        return 'Please enter your host name';
+                        return S.of(context).please_enter_host_name;
                       }
                       return null;
                     },
@@ -321,9 +322,9 @@ class _EventDetailsViewState extends State<EventDetailsView> {
                         padding: const EdgeInsets.all(15),
                         child: CustomElevatedButton(
                           title:
-                              selectedEventType == 'Private'
-                                  ? 'Add Guests'
-                                  : 'Next: Preview',
+                              selectedEventType == S.of(context).private
+                                  ? S.of(context).addguests
+                                  : S.of(context).next_preview,
                           onPressed: () {
                             // لو Public → يكمل createEvent عادي
                             createEvent();
@@ -344,7 +345,7 @@ class _EventDetailsViewState extends State<EventDetailsView> {
       if (!_isDateTimeRangeValid()) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text("End date/time must be after start date/time"),
+            content: Text(S.of(context).end_datetime_must_be_after_start_datetime),
           ),
         );
         return;

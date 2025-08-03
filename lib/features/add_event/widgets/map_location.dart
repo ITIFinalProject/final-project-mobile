@@ -1,3 +1,4 @@
+import 'package:eventify_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -15,7 +16,7 @@ class _MapPickerScreenState extends State<MapPickerScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Pick Location")),
+      appBar: AppBar(title: Text(S.of(context).pick_location)),
       body: GoogleMap(
         initialCameraPosition: CameraPosition(
           target: LatLng(30.0444, 31.2357),

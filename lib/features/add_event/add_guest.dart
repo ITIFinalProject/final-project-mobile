@@ -2,6 +2,7 @@ import 'package:eventify_app/core/routes.dart';
 import 'package:eventify_app/core/theme.dart';
 import 'package:eventify_app/features/add_event/widgets/custom_text.dart';
 import 'package:eventify_app/features/add_event/widgets/custom_text_form_field.dart';
+import 'package:eventify_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
 
@@ -28,7 +29,7 @@ class _AddGuestsState extends State<AddGuests> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('4 of 5: Add Guests'),
+        title: Text(S.of(context).addguests),
         actions: [
           IconButton(
             onPressed: () {
@@ -44,7 +45,7 @@ class _AddGuestsState extends State<AddGuests> {
             validator: (val) {
               return null;
             },
-            hint: 'Search contacts',
+            hint: S.of(context).search_contacts,
             controller: searchController,
             prefixIcon: Icons.search,
             onChange: filterContacts,
@@ -75,7 +76,7 @@ class _AddGuestsState extends State<AddGuests> {
                           subtitle:
                               contact.phones.isNotEmpty
                                   ? Text(contact.phones.first.number)
-                                  : Text('No number'),
+                                  : Text(S.of(context).no_number),
                           trailing: Checkbox(
                             value: selectedContacts.any(
                               (c) => c.id == contact.id,
@@ -128,7 +129,7 @@ class _AddGuestsState extends State<AddGuests> {
                       });
                     },
                     child: Text(
-                      'Done',
+                      S.of(context).done,
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: 18,
@@ -227,7 +228,7 @@ class _AddGuestsState extends State<AddGuests> {
                               ),
                             ),
                           ),
-                          Text('See All'),
+                          Text(S.of(context).see_all),
                         ],
                       ),
                     ),
@@ -260,7 +261,7 @@ class _AddGuestsState extends State<AddGuests> {
               },
             ),
           ),
-          CustomElevatedButton(title: 'Next: Review & Send', onPressed: () {}),
+          CustomElevatedButton(title:S.of(context).next_review_send, onPressed: () {}),
         ],
       ),
     );

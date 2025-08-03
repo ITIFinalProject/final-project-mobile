@@ -39,7 +39,55 @@ class SAr extends S {
   String get events => 'الفعاليات';
 
   @override
+  String get edit_event => 'تعديل الفعالية';
+
+  @override
+  String get event_updated_successfully => 'تم تحديث الفعالية بنجاح';
+
+  @override
+  String get end_datetime_must_be_after_start_datetime =>
+      'يجب ان يكون تاريخ/وقت الانتهاء بعد تاريخ/وقت البدء';
+
+  @override
   String get no_events => 'لا توجد فعاليات';
+
+  @override
+  String start_text(Object start) {
+    return 'البداية: $start';
+  }
+
+  @override
+  String get please_enter_number_of_attendees => 'من فضلك أدخل عدد الحضور';
+
+  @override
+  String get please_enter_host_name => 'من فضلك أدخل اسم المنظم';
+
+  @override
+  String get no_created_events => 'لم تقم بإنشاء أي أحداث بعد.';
+
+  @override
+  String get no_events_created => 'لم يتم إنشاء أي فعاليات';
+
+  @override
+  String get confirm_delete_event => 'هل أنت متأكد أنك تريد حذف هذه الفعالية؟';
+
+  @override
+  String get delete_event => 'حذف الفعالية';
+
+  @override
+  String get ok => 'حسنًا';
+
+  @override
+  String get interestedEvents => 'الفعاليات المهتم بها';
+
+  @override
+  String get joinedSuccessfully => 'تم الانضمام بنجاح';
+
+  @override
+  String get noInterestedEvents => 'لا توجد فعاليات مهتم بها حتى الآن.';
+
+  @override
+  String get eventDeletedSuccessfully => 'تم حذف الفعالية بنجاح';
 
   @override
   String get update_event => 'تحديث الفعالية';
@@ -87,6 +135,9 @@ class SAr extends S {
   String get select_event_category => 'اختر فئة الفعالية';
 
   @override
+  String get pleaseselect_event_category => 'من فضلك اختر فئة الفعالية';
+
+  @override
   String get event_description => 'وصف الفعالية';
 
   @override
@@ -111,7 +162,13 @@ class SAr extends S {
   String get public => 'عامة';
 
   @override
+  String get pick_location => 'اختيار الموقع';
+
+  @override
   String get event_timing => 'موعد الفعالية';
+
+  @override
+  String get addguests => '٤ من ٥: أضف الضيوف';
 
   @override
   String get start_date => 'تاريخ البدء';
@@ -120,13 +177,92 @@ class SAr extends S {
   String get start_time => 'وقت البدء';
 
   @override
+  String get search_contacts => 'ابحث عن جهات الاتصال';
+
+  @override
+  String get no_number => 'لا يوجد رقم';
+
+  @override
+  String get done => 'تم';
+
+  @override
+  String get see_all => 'عرض الكل';
+
+  @override
+  String get next_review_send => 'التالي: المراجعة والإرسال';
+
+  @override
+  String get invitations_sent => 'تم إرسال الدعوات بنجاح';
+
+  @override
+  String get create_contact => 'إنشاء جهة اتصال';
+
+  @override
+  String get guest_email => 'البريد الإلكتروني للضيف';
+
+  @override
+  String get capacity_reached => 'تم الوصول إلى الحد الأقصى للسعة';
+
+  @override
+  String get cancel => 'إلغاء';
+
+  @override
+  String get please_add_one_guest => 'يرجى إضافة ضيف واحد على الأقل';
+
+  @override
+  String get no_valid_users_found =>
+      'لم يتم العثور على مستخدمين مسجلين صالحين.';
+
+  @override
+  String get error_fetching_guest_data => 'حدث خطأ أثناء جلب بيانات الضيوف';
+
+  @override
+  String get save => 'حفظ';
+
+  @override
+  String get failed_to_create_event => 'فشل في إنشاء الحدث';
+
+  @override
+  String get event_details_step => '٢ من ٥: تفاصيل الحدث';
+
+  @override
   String get end_date => 'تاريخ الانتهاء';
+
+  @override
+  String get please_enter_your_start_date => 'من فضلك ادخل تاريخ البدء';
+
+  @override
+  String get please_enter_your_end_date => 'من فضلك ادخل تاريخ الانتهاء';
+
+  @override
+  String get please_enter_your_start_time => 'من فضلك ادخل وقت البدء';
+
+  @override
+  String get please_enter_your_end_time => 'من فضلك ادخل وقت الانتهاء';
+
+  @override
+  String get yyyymmdd => 'عام-شهر-يوم';
 
   @override
   String get end_time => 'وقت الانتهاء';
 
   @override
   String get location => 'الموقع';
+
+  @override
+  String get enter_event_location => 'ادخل مكان الفعالية';
+
+  @override
+  String get please_enter_your_event_location => 'من فضلك ادخل مكان الفعالية';
+
+  @override
+  String get category => 'الفئة';
+
+  @override
+  String get select_category => 'اختر الفئة';
+
+  @override
+  String get please_select_category => 'من فضلك اختر الفئة';
 
   @override
   String get open_google_maps => 'افتح خرائط جوجل';
@@ -225,6 +361,15 @@ class SAr extends S {
   String get my_events => 'فعالياتي';
 
   @override
+  String get capacity => 'السعة';
+
+  @override
+  String get please_enter_capacity => 'من فضلك ادخل عدد الحضور';
+
+  @override
+  String get enter_valid_number => 'ادخل رقم صالح';
+
+  @override
   String get edit => 'تعديل';
 
   @override
@@ -293,4 +438,19 @@ class SAr extends S {
 
   @override
   String get customize_step_title => '١ من ٥: التخصيص';
+
+  @override
+  String get createEventAndMakeMemories => 'أنشئ فعالية واصنع بعض الذكريات';
+
+  @override
+  String get noEventsForThatDay => 'لا توجد فعاليات لهذا اليوم';
+
+  @override
+  String get eventMemories => 'ذكريات الفعالية';
+
+  @override
+  String get noEndedEventsYet => 'لا توجد فعاليات منتهية بعد.';
+
+  @override
+  String get eventMemory => 'ذكرى الفعالية';
 }
