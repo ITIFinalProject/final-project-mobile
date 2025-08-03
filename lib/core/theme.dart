@@ -25,13 +25,35 @@ class ThemeManager{
       showSelectedLabels: true,
       showUnselectedLabels: false,
     ),
+    inputDecorationTheme: InputDecorationTheme(
+
+      focusedBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: primaryColor),
+        borderRadius: BorderRadius.circular(13),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderSide: BorderSide(color:primaryColor),
+        borderRadius: BorderRadius.circular(13),
+      ),
+      errorBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: Colors.red),
+        borderRadius: BorderRadius.circular(13),
+      ),
+      focusedErrorBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: Colors.red),
+        borderRadius: BorderRadius.circular(13),
+      ),
+      disabledBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: ThemeManager.primaryColor),
+        borderRadius: BorderRadius.circular(13),
+      ),
+    ),
   );
   static ThemeData darkTheme = ThemeData(
     scaffoldBackgroundColor: primaryColor,
     appBarTheme: AppBarTheme(
-      backgroundColor: darkPinkColor,
+      backgroundColor: lightPinkColor,
       centerTitle: true,
-
       titleTextStyle: TextStyle(
         fontSize: 20,
         fontWeight: FontWeight.w600,
@@ -50,6 +72,31 @@ class ThemeManager{
       showSelectedLabels: true,
       showUnselectedLabels: false,
     ),
+      inputDecorationTheme: InputDecorationTheme(
+        fillColor: secondaryColor.withOpacity(0.1),
+        filled: true,
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: lightPinkColor),
+          borderRadius: BorderRadius.circular(13),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color:lightPinkColor , width: 2),
+          borderRadius: BorderRadius.circular(13),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.red),
+          borderRadius: BorderRadius.circular(13),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.red),
+          borderRadius: BorderRadius.circular(13),
+        ),
+        disabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: ThemeManager.lightPinkColor),
+          borderRadius: BorderRadius.circular(13),
+        ),
+      ),
+
     textTheme: TextTheme(
       bodyLarge: TextStyle(color: lightPinkColor),
       bodyMedium: TextStyle(color: lightPinkColor),

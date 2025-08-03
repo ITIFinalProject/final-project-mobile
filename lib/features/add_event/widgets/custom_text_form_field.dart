@@ -38,26 +38,11 @@ class CustomTextFormField extends StatelessWidget {
         onTap: onTapped,
         onChanged: onChange,
         keyboardType: keyboardType,
-        decoration: CustomInputDecoration.getDecoration(
-          hintText: hint,
-          icon: prefixIcon,
-        ),
-        validator: validator,
-      ),
-    );
-  }
-}
-
-class CustomInputDecoration {
-  static InputDecoration getDecoration({
-    required String hintText,
-    IconData? icon,
-  }) {
-    return InputDecoration(
-      hintText: hintText,
+        decoration: InputDecoration(
+    hintText: hint,
       hintStyle: TextStyle(fontSize: 15, color: ThemeManager.darkPinkColor),
       prefixIcon:
-          icon != null
+          prefixIcon != null
               ? Container(
                 width: 35,
                 height: 52,
@@ -68,26 +53,57 @@ class CustomInputDecoration {
                     topLeft: Radius.circular(13),
                   ),
                 ),
-        child: Icon(icon),
+        child: Icon(prefixIcon),
       )
           : null,
       enabled: true,
-      focusedBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: ThemeManager.primaryColor),
-        borderRadius: BorderRadius.circular(13),
-      ),
-      enabledBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: ThemeManager.primaryColor),
-        borderRadius: BorderRadius.circular(13),
-      ),
-      errorBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.red),
-        borderRadius: BorderRadius.circular(13),
-      ),
-      focusedErrorBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.red),
-        borderRadius: BorderRadius.circular(13),
-      ),
+    ),
+        validator: validator,
+    )
     );
   }
 }
+
+// class CustomInputDecoration {
+//   static InputDecoration getDecoration({
+//     required String hintText,
+//     IconData? icon,
+//   }) {
+//     return InputDecoration(
+//       hintText: hintText,
+//       hintStyle: TextStyle(fontSize: 15, color: ThemeManager.darkPinkColor),
+//       prefixIcon:
+//           icon != null
+//               ? Container(
+//                 width: 35,
+//                 height: 52,
+//                 decoration: BoxDecoration(
+//                   color: ThemeManager.darkPinkColor,
+//                   borderRadius: BorderRadius.only(
+//                     bottomLeft: Radius.circular(13),
+//                     topLeft: Radius.circular(13),
+//                   ),
+//                 ),
+//         child: Icon(icon),
+//       )
+//           : null,
+//       enabled: true,
+//       focusedBorder: OutlineInputBorder(
+//         borderSide: BorderSide(color: ThemeManager.primaryColor),
+//         borderRadius: BorderRadius.circular(13),
+//       ),
+//       enabledBorder: OutlineInputBorder(
+//         borderSide: BorderSide(color: ThemeManager.primaryColor),
+//         borderRadius: BorderRadius.circular(13),
+//       ),
+//       errorBorder: OutlineInputBorder(
+//         borderSide: BorderSide(color: Colors.red),
+//         borderRadius: BorderRadius.circular(13),
+//       ),
+//       focusedErrorBorder: OutlineInputBorder(
+//         borderSide: BorderSide(color: Colors.red),
+//         borderRadius: BorderRadius.circular(13),
+//       ),
+//     );
+//   }
+// }

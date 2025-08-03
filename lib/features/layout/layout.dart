@@ -106,15 +106,15 @@ class _LayoutViewState extends State<LayoutView> {
 
   @override
   Widget build(BuildContext context) {
+    final themeMode = context.watch<ThemeCubit>().state;
+    final isDark = themeMode == ThemeMode.dark;
     return Scaffold(
       body: pages[currentIndex],
-      bottomNavigationBar: BlocBuilder<ThemeCubit, ThemeMode>(
-        builder: (context, mode) {
-          final isDark = mode == ThemeMode.dark;
-          return CurvedNavigationBar(
+      bottomNavigationBar:
+        CurvedNavigationBar(
             backgroundColor: Colors.transparent,
             color:
-                isDark ? ThemeManager.darkPinkColor : ThemeManager.primaryColor,
+                isDark ? ThemeManager.lightPinkColor : ThemeManager.primaryColor,
             buttonBackgroundColor:
                 isDark
                     ? ThemeManager.lightPinkColor
@@ -180,9 +180,7 @@ class _LayoutViewState extends State<LayoutView> {
               if( currentIndex ==1){context.read<EventCubit>().fetchEvents();}
               setState(() {});
             },
-          );
-        },
-      ),
+          )
     );
   }
 }

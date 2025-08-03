@@ -1,7 +1,9 @@
 // custom textfield******
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/theme.dart';
+import '../../../profile/cubit/theme_cubit.dart';
 
 typedef Validator = String? Function(String?);
 
@@ -34,6 +36,8 @@ class CustomTextFIeld extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeMode = context.watch<ThemeCubit>().state;
+    final isDark = themeMode == ThemeMode.dark;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
       child: TextFormField(
@@ -44,34 +48,38 @@ class CustomTextFIeld extends StatelessWidget {
         obscureText: obscure,
         enabled: enable,
         decoration: InputDecoration(
-          prefix: Icon(icon, color: ThemeManager.secondaryColor),
-          label: Text(lable),
-          labelStyle: TextStyle(color: ThemeManager.primaryColor),
+          prefix: Icon(icon, color: isDark?ThemeManager.lightPinkColor:ThemeManager.primaryColor),
+          label: Text(lable , style: TextStyle(
+            color: isDark?ThemeManager.lightPinkColor:ThemeManager.primaryColor,
+            fontSize: 18,
+            fontWeight: FontWeight.bold
+          ),),
+          // labelStyle: TextStyle(color: ThemeManager.primaryColor),
           suffixIcon: IconButton(
-            icon: Icon(suffixIcon, color: ThemeManager.secondaryColor),
+            icon: Icon(suffixIcon, color: isDark?ThemeManager.lightPinkColor:ThemeManager.primaryColor),
             onPressed: onPressedIcon,
           ),
           // labelStyle: TextStyle(color: color),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: ThemeManager.primaryColor),
-            borderRadius: BorderRadius.circular(13),
-          ),
-          disabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: ThemeManager.primaryColor),
-            borderRadius: BorderRadius.circular(13),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: ThemeManager.primaryColor),
-            borderRadius: BorderRadius.circular(13),
-          ),
-          errorBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.red),
-            borderRadius: BorderRadius.circular(13),
-          ),
-          focusedErrorBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.red),
-            borderRadius: BorderRadius.circular(13),
-          ),
+          // focusedBorder: OutlineInputBorder(
+          //   borderSide: BorderSide(color: ThemeManager.primaryColor),
+          //   borderRadius: BorderRadius.circular(13),
+          // ),
+          // disabledBorder: OutlineInputBorder(
+          //   borderSide: BorderSide(color: ThemeManager.primaryColor),
+          //   borderRadius: BorderRadius.circular(13),
+          // ),
+          // enabledBorder: OutlineInputBorder(
+          //   borderSide: BorderSide(color: ThemeManager.primaryColor),
+          //   borderRadius: BorderRadius.circular(13),
+          // ),
+          // errorBorder: OutlineInputBorder(
+          //   borderSide: BorderSide(color: Colors.red),
+          //   borderRadius: BorderRadius.circular(13),
+          // ),
+          // focusedErrorBorder: OutlineInputBorder(
+          //   borderSide: BorderSide(color: Colors.red),
+          //   borderRadius: BorderRadius.circular(13),
+          // ),
         ),
         validator:
             validator ??

@@ -4,12 +4,14 @@ import 'dart:io';
 import 'package:eventify_app/features/add_event/widgets/custom_text.dart';
 import 'package:eventify_app/features/auth/cubit/auth_cubit.dart';
 import 'package:eventify_app/features/auth/cubit/auth_state.dart';
+import 'package:eventify_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../core/theme.dart';
 import '../auth/view/widgets/custom_text_field.dart';
+import 'cubit/theme_cubit.dart';
 
 class EditProfile extends StatefulWidget {
   const EditProfile({super.key});
@@ -39,7 +41,7 @@ class _EditProfileState extends State<EditProfile> {
               children: [
                 ListTile(
                   leading: const Icon(Icons.photo_camera),
-                  title: const Text("Take a photo"),
+                  title:  Text(S.of(context).take_a_photo),
                   onTap: () async {
                     Navigator.pop(context);
                     final picked = await ImagePicker().pickImage(
@@ -52,7 +54,7 @@ class _EditProfileState extends State<EditProfile> {
                 ),
                 ListTile(
                   leading: const Icon(Icons.photo_library),
-                  title: const Text("Choose from gallery"),
+                  title:  Text(S.of(context).choose_from_gallery),
                   onTap: () async {
                     Navigator.pop(context);
                     final picked = await ImagePicker().pickImage(
@@ -83,11 +85,13 @@ class _EditProfileState extends State<EditProfile> {
 
   @override
   Widget build(BuildContext context) {
+    final themeMode = context.watch<ThemeCubit>().state;
+    final isDark = themeMode == ThemeMode.dark;
     return BlocConsumer<AuthCubit, AuthState>(
       listener: (context, state) {
         if (state is AuthSuccess) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(' Profile Updated Successfully')),
+            SnackBar(content: Text(S.of(context).profile_updated_successfully)),
           );
           Navigator.pop(context);
         } else if (state is AuthFailure) {
@@ -99,7 +103,7 @@ class _EditProfileState extends State<EditProfile> {
       },
       builder: (context, state) {
         return Scaffold(
-          appBar: AppBar(title: Text("Edit Profile")),
+          appBar: AppBar(title: Text(S.of(context).edit_profile)),
           body: SingleChildScrollView(
             padding: EdgeInsets.symmetric(vertical: 50),
             child: Column(
@@ -109,7 +113,7 @@ class _EditProfileState extends State<EditProfile> {
                   children: [
                     CircleAvatar(
                       radius: 45,
-                      backgroundColor: ThemeManager.darkPinkColor,
+                      backgroundColor: isDark?ThemeManager.lightPinkColor:ThemeManager.primaryColor,
                       backgroundImage:
                           profileImage != null
                               ? FileImage(profileImage!)
@@ -147,13 +151,14 @@ class _EditProfileState extends State<EditProfile> {
                                               .imagePath !=
                                           null)
                               ? (nameController.text.isNotEmpty
-                                  ? Text(nameController.text[0])
+                                  ? Text(nameController.text[0] , style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20,color: isDark?ThemeManager.primaryColor:ThemeManager.lightPinkColor),)
                                   : const Icon(Icons.person, size: 40))
                               : null,
                     ),
                     GestureDetector(
                       onTap: _pickImage,
                       child: CircleAvatar(
+
                         backgroundColor: ThemeManager.lightPinkColor,
                         child: Icon(
                           Icons.camera_alt,
@@ -167,24 +172,24 @@ class _EditProfileState extends State<EditProfile> {
 
                 const SizedBox(height: 20),
                 CustomTextFIeld(
-                  lable: "Name",
+                  lable: S.of(context).name,
                   icon: Icons.person,
                   textFieldController: nameController,
                 ),
                 CustomTextFIeld(
-                  lable: "Email",
+                  lable: S.of(context).email,
                   icon: Icons.email,
                   textFieldController: emailController,
                   enable: false,
                 ),
                 CustomTextFIeld(
-                  lable: "Phone",
+                  lable: S.of(context).phone,
                   icon: Icons.phone,
                   textFieldController: phoneController,
                 ),
 
                 CustomTextFIeld(
-                  lable: "Address",
+                  lable: S.of(context).address,
                   icon: Icons.location_on,
                   textFieldController: addressController,
                 ),
@@ -192,7 +197,7 @@ class _EditProfileState extends State<EditProfile> {
                 (state is AuthLoading)
                     ? Center(child: CircularProgressIndicator())
                     : CustomElevatedButton(
-                      title: 'Save Changes',
+                      title: S.of(context).save_changes,
                       onPressed: () {
                         context.read<AuthCubit>().reauthenticateAndUpdateEmail(
                           currentEmail: emailController.text,

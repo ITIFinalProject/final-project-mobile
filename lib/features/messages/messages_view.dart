@@ -2,9 +2,10 @@ import 'package:eventify_app/core/theme.dart';
 import 'package:eventify_app/features/events/event_cubit/event_cubit.dart';
 import 'package:eventify_app/features/events/widgets/card_no_events.dart';
 import 'package:eventify_app/features/messages/chat_view.dart';
+import 'package:eventify_app/features/profile/cubit/theme_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:eventify_app/generated/l10n.dart';
 import '../events/event_cubit/event_state.dart';
 
 class MessagesView extends StatefulWidget {
@@ -23,16 +24,21 @@ class _MessagesViewState extends State<MessagesView> {
 
   @override
   Widget build(BuildContext context) {
+     final thememode = context.watch<ThemeCubit>().state;
+    final isDarkMode = thememode == ThemeMode.dark;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Messages"),
+        title: Text(S.of(context).messages),
         automaticallyImplyLeading: false,
       ),
 
       body: BlocBuilder<EventCubit, EventState>(
         builder: (context, state) {
           if (state is EventLoading) {
-            return Center(child: CircularProgressIndicator());
+            return Center(child: CircularProgressIndicator(
+              color: isDarkMode?ThemeManager.lightPinkColor: ThemeManager.primaryColor,
+            ));
           } else if (state is EventJoinedLoaded) {
             final events = state.joinedEvents;
             if (events.isEmpty) {
@@ -43,12 +49,16 @@ class _MessagesViewState extends State<MessagesView> {
                 itemBuilder: (context, index) {
                   final event = events[index];
                   return Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      side: BorderSide(color: ThemeManager.primaryColor),
+                    ),
                     color: ThemeManager.lightPinkColor,
                     margin: EdgeInsets.all(10),
                     child: ListTile(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15),
-                        side: BorderSide(color: ThemeManager.primaryColor),
+                        side: BorderSide(color: ThemeManager.primaryColor),  
                       ),
                       leading: CircleAvatar(
                         backgroundColor: ThemeManager.primaryColor,
@@ -58,7 +68,7 @@ class _MessagesViewState extends State<MessagesView> {
                         event.title ?? '',
                         style: TextStyle(color: ThemeManager.primaryColor),
                       ),
-                      subtitle: Text("Send a message to your guests"),
+                      subtitle: Text(S.of(context).send_a_message_to_your_guests),
                       onTap: () {
                         Navigator.push(
                           context,

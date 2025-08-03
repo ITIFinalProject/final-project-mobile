@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:eventify_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 import '../../../core/theme.dart';
@@ -112,16 +112,16 @@ class _EventFormState extends State<EventForm> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            CustomText(title: 'Event Title'),
+            CustomText(title: S.of(context).event_title),
             CustomTextFormField(
               controller: titleController,
-              hint: 'Enter event title',
+              hint: S.of(context).enter_event_title,
               validator:
                   (val) =>
-                      val!.isEmpty ? 'Please enter your event title' : null,
+                      val!.isEmpty ? S.of(context).please_enter_your_event_title : null,
             ),
 
-            CustomText(title: 'Event Type'),
+            CustomText(title: S.of(context).event_type),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25),
               child: DropdownButtonFormField<String>(
@@ -131,24 +131,24 @@ class _EventFormState extends State<EventForm> {
                       return DropdownMenuItem(value: value, child: Text(value));
                     }).toList(),
                 onChanged: (val) => setState(() => selectedEventType = val),
-                decoration: CustomInputDecoration.getDecoration(
-                  hintText: 'Select event type',
-                ),
+                // decoration: CustomInputDecoration.getDecoration(
+                //   hintText: S.of(context).select_event_type,
+                // ),
                 validator:
                     (value) =>
-                        value == null ? 'Please select your event type' : null,
+                        value == null ? S.of(context).please_select_event_type : null,
               ),
             ),
 
-            CustomText(title: 'Event Description'),
+            CustomText(title: S.of(context).event_description),
             CustomTextFormField(
               controller: descriptionController,
               lines: 2,
-              hint: 'Write your event description',
+              hint: S.of(context).write_your_event_description,
               validator:
                   (val) =>
                       val!.isEmpty
-                          ? 'Please enter your event description'
+                          ? S.of(context).please_enter_your_event_description
                           : null,
             ),
 
@@ -181,7 +181,7 @@ class _EventFormState extends State<EventForm> {
                 }
               },
               child: Text(
-                widget.isEdit ? 'Update Event' : 'Create Event',
+                widget.isEdit ? S.of(context).update_event : S.of(context).create_event,
                 style: const TextStyle(color: Colors.white),
               ),
             ),

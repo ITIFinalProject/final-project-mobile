@@ -5,6 +5,7 @@ import 'package:eventify_app/features/events/event_cubit/event_state.dart';
 import 'package:eventify_app/features/home/widgets/event_categories.dart';
 import 'package:eventify_app/features/home/widgets/search_input_field.dart';
 import 'package:eventify_app/features/home/widgets/show_upcoming_events.dart';
+import 'package:eventify_app/generated/l10n.dart';
 import 'package:eventify_app/models.dart/event_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../auth/cubit/auth_cubit.dart';
 import '../auth/cubit/auth_state.dart';
 import '../floating_button/chatscreen.dart';
+import '../profile/cubit/theme_cubit.dart';
 import 'cubit/home_cubit.dart';
 import 'cubit/home_state.dart';
 
@@ -43,13 +45,43 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
+    final themeMode = context
+        .watch<ThemeCubit>()
+        .state;
+    final isDark = themeMode == ThemeMode.dark;
     return Scaffold(
+      appBar: AppBar(title: Text(
+        name.isNotEmpty ? "Hello, $name! 👋" : S
+            .of(context)
+            .welcome,
+        style: TextStyle(
+          fontSize: 24,
+          fontWeight: FontWeight.bold,
+          color: isDark ? ThemeManager.lightPinkColor : ThemeManager
+              .primaryColor,
+        ),
+      ), actions: [
+        IconButton(onPressed: () {
+          Navigator.pushNamed(
+            context,
+            AppRoutes.interestedEventsView,
+          );
+        },
+            icon: Icon(Icons.star_outline_rounded, size: 30,
+              color: isDark ? ThemeManager.lightPinkColor : ThemeManager
+                  .primaryColor,)),
+      ],
+        centerTitle: false,
+        backgroundColor: isDark ? ThemeManager.primaryColor : ThemeManager
+            .lightPinkColor,),
       body: SafeArea(
         child: MultiBlocListener(
           listeners: [
             BlocListener<AuthCubit, AuthState>(
               listener: (context, authState) {
-                final eventState = context.read<EventCubit>().state;
+                final eventState = context
+                    .read<EventCubit>()
+                    .state;
                 if (authState is AuthSuccess && eventState is EventLoaded) {
                   context.read<HomeCubit>().initHome(
                     userName: authState.user.name ?? '',
@@ -67,8 +99,8 @@ class _HomeViewState extends State<HomeView> {
                     events: eventState.events,
                   );
                 }else if (eventState is EventError) {
-      print("⚠️ حدث خطأ في تحميل الأحداث: ${eventState.message}");
-    }
+                  print("⚠️ حدث خطأ في تحميل الأحداث: ${eventState.message}");
+                }
               },
             ),
           ],
@@ -89,40 +121,11 @@ class _HomeViewState extends State<HomeView> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            name.isNotEmpty ? "Hello, $name! 👋" : "Welcome!",
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                              color: ThemeManager.primaryColor,
-                            ),
-                          ),
-                          Row(
-                            children: [
-                              IconButton(onPressed: (){
-                              
-                                Navigator.pushNamed(
-                                  context,
-                                  AppRoutes.interestedEventsView,
-                                );
-                              }, icon: Icon(Icons.star_outline_rounded,size: 30,)),
-                              IconButton(onPressed: (){
-                              
-                              }, icon: Icon(Icons.notifications_active,size: 30,)),
-                            ],
-                          )
-
-                        ],
-                      ),
-                      const SizedBox(height: 20),
                       SearchInputField(
-                        onChange: (value) {
-                          searchText = value;
-                          context.read<HomeCubit>().search(value);
-                            }
+                          onChange: (value) {
+                            searchText = value;
+                            context.read<HomeCubit>().search(value);
+                          }
 
                       ),
                       if (searchText.isNotEmpty) ...[
@@ -169,7 +172,7 @@ class _HomeViewState extends State<HomeView> {
                       const EventCategories(),
                       const SizedBox(height: 20),
                       Text(
-                        'Upcoming Events',
+                        S.of(context).upcoming_events,
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
@@ -180,7 +183,7 @@ class _HomeViewState extends State<HomeView> {
                       ShowUpcomingEvents(upcomingEvents: getUpcomingEvents()),
                       const SizedBox(height: 10),
                       Text(
-                        'Recommended Events',
+                        S.of(context).recommended_events,
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
@@ -199,11 +202,14 @@ class _HomeViewState extends State<HomeView> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed:
-            () => Navigator.push(
+            () =>
+            Navigator.push(
               context,
               MaterialPageRoute(builder: (_) => const ChatScreen()),
             ),
-        backgroundColor: const Color(0xFF1B3C53),
+        backgroundColor: isDark
+            ? ThemeManager.secondaryColor.withOpacity(1)
+            : ThemeManager.primaryColor,
         child: SvgPicture.asset(
           'assets/images/ChatGPT-Logo.svg',
           width: 32,
@@ -213,40 +219,6 @@ class _HomeViewState extends State<HomeView> {
       ),
     );
   }
-
-  // List<EventModel> getUpcomingEvents() {
-  //   final now = DateTime.now();
-  //   final upcoming =
-  //       allEvents.where((event) {
-  //           try {
-  //             final parts = event.date.split(' _').first.trim().split('-');
-  //             final parsedDate = DateTime(
-  //               int.parse(parts[0]),
-  //               int.parse(parts[1]),
-  //               int.parse(parts[2]),
-  //             );
-  //             return parsedDate.isAfter(now);
-  //           } catch (_) {
-  //             return false;
-  //           }
-  //         }).toList()
-  //         ..sort((a, b) {
-  //           final aParts = a.date.split('_').first.trim().split('-');
-  //           final bParts = b.date.split(' _').first.trim().split('-');
-  //           return DateTime(
-  //             int.parse(aParts[0]),
-  //             int.parse(aParts[1]),
-  //             int.parse(aParts[2]),
-  //           ).compareTo(
-  //             DateTime(
-  //               int.parse(bParts[0]),
-  //               int.parse(bParts[1]),
-  //               int.parse(bParts[2]),
-  //             ),
-  //           );
-  //         });
-  //   return upcoming.take(3).toList();
-  // }
   List<EventModel> getUpcomingEvents() {
     final now = DateTime.now();
     final upcoming = allEvents.where((event) {

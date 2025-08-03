@@ -270,6 +270,7 @@
 // }
 import 'package:eventify_app/core/routes.dart';
 import 'package:eventify_app/core/theme.dart';
+import 'package:eventify_app/generated/l10n.dart';
 import 'package:eventify_app/models.dart/event_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -310,7 +311,7 @@ class _CardEventState extends State<CardEvent> {
   Widget build(BuildContext context) {
     final currentUserId = FirebaseAuth.instance.currentUser?.uid;
     final isMyEvent = widget.event.hostId == currentUserId;
-
+    var size = MediaQuery.of(context).size;
     return GestureDetector(
       onTap: () {
         Navigator.pushNamed(
@@ -339,13 +340,13 @@ class _CardEventState extends State<CardEvent> {
                               widget.event.bannerUrl!.isNotEmpty
                           ? Image.network(
                             widget.event.bannerUrl!,
-                            height: 180,
+                            height:size.height*0.2,
                             width: double.infinity,
                             fit: BoxFit.cover,
                             loadingBuilder: (context, child, loadingProgress) {
                               if (loadingProgress == null) return child;
                               return Container(
-                                height: 180,
+                                height: size.height*0.2,
                                 alignment: Alignment.center,
                                 child: CircularProgressIndicator(
                                   color: ThemeManager.primaryColor,
@@ -354,7 +355,7 @@ class _CardEventState extends State<CardEvent> {
                             },
                             errorBuilder: (context, error, stackTrace) {
                               return Container(
-                                height: 180,
+                                height: size.height*0.2,
                                 color: Colors.grey[300],
                                 child: const Icon(
                                   Icons.broken_image,
@@ -367,7 +368,7 @@ class _CardEventState extends State<CardEvent> {
                           : (widget.event.templateIndex != null)
                           ? Image.asset(
                             'assets/images/template${widget.event.templateIndex}.jpg',
-                            height: 180,
+                            height: size.height*0.2,
                             width: double.infinity,
                             fit: BoxFit.cover,
                           )
@@ -424,48 +425,48 @@ class _CardEventState extends State<CardEvent> {
                   const SizedBox(height: 6),
 
                   // 🔵 التاريخ والوقت
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          const Icon(
-                            Icons.calendar_today,
-                            size: 18,
-                            color: ThemeManager.primaryColor,
-                          ),
-                          const SizedBox(width: 6),
-                          Text(
-                            widget.event.date.split('_')[0],
-                            style: const TextStyle(
-                              fontSize: 14,
-                              color: ThemeManager.primaryColor,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          const Icon(
-                            Icons.access_time,
-                            size: 18,
-                            color: ThemeManager.primaryColor,
-                          ),
-                          const SizedBox(width: 6),
-                          Text(
-                            widget.event.time.split('-')[0],
-                            style: const TextStyle(
-                              fontSize: 14,
-                              color: ThemeManager.primaryColor,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 6),
-
-                  // 🔵 المكان
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //   children: [
+                  //     Row(
+                  //       children: [
+                  //         const Icon(
+                  //           Icons.calendar_today,
+                  //           size: 18,
+                  //           color: ThemeManager.primaryColor,
+                  //         ),
+                  //         const SizedBox(width: 6),
+                  //         Text(
+                  //           widget.event.date.split('_')[0],
+                  //           style: const TextStyle(
+                  //             fontSize: 14,
+                  //             color: ThemeManager.primaryColor,
+                  //           ),
+                  //         ),
+                  //       ],
+                  //     ),
+                  //     Row(
+                  //       children: [
+                  //         const Icon(
+                  //           Icons.access_time,
+                  //           size: 18,
+                  //           color: ThemeManager.primaryColor,
+                  //         ),
+                  //         const SizedBox(width: 6),
+                  //         Text(
+                  //           widget.event.time.split('-')[0],
+                  //           style: const TextStyle(
+                  //             fontSize: 14,
+                  //             color: ThemeManager.primaryColor,
+                  //           ),
+                  //         ),
+                  //       ],
+                  //     ),
+                  //   ],
+                  // ),
+                  // const SizedBox(height: 6),
+                  //
+                  // // 🔵 المكان
                   Row(
                     children: [
                       const Icon(
@@ -595,7 +596,6 @@ class _CardEventState extends State<CardEvent> {
                   //   ),
                   // ],
                   if (widget.onDelete != null || widget.onJoin != null) ...[
-                    const SizedBox(height: 10),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [

@@ -89,9 +89,10 @@ import 'package:eventify_app/core/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:eventify_app/generated/l10n.dart';
 import '../auth/cubit/auth_cubit.dart';
 import '../auth/cubit/auth_state.dart';
+import '../profile/cubit/theme_cubit.dart';
 import 'cubit/event_chat_cubit.dart';
 import 'cubit/event_chat_state.dart';
 
@@ -162,18 +163,22 @@ class _ChatPageState extends State<ChatPage> {
 
   @override
   Widget build(BuildContext context) {
+    final themeMode = context.watch<ThemeCubit>().state;
+    final isDark = themeMode == ThemeMode.dark;
     final authState = context
         .watch<AuthCubit>()
         .state;
     if (authState is! AuthSuccess) {
       return Scaffold(
         body: Center(
-            child: Text('You need to be logged in to access the chat.')),
+            child: Text(S.of(context).login_required_message)),
       );
     }
+ final thememode = context.watch<ThemeCubit>().state;
+    final isDarkMode = thememode == ThemeMode.dark;
 
     return Scaffold(
-      appBar: AppBar(title: Text(eventName ?? 'Chat')),
+      appBar: AppBar(title: Text(eventName ??  S.of(context).chat)),
       body: Column(
         children: [
           Expanded(
@@ -181,7 +186,12 @@ class _ChatPageState extends State<ChatPage> {
               bloc: chatCubit,
               builder: (context, state) {
                 if (state is EventChatLoading) {
-                  return Center(child: CircularProgressIndicator());
+                  return Center(child: CircularProgressIndicator(
+                    color:  
+                    isDarkMode
+                        ? ThemeManager.lightPinkColor
+                        : ThemeManager.primaryColor,
+                  ));
                 } else if (state is EventChatLoaded) {
                   final messages = state.messages;
                   return ListView.builder(
@@ -200,7 +210,7 @@ class _ChatPageState extends State<ChatPage> {
                           padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
                             color: isMe
-                                ? ThemeManager.primaryColor
+                                ? (isDark)?ThemeManager.secondaryColor.withOpacity(0.7):ThemeManager.primaryColor
                                 : ThemeManager.darkPinkColor.withOpacity(0.9),
                             borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(12),
@@ -235,7 +245,7 @@ class _ChatPageState extends State<ChatPage> {
                     },
                   );
                 } else {
-                  return Center(child: Text("No messages yet."));
+                  return Center(child: Text(S.of(context).no_messages_yet));
                 }
               },
             ),
@@ -248,12 +258,15 @@ class _ChatPageState extends State<ChatPage> {
                   child: TextField(
                     controller: _messageController,
                     decoration: InputDecoration(
-                      fillColor: ThemeManager.primaryColor.withOpacity(0.1),
+                      fillColor: isDark?ThemeManager.secondaryColor.withOpacity(0.5):ThemeManager.primaryColor.withOpacity(0.1),
                       filled: true,
-                      hintText: "Write a message...",
+                      hintText:  S.of(context).write_a_message,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(20),
                       ),
+                      hintStyle: TextStyle(
+                        color: isDark?ThemeManager.lightPinkColor:Colors.grey
+                      )
                     ),
                   ),
                 ),

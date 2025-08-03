@@ -6,6 +6,8 @@ import 'package:eventify_app/models.dart/event_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../profile/cubit/theme_cubit.dart';
+
 class CardEventUpcoming extends StatelessWidget {
   final EventModel event;
 
@@ -13,13 +15,20 @@ class CardEventUpcoming extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
+    final themeMode = context
+        .watch<ThemeCubit>()
+        .state;
+    final isDark = themeMode == ThemeMode.dark;
+    var size = MediaQuery
+        .of(context)
+        .size;
 
     return SizedBox(
       width: size.width * 0.6,
       child: GestureDetector(
         onTap: () {
-          Navigator.pushNamed(context, AppRoutes.eventPreview,arguments: event);
+          Navigator.pushNamed(
+              context, AppRoutes.eventPreview, arguments: event);
         },
         child: Card(
           margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
@@ -27,6 +36,8 @@ class CardEventUpcoming extends StatelessWidget {
             borderRadius: BorderRadius.circular(15),
             side: BorderSide(color: ThemeManager.secondaryColor),
           ),
+          color: isDark ? ThemeManager.secondaryColor.withOpacity(0.5) : Colors
+              .white,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisSize: MainAxisSize.min,
@@ -34,38 +45,38 @@ class CardEventUpcoming extends StatelessWidget {
               ClipRRect(
                 borderRadius: BorderRadius.circular(15),
                 child:
-                    event.bannerUrl != null && event.bannerUrl!.isNotEmpty
-                        ? Image.network(
-                          event.bannerUrl ?? '',
-                          width: size.width * 0.5,
-                          height: size.height * 0.2,
-                          fit: BoxFit.cover,
-                          loadingBuilder: (context, child, loadingProgress) {
-                            if (loadingProgress == null) return child;
+                event.bannerUrl != null && event.bannerUrl!.isNotEmpty
+                    ? Image.network(
+                  event.bannerUrl ?? '',
+                  width: size.width * 0.5,
+                  height: size.height * 0.2,
+                  fit: BoxFit.cover,
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) return child;
 
-                            return Center(
-                              child: CircularProgressIndicator(
-                                color: ThemeManager.primaryColor,
-                              ),
-                            );
-                          },
-                          errorBuilder: (context, error, stackTrace) {
-                            return Icon(Icons.error, color: Colors.red);
-                          },
-                        )
-                        : (event.templateIndex != null)
-                        ? Image.asset(
-                          'assets/images/template${event.templateIndex}.jpg',
-                          width: size.width * 0.5,
-                          height: size.height * 0.2,
-                          fit: BoxFit.cover,
-                        )
-                        : Image.network(
-                          'https://i.pinimg.com/1200x/2b/7f/a9/2b7fa911454725f7fd5b9d2f4dd41046.jpg',
-                          width: size.width * 0.5,
-                          height: size.height * 0.2,
-                          fit: BoxFit.cover,
-                        ),
+                    return Center(
+                      child: CircularProgressIndicator(
+                        color: ThemeManager.primaryColor,
+                      ),
+                    );
+                  },
+                  errorBuilder: (context, error, stackTrace) {
+                    return Icon(Icons.error, color: Colors.red);
+                  },
+                )
+                    : (event.templateIndex != null)
+                    ? Image.asset(
+                  'assets/images/template${event.templateIndex}.jpg',
+                  width: size.width * 0.5,
+                  height: size.height * 0.2,
+                  fit: BoxFit.cover,
+                )
+                    : Image.network(
+                  'https://i.pinimg.com/1200x/2b/7f/a9/2b7fa911454725f7fd5b9d2f4dd41046.jpg',
+                  width: size.width * 0.5,
+                  height: size.height * 0.2,
+                  fit: BoxFit.cover,
+                ),
               ),
               Row(
                 mainAxisSize: MainAxisSize.min,
@@ -119,11 +130,14 @@ class CardEventUpcoming extends StatelessWidget {
                           context.read<EventCubit>().toggleInterestedEvent(event);
                         },
                         icon: Icon(
-                          isInterested ? Icons.star : Icons.star_border_outlined,
+                          isInterested ? Icons.star : Icons
+                              .star_border_outlined,
                           color:
-                              isInterested
-                                  ? Colors.amber
-                                  : ThemeManager.primaryColor,
+                          isInterested
+                              ? Colors.amber
+                              : (isDark)
+                              ? ThemeManager.lightPinkColor
+                              : ThemeManager.primaryColor,
                           size: 35,
                         ),
                       );
