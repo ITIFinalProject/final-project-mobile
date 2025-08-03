@@ -1,6 +1,7 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
 import 'intl/messages_all.dart';
 
 // **************************************************************************
@@ -134,9 +135,149 @@ class S {
     return Intl.message('Events', name: 'events', desc: '', args: []);
   }
 
+  /// `Edit Event`
+  String get edit_event {
+    return Intl.message('Edit Event', name: 'edit_event', desc: '', args: []);
+  }
+
+  /// `Event Updated Successfully`
+  String get event_updated_successfully {
+    return Intl.message(
+      'Event Updated Successfully',
+      name: 'event_updated_successfully',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `End date/time must be after start date/time`
+  String get end_datetime_must_be_after_start_datetime {
+    return Intl.message(
+      'End date/time must be after start date/time',
+      name: 'end_datetime_must_be_after_start_datetime',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `No Events`
   String get no_events {
     return Intl.message('No Events', name: 'no_events', desc: '', args: []);
+  }
+
+  /// `Start: {start}`
+  String start_text(Object start) {
+    return Intl.message(
+      'Start: $start',
+      name: 'start_text',
+      desc: '',
+      args: [start],
+    );
+  }
+
+  /// `Please enter number of attendees`
+  String get please_enter_number_of_attendees {
+    return Intl.message(
+      'Please enter number of attendees',
+      name: 'please_enter_number_of_attendees',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter host name`
+  String get please_enter_host_name {
+    return Intl.message(
+      'Please enter host name',
+      name: 'please_enter_host_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You haven’t created any events yet.`
+  String get no_created_events {
+    return Intl.message(
+      'You haven’t created any events yet.',
+      name: 'no_created_events',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No Events Created`
+  String get no_events_created {
+    return Intl.message(
+      'No Events Created',
+      name: 'no_events_created',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Are you sure you want to delete this event?`
+  String get confirm_delete_event {
+    return Intl.message(
+      'Are you sure you want to delete this event?',
+      name: 'confirm_delete_event',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delete Event`
+  String get delete_event {
+    return Intl.message(
+      'Delete Event',
+      name: 'delete_event',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ok`
+  String get ok {
+    return Intl.message('Ok', name: 'ok', desc: '', args: []);
+  }
+
+  /// `Interested Events`
+  String get interestedEvents {
+    return Intl.message(
+      'Interested Events',
+      name: 'interestedEvents',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Joined Successfully`
+  String get joinedSuccessfully {
+    return Intl.message(
+      'Joined Successfully',
+      name: 'joinedSuccessfully',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No interested events yet.`
+  String get noInterestedEvents {
+    return Intl.message(
+      'No interested events yet.',
+      name: 'noInterestedEvents',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Event Deleted Successfully`
+  String get eventDeletedSuccessfully {
+    return Intl.message(
+      'Event Deleted Successfully',
+      name: 'eventDeletedSuccessfully',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Update Event`
@@ -274,6 +415,16 @@ class S {
     );
   }
 
+  /// `Please Select event category`
+  String get pleaseselect_event_category {
+    return Intl.message(
+      'Please Select event category',
+      name: 'pleaseselect_event_category',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Event Description`
   String get event_description {
     return Intl.message(
@@ -339,11 +490,31 @@ class S {
     return Intl.message('Public', name: 'public', desc: '', args: []);
   }
 
+  /// `Pick Location`
+  String get pick_location {
+    return Intl.message(
+      'Pick Location',
+      name: 'pick_location',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Event Timing`
   String get event_timing {
     return Intl.message(
       'Event Timing',
       name: 'event_timing',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `4 of 5: Add Guests`
+  String get addguests {
+    return Intl.message(
+      '4 of 5: Add Guests',
+      name: 'addguests',
       desc: '',
       args: [],
     );
@@ -359,9 +530,184 @@ class S {
     return Intl.message('Start Time', name: 'start_time', desc: '', args: []);
   }
 
+  /// `Search contacts`
+  String get search_contacts {
+    return Intl.message(
+      'Search contacts',
+      name: 'search_contacts',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No number`
+  String get no_number {
+    return Intl.message('No number', name: 'no_number', desc: '', args: []);
+  }
+
+  /// `Done`
+  String get done {
+    return Intl.message('Done', name: 'done', desc: '', args: []);
+  }
+
+  /// `See All`
+  String get see_all {
+    return Intl.message('See All', name: 'see_all', desc: '', args: []);
+  }
+
+  /// `Next: Review & Send`
+  String get next_review_send {
+    return Intl.message(
+      'Next: Review & Send',
+      name: 'next_review_send',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Invitations sent successfully`
+  String get invitations_sent {
+    return Intl.message(
+      'Invitations sent successfully',
+      name: 'invitations_sent',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Create Contact`
+  String get create_contact {
+    return Intl.message(
+      'Create Contact',
+      name: 'create_contact',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Guest Email`
+  String get guest_email {
+    return Intl.message('Guest Email', name: 'guest_email', desc: '', args: []);
+  }
+
+  /// `Capacity reached`
+  String get capacity_reached {
+    return Intl.message(
+      'Capacity reached',
+      name: 'capacity_reached',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cancel`
+  String get cancel {
+    return Intl.message('Cancel', name: 'cancel', desc: '', args: []);
+  }
+
+  /// `Please add at least one guest`
+  String get please_add_one_guest {
+    return Intl.message(
+      'Please add at least one guest',
+      name: 'please_add_one_guest',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No valid registered users found.`
+  String get no_valid_users_found {
+    return Intl.message(
+      'No valid registered users found.',
+      name: 'no_valid_users_found',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Error fetching guest data`
+  String get error_fetching_guest_data {
+    return Intl.message(
+      'Error fetching guest data',
+      name: 'error_fetching_guest_data',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Save`
+  String get save {
+    return Intl.message('Save', name: 'save', desc: '', args: []);
+  }
+
+  /// `Failed to create event`
+  String get failed_to_create_event {
+    return Intl.message(
+      'Failed to create event',
+      name: 'failed_to_create_event',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `2 of 5: Event Details`
+  String get event_details_step {
+    return Intl.message(
+      '2 of 5: Event Details',
+      name: 'event_details_step',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `End Date`
   String get end_date {
     return Intl.message('End Date', name: 'end_date', desc: '', args: []);
+  }
+
+  /// `please enter your start date`
+  String get please_enter_your_start_date {
+    return Intl.message(
+      'please enter your start date',
+      name: 'please_enter_your_start_date',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `please enter your end date`
+  String get please_enter_your_end_date {
+    return Intl.message(
+      'please enter your end date',
+      name: 'please_enter_your_end_date',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `please enter your start time`
+  String get please_enter_your_start_time {
+    return Intl.message(
+      'please enter your start time',
+      name: 'please_enter_your_start_time',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `please enter your end time`
+  String get please_enter_your_end_time {
+    return Intl.message(
+      'please enter your end time',
+      name: 'please_enter_your_end_time',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `yyyy-MM-dd`
+  String get yyyymmdd {
+    return Intl.message('yyyy-MM-dd', name: 'yyyymmdd', desc: '', args: []);
   }
 
   /// `End Time`
@@ -372,6 +718,51 @@ class S {
   /// `Location`
   String get location {
     return Intl.message('Location', name: 'location', desc: '', args: []);
+  }
+
+  /// `Enter Event Location`
+  String get enter_event_location {
+    return Intl.message(
+      'Enter Event Location',
+      name: 'enter_event_location',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter your event Location`
+  String get please_enter_your_event_location {
+    return Intl.message(
+      'Please enter your event Location',
+      name: 'please_enter_your_event_location',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Category`
+  String get category {
+    return Intl.message('Category', name: 'category', desc: '', args: []);
+  }
+
+  /// `Select Category`
+  String get select_category {
+    return Intl.message(
+      'Select Category',
+      name: 'select_category',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please select category`
+  String get please_select_category {
+    return Intl.message(
+      'Please select category',
+      name: 'please_select_category',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Open Google maps`
@@ -639,6 +1030,31 @@ class S {
     return Intl.message('My Events', name: 'my_events', desc: '', args: []);
   }
 
+  /// `Capacity`
+  String get capacity {
+    return Intl.message('Capacity', name: 'capacity', desc: '', args: []);
+  }
+
+  /// `Please enter capacity`
+  String get please_enter_capacity {
+    return Intl.message(
+      'Please enter capacity',
+      name: 'please_enter_capacity',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter valid number`
+  String get enter_valid_number {
+    return Intl.message(
+      'Enter valid number',
+      name: 'enter_valid_number',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Edit`
   String get edit {
     return Intl.message('Edit', name: 'edit', desc: '', args: []);
@@ -839,6 +1255,56 @@ class S {
     return Intl.message(
       '1 of 5: Customize',
       name: 'customize_step_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Create an event and make some memories`
+  String get createEventAndMakeMemories {
+    return Intl.message(
+      'Create an event and make some memories',
+      name: 'createEventAndMakeMemories',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No Events for that Day`
+  String get noEventsForThatDay {
+    return Intl.message(
+      'No Events for that Day',
+      name: 'noEventsForThatDay',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Event Memories`
+  String get eventMemories {
+    return Intl.message(
+      'Event Memories',
+      name: 'eventMemories',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No ended events yet.`
+  String get noEndedEventsYet {
+    return Intl.message(
+      'No ended events yet.',
+      name: 'noEndedEventsYet',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Event Memory`
+  String get eventMemory {
+    return Intl.message(
+      'Event Memory',
+      name: 'eventMemory',
       desc: '',
       args: [],
     );

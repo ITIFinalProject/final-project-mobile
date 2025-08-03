@@ -20,8 +20,12 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'ar';
 
+  static String m0(start) => "البداية: ${start}";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
+
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+    "addguests": MessageLookupByLibrary.simpleMessage("٤ من ٥: أضف الضيوف"),
     "address": MessageLookupByLibrary.simpleMessage("العنوان"),
     "ai_chat": MessageLookupByLibrary.simpleMessage(
       "دردشة مع الذكاء الاصطناعى",
@@ -30,6 +34,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "اسأل الذكاء الاصطناعى عن اى شئ",
     ),
     "attendees": MessageLookupByLibrary.simpleMessage("الحضور"),
+    "cancel": MessageLookupByLibrary.simpleMessage("إلغاء"),
+    "capacity": MessageLookupByLibrary.simpleMessage("السعة"),
+    "capacity_reached": MessageLookupByLibrary.simpleMessage(
+      "تم الوصول إلى الحد الأقصى للسعة",
+    ),
+    "category": MessageLookupByLibrary.simpleMessage("الفئة"),
     "change_language": MessageLookupByLibrary.simpleMessage("تغيير اللغة"),
     "change_password": MessageLookupByLibrary.simpleMessage(
       "تغيير كلمة المرور",
@@ -40,10 +50,17 @@ class MessageLookup extends MessageLookupByLibrary {
       "اختر من المعرض",
     ),
     "choose_template": MessageLookupByLibrary.simpleMessage("اختر قالبًا"),
+    "confirm_delete_event": MessageLookupByLibrary.simpleMessage(
+      "هل أنت متأكد أنك تريد حذف هذه الفعالية؟",
+    ),
     "confirm_password": MessageLookupByLibrary.simpleMessage(
       "تأكيد كلمة المرور",
     ),
     "contact_us": MessageLookupByLibrary.simpleMessage("اتصل بنا"),
+    "createEventAndMakeMemories": MessageLookupByLibrary.simpleMessage(
+      "أنشئ فعالية واصنع بعض الذكريات",
+    ),
+    "create_contact": MessageLookupByLibrary.simpleMessage("إنشاء جهة اتصال"),
     "create_event": MessageLookupByLibrary.simpleMessage("انشئ فعاليه"),
     "culturalAndarts": MessageLookupByLibrary.simpleMessage("ثقافة وفنون"),
     "customize": MessageLookupByLibrary.simpleMessage("تخصيص"),
@@ -51,14 +68,24 @@ class MessageLookup extends MessageLookupByLibrary {
       "١ من ٥: التخصيص",
     ),
     "delete": MessageLookupByLibrary.simpleMessage("حذف"),
+    "delete_event": MessageLookupByLibrary.simpleMessage("حذف الفعالية"),
+    "done": MessageLookupByLibrary.simpleMessage("تم"),
     "edit": MessageLookupByLibrary.simpleMessage("تعديل"),
+    "edit_event": MessageLookupByLibrary.simpleMessage("تعديل الفعالية"),
     "edit_profile": MessageLookupByLibrary.simpleMessage("تعديل الملف الشخصي"),
     "educationalAndbusiness": MessageLookupByLibrary.simpleMessage(
       "تعليمي وأعمال",
     ),
     "email": MessageLookupByLibrary.simpleMessage("البريد الإلكتروني"),
     "end_date": MessageLookupByLibrary.simpleMessage("تاريخ الانتهاء"),
+    "end_datetime_must_be_after_start_datetime":
+        MessageLookupByLibrary.simpleMessage(
+          "يجب ان يكون تاريخ/وقت الانتهاء بعد تاريخ/وقت البدء",
+        ),
     "end_time": MessageLookupByLibrary.simpleMessage("وقت الانتهاء"),
+    "enter_event_location": MessageLookupByLibrary.simpleMessage(
+      "ادخل مكان الفعالية",
+    ),
     "enter_event_title": MessageLookupByLibrary.simpleMessage(
       "أدخل عنوان الفعالية",
     ),
@@ -72,19 +99,49 @@ class MessageLookup extends MessageLookupByLibrary {
     "enter_old_password1": MessageLookupByLibrary.simpleMessage(
       "أدخل كلمة المرور القديمة",
     ),
+    "enter_valid_number": MessageLookupByLibrary.simpleMessage("ادخل رقم صالح"),
     "entertainment": MessageLookupByLibrary.simpleMessage("ترفيه"),
+    "error_fetching_guest_data": MessageLookupByLibrary.simpleMessage(
+      "حدث خطأ أثناء جلب بيانات الضيوف",
+    ),
+    "eventDeletedSuccessfully": MessageLookupByLibrary.simpleMessage(
+      "تم حذف الفعالية بنجاح",
+    ),
+    "eventMemories": MessageLookupByLibrary.simpleMessage("ذكريات الفعالية"),
+    "eventMemory": MessageLookupByLibrary.simpleMessage("ذكرى الفعالية"),
     "event_category": MessageLookupByLibrary.simpleMessage("فئة الفعالية"),
     "event_description": MessageLookupByLibrary.simpleMessage("وصف الفعالية"),
+    "event_details_step": MessageLookupByLibrary.simpleMessage(
+      "٢ من ٥: تفاصيل الحدث",
+    ),
     "event_memories": MessageLookupByLibrary.simpleMessage("ذكريات الفعاليات"),
     "event_timing": MessageLookupByLibrary.simpleMessage("موعد الفعالية"),
     "event_title": MessageLookupByLibrary.simpleMessage("عنوان الفعالية"),
     "event_type": MessageLookupByLibrary.simpleMessage("نوع الفعالية"),
+    "event_updated_successfully": MessageLookupByLibrary.simpleMessage(
+      "تم تحديث الفعالية بنجاح",
+    ),
     "events": MessageLookupByLibrary.simpleMessage("الفعاليات"),
+    "failed_to_create_event": MessageLookupByLibrary.simpleMessage(
+      "فشل في إنشاء الحدث",
+    ),
     "forgot_password": MessageLookupByLibrary.simpleMessage(
       "نسيت كلمة المرور؟",
     ),
+    "guest_email": MessageLookupByLibrary.simpleMessage(
+      "البريد الإلكتروني للضيف",
+    ),
     "hosted_by": MessageLookupByLibrary.simpleMessage("بواسطة"),
+    "interestedEvents": MessageLookupByLibrary.simpleMessage(
+      "الفعاليات المهتم بها",
+    ),
+    "invitations_sent": MessageLookupByLibrary.simpleMessage(
+      "تم إرسال الدعوات بنجاح",
+    ),
     "join": MessageLookupByLibrary.simpleMessage("انضم"),
+    "joinedSuccessfully": MessageLookupByLibrary.simpleMessage(
+      "تم الانضمام بنجاح",
+    ),
     "location": MessageLookupByLibrary.simpleMessage("الموقع"),
     "login": MessageLookupByLibrary.simpleMessage("تسجيل الدخول"),
     "login_required_message": MessageLookupByLibrary.simpleMessage(
@@ -98,10 +155,28 @@ class MessageLookup extends MessageLookupByLibrary {
       "التالي: تفاصيل الفعالية",
     ),
     "next_preview": MessageLookupByLibrary.simpleMessage("التالي: المعاينة"),
+    "next_review_send": MessageLookupByLibrary.simpleMessage(
+      "التالي: المراجعة والإرسال",
+    ),
+    "noEndedEventsYet": MessageLookupByLibrary.simpleMessage(
+      "لا توجد فعاليات منتهية بعد.",
+    ),
+    "noEventsForThatDay": MessageLookupByLibrary.simpleMessage(
+      "لا توجد فعاليات لهذا اليوم",
+    ),
+    "noInterestedEvents": MessageLookupByLibrary.simpleMessage(
+      "لا توجد فعاليات مهتم بها حتى الآن.",
+    ),
+    "no_created_events": MessageLookupByLibrary.simpleMessage(
+      "لم تقم بإنشاء أي أحداث بعد.",
+    ),
     "no_ended_events_yet": MessageLookupByLibrary.simpleMessage(
       "لا توجد فعاليات منتهية بعد",
     ),
     "no_events": MessageLookupByLibrary.simpleMessage("لا توجد فعاليات"),
+    "no_events_created": MessageLookupByLibrary.simpleMessage(
+      "لم يتم إنشاء أي فعاليات",
+    ),
     "no_events_desc": MessageLookupByLibrary.simpleMessage(
       "انشئ حدث وكون بعض الذكريات",
     ),
@@ -114,11 +189,16 @@ class MessageLookup extends MessageLookupByLibrary {
     "no_messages_yet": MessageLookupByLibrary.simpleMessage(
       "لا توجد رسائل بعد",
     ),
+    "no_number": MessageLookupByLibrary.simpleMessage("لا يوجد رقم"),
     "no_results_found": MessageLookupByLibrary.simpleMessage("لا توجد نتائج"),
     "no_user_data_found": MessageLookupByLibrary.simpleMessage(
       "لم يتم العثور على بيانات المستخدم",
     ),
+    "no_valid_users_found": MessageLookupByLibrary.simpleMessage(
+      "لم يتم العثور على مستخدمين مسجلين صالحين.",
+    ),
     "notification": MessageLookupByLibrary.simpleMessage("الإشعارات"),
+    "ok": MessageLookupByLibrary.simpleMessage("حسنًا"),
     "open_google_maps": MessageLookupByLibrary.simpleMessage("افتح خرائط جوجل"),
     "password_min_length": MessageLookupByLibrary.simpleMessage(
       "كلمة المرور يجب أن تكون على الأقل 6 أحرف",
@@ -130,14 +210,48 @@ class MessageLookup extends MessageLookupByLibrary {
       "كلمتا المرور غير متطابقتين",
     ),
     "phone": MessageLookupByLibrary.simpleMessage("رقم الهاتف"),
+    "pick_location": MessageLookupByLibrary.simpleMessage("اختيار الموقع"),
+    "please_add_one_guest": MessageLookupByLibrary.simpleMessage(
+      "يرجى إضافة ضيف واحد على الأقل",
+    ),
+    "please_enter_capacity": MessageLookupByLibrary.simpleMessage(
+      "من فضلك ادخل عدد الحضور",
+    ),
+    "please_enter_host_name": MessageLookupByLibrary.simpleMessage(
+      "من فضلك أدخل اسم المنظم",
+    ),
+    "please_enter_number_of_attendees": MessageLookupByLibrary.simpleMessage(
+      "من فضلك أدخل عدد الحضور",
+    ),
+    "please_enter_your_end_date": MessageLookupByLibrary.simpleMessage(
+      "من فضلك ادخل تاريخ الانتهاء",
+    ),
+    "please_enter_your_end_time": MessageLookupByLibrary.simpleMessage(
+      "من فضلك ادخل وقت الانتهاء",
+    ),
     "please_enter_your_event_description": MessageLookupByLibrary.simpleMessage(
       "من فضلك ادخل وصف الفعالية",
+    ),
+    "please_enter_your_event_location": MessageLookupByLibrary.simpleMessage(
+      "من فضلك ادخل مكان الفعالية",
     ),
     "please_enter_your_event_title": MessageLookupByLibrary.simpleMessage(
       "من فضلك ادخل اسم الفعالية",
     ),
+    "please_enter_your_start_date": MessageLookupByLibrary.simpleMessage(
+      "من فضلك ادخل تاريخ البدء",
+    ),
+    "please_enter_your_start_time": MessageLookupByLibrary.simpleMessage(
+      "من فضلك ادخل وقت البدء",
+    ),
+    "please_select_category": MessageLookupByLibrary.simpleMessage(
+      "من فضلك اختر الفئة",
+    ),
     "please_select_event_type": MessageLookupByLibrary.simpleMessage(
       "من فضلك اختر نوع الفعالية",
+    ),
+    "pleaseselect_event_category": MessageLookupByLibrary.simpleMessage(
+      "من فضلك اختر فئة الفعالية",
     ),
     "private": MessageLookupByLibrary.simpleMessage("خاصة"),
     "profile_updated_successfully": MessageLookupByLibrary.simpleMessage(
@@ -148,9 +262,15 @@ class MessageLookup extends MessageLookupByLibrary {
       "الفعاليات المقترحة",
     ),
     "register": MessageLookupByLibrary.simpleMessage("إنشاء حساب"),
+    "save": MessageLookupByLibrary.simpleMessage("حفظ"),
     "save_changes": MessageLookupByLibrary.simpleMessage("حفظ التغييرات"),
     "save_password": MessageLookupByLibrary.simpleMessage("حفظ كلمة المرور"),
     "search": MessageLookupByLibrary.simpleMessage("بحث"),
+    "search_contacts": MessageLookupByLibrary.simpleMessage(
+      "ابحث عن جهات الاتصال",
+    ),
+    "see_all": MessageLookupByLibrary.simpleMessage("عرض الكل"),
+    "select_category": MessageLookupByLibrary.simpleMessage("اختر الفئة"),
     "select_event_category": MessageLookupByLibrary.simpleMessage(
       "اختر فئة الفعالية",
     ),
@@ -163,6 +283,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "sign_out": MessageLookupByLibrary.simpleMessage("تسجيل الخروج"),
     "sportsAndfitness": MessageLookupByLibrary.simpleMessage("رياضة ولياقة"),
     "start_date": MessageLookupByLibrary.simpleMessage("تاريخ البدء"),
+    "start_text": m0,
     "start_time": MessageLookupByLibrary.simpleMessage("وقت البدء"),
     "step_2_of_5_event_details": MessageLookupByLibrary.simpleMessage(
       "2 من 5: تفاصيل الفعالية",
@@ -195,5 +316,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "your_event_cover_here": MessageLookupByLibrary.simpleMessage(
       "غلاف الفعالية هنا",
     ),
+    "yyyymmdd": MessageLookupByLibrary.simpleMessage("عام-شهر-يوم"),
   };
 }

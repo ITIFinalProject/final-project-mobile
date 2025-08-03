@@ -1,22 +1,19 @@
 
 import 'package:eventify_app/core/theme.dart';
-import 'package:eventify_app/features/add_event/edit%20event/edit_event_view.dart'; // Corrected import syntax for spaces
 import 'package:eventify_app/features/events/widgets/card_no_events.dart';
 import 'package:eventify_app/features/events/widgets/event_card.dart';
 import 'package:eventify_app/features/profile/cubit/theme_cubit.dart';
+import 'package:eventify_app/generated/l10n.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:eventify_app/generated/l10n.dart';
 
-import '../../core/routes.dart';
 import '../../main.dart'; // Assuming routeObserver is defined in main.dart
-import '../add_memory/view/add_memory.dart';
+import '../../models.dart/event_model.dart'; // Make sure EventModel is imported
 import 'event_cubit/event_cubit.dart';
 import 'event_cubit/event_state.dart';
-import '../../models.dart/event_model.dart'; // Make sure EventModel is imported
 
 
 class EventsView extends StatefulWidget {
@@ -165,7 +162,9 @@ class _EventsViewState extends State<EventsView> with RouteAware, WidgetsBinding
                 listener: (context, state) {
                   if (state is EventJoinSuccess) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text("Joined Successfully")),
+                     SnackBar(content: Text(S
+                         .of(context)
+                         .joinedSuccessfully)),
                     );
                     // Crucially, refetch all events to update the list
                     _fetchData(); // Trigger full refresh
@@ -179,7 +178,9 @@ class _EventsViewState extends State<EventsView> with RouteAware, WidgetsBinding
                     );
                   } else if (state is EventDeleted) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text("Event Deleted Successfully")),
+                      SnackBar(content: Text(S
+                          .of(context)
+                          .eventDeletedSuccessfully)),
                     );
                     _fetchData(); // Refresh data after deletion
                     Navigator.pop(context); // Pop the delete dialog if it was showing
@@ -262,8 +263,12 @@ class _EventsViewState extends State<EventsView> with RouteAware, WidgetsBinding
 
                   if (finalFilteredEvents.isEmpty) {
                     return CardNoEvents(
-                      text: 'Create an event and make some memories',
-                      title: 'No Events for that Day',
+                      text: S
+                          .of(context)
+                          .createEventAndMakeMemories,
+                      title: S
+                          .of(context)
+                          .noEventsForThatDay,
                     );
                   }
 
@@ -336,20 +341,28 @@ class _EventsViewState extends State<EventsView> with RouteAware, WidgetsBinding
                 return const Center(child: CircularProgressIndicator());
               }
               return AlertDialog(
-                content: const Text('Are you sure you want to delete this event?'),
-                title: const Text('Delete Event'),
+                content: Text(S
+                    .of(context)
+                    .confirm_delete_event),
+                title: Text(S
+                    .of(context)
+                    .delete_event),
                 actions: [
                   TextButton(
                     onPressed: () {
                       innerContext.read<EventCubit>().deleteEvent(eventId);
                     },
-                    child: const Text('Delete', style: TextStyle(color: Colors.red)),
+                    child: Text(S
+                        .of(context)
+                        .delete, style: TextStyle(color: Colors.red)),
                   ),
                   TextButton(
                     onPressed: () {
                       Navigator.of(innerContext).pop();
                     },
-                    child: const Text('Cancel'),
+                    child: Text(S
+                        .of(context)
+                        .cancel),
                   ),
                 ],
               );

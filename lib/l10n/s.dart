@@ -157,11 +157,101 @@ abstract class S {
   /// **'Events'**
   String get events;
 
+  /// No description provided for @edit_event.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Event'**
+  String get edit_event;
+
+  /// No description provided for @event_updated_successfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Event Updated Successfully'**
+  String get event_updated_successfully;
+
+  /// No description provided for @end_datetime_must_be_after_start_datetime.
+  ///
+  /// In en, this message translates to:
+  /// **'End date/time must be after start date/time'**
+  String get end_datetime_must_be_after_start_datetime;
+
   /// No description provided for @no_events.
   ///
   /// In en, this message translates to:
   /// **'No Events'**
   String get no_events;
+
+  /// No description provided for @start_text.
+  ///
+  /// In en, this message translates to:
+  /// **'Start: {start}'**
+  String start_text(Object start);
+
+  /// No description provided for @please_enter_number_of_attendees.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter number of attendees'**
+  String get please_enter_number_of_attendees;
+
+  /// No description provided for @please_enter_host_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter host name'**
+  String get please_enter_host_name;
+
+  /// No description provided for @no_created_events.
+  ///
+  /// In en, this message translates to:
+  /// **'You haven’t created any events yet.'**
+  String get no_created_events;
+
+  /// No description provided for @no_events_created.
+  ///
+  /// In en, this message translates to:
+  /// **'No Events Created'**
+  String get no_events_created;
+
+  /// No description provided for @confirm_delete_event.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this event?'**
+  String get confirm_delete_event;
+
+  /// No description provided for @delete_event.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Event'**
+  String get delete_event;
+
+  /// No description provided for @ok.
+  ///
+  /// In en, this message translates to:
+  /// **'Ok'**
+  String get ok;
+
+  /// No description provided for @interestedEvents.
+  ///
+  /// In en, this message translates to:
+  /// **'Interested Events'**
+  String get interestedEvents;
+
+  /// No description provided for @joinedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Joined Successfully'**
+  String get joinedSuccessfully;
+
+  /// No description provided for @noInterestedEvents.
+  ///
+  /// In en, this message translates to:
+  /// **'No interested events yet.'**
+  String get noInterestedEvents;
+
+  /// No description provided for @eventDeletedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Event Deleted Successfully'**
+  String get eventDeletedSuccessfully;
 
   /// No description provided for @update_event.
   ///
@@ -253,6 +343,12 @@ abstract class S {
   /// **'Select event category'**
   String get select_event_category;
 
+  /// No description provided for @pleaseselect_event_category.
+  ///
+  /// In en, this message translates to:
+  /// **'Please Select event category'**
+  String get pleaseselect_event_category;
+
   /// No description provided for @event_description.
   ///
   /// In en, this message translates to:
@@ -301,11 +397,23 @@ abstract class S {
   /// **'Public'**
   String get public;
 
+  /// No description provided for @pick_location.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick Location'**
+  String get pick_location;
+
   /// No description provided for @event_timing.
   ///
   /// In en, this message translates to:
   /// **'Event Timing'**
   String get event_timing;
+
+  /// No description provided for @addguests.
+  ///
+  /// In en, this message translates to:
+  /// **'4 of 5: Add Guests'**
+  String get addguests;
 
   /// No description provided for @start_date.
   ///
@@ -319,11 +427,137 @@ abstract class S {
   /// **'Start Time'**
   String get start_time;
 
+  /// No description provided for @search_contacts.
+  ///
+  /// In en, this message translates to:
+  /// **'Search contacts'**
+  String get search_contacts;
+
+  /// No description provided for @no_number.
+  ///
+  /// In en, this message translates to:
+  /// **'No number'**
+  String get no_number;
+
+  /// No description provided for @done.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get done;
+
+  /// No description provided for @see_all.
+  ///
+  /// In en, this message translates to:
+  /// **'See All'**
+  String get see_all;
+
+  /// No description provided for @next_review_send.
+  ///
+  /// In en, this message translates to:
+  /// **'Next: Review & Send'**
+  String get next_review_send;
+
+  /// No description provided for @invitations_sent.
+  ///
+  /// In en, this message translates to:
+  /// **'Invitations sent successfully'**
+  String get invitations_sent;
+
+  /// No description provided for @create_contact.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Contact'**
+  String get create_contact;
+
+  /// No description provided for @guest_email.
+  ///
+  /// In en, this message translates to:
+  /// **'Guest Email'**
+  String get guest_email;
+
+  /// No description provided for @capacity_reached.
+  ///
+  /// In en, this message translates to:
+  /// **'Capacity reached'**
+  String get capacity_reached;
+
+  /// No description provided for @cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
+
+  /// No description provided for @please_add_one_guest.
+  ///
+  /// In en, this message translates to:
+  /// **'Please add at least one guest'**
+  String get please_add_one_guest;
+
+  /// No description provided for @no_valid_users_found.
+  ///
+  /// In en, this message translates to:
+  /// **'No valid registered users found.'**
+  String get no_valid_users_found;
+
+  /// No description provided for @error_fetching_guest_data.
+  ///
+  /// In en, this message translates to:
+  /// **'Error fetching guest data'**
+  String get error_fetching_guest_data;
+
+  /// No description provided for @save.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get save;
+
+  /// No description provided for @failed_to_create_event.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to create event'**
+  String get failed_to_create_event;
+
+  /// No description provided for @event_details_step.
+  ///
+  /// In en, this message translates to:
+  /// **'2 of 5: Event Details'**
+  String get event_details_step;
+
   /// No description provided for @end_date.
   ///
   /// In en, this message translates to:
   /// **'End Date'**
   String get end_date;
+
+  /// No description provided for @please_enter_your_start_date.
+  ///
+  /// In en, this message translates to:
+  /// **'please enter your start date'**
+  String get please_enter_your_start_date;
+
+  /// No description provided for @please_enter_your_end_date.
+  ///
+  /// In en, this message translates to:
+  /// **'please enter your end date'**
+  String get please_enter_your_end_date;
+
+  /// No description provided for @please_enter_your_start_time.
+  ///
+  /// In en, this message translates to:
+  /// **'please enter your start time'**
+  String get please_enter_your_start_time;
+
+  /// No description provided for @please_enter_your_end_time.
+  ///
+  /// In en, this message translates to:
+  /// **'please enter your end time'**
+  String get please_enter_your_end_time;
+
+  /// No description provided for @yyyymmdd.
+  ///
+  /// In en, this message translates to:
+  /// **'yyyy-MM-dd'**
+  String get yyyymmdd;
 
   /// No description provided for @end_time.
   ///
@@ -336,6 +570,36 @@ abstract class S {
   /// In en, this message translates to:
   /// **'Location'**
   String get location;
+
+  /// No description provided for @enter_event_location.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter Event Location'**
+  String get enter_event_location;
+
+  /// No description provided for @please_enter_your_event_location.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your event Location'**
+  String get please_enter_your_event_location;
+
+  /// No description provided for @category.
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get category;
+
+  /// No description provided for @select_category.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Category'**
+  String get select_category;
+
+  /// No description provided for @please_select_category.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select category'**
+  String get please_select_category;
 
   /// No description provided for @open_google_maps.
   ///
@@ -529,6 +793,24 @@ abstract class S {
   /// **'My Events'**
   String get my_events;
 
+  /// No description provided for @capacity.
+  ///
+  /// In en, this message translates to:
+  /// **'Capacity'**
+  String get capacity;
+
+  /// No description provided for @please_enter_capacity.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter capacity'**
+  String get please_enter_capacity;
+
+  /// No description provided for @enter_valid_number.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter valid number'**
+  String get enter_valid_number;
+
   /// No description provided for @edit.
   ///
   /// In en, this message translates to:
@@ -666,6 +948,36 @@ abstract class S {
   /// In en, this message translates to:
   /// **'1 of 5: Customize'**
   String get customize_step_title;
+
+  /// No description provided for @createEventAndMakeMemories.
+  ///
+  /// In en, this message translates to:
+  /// **'Create an event and make some memories'**
+  String get createEventAndMakeMemories;
+
+  /// No description provided for @noEventsForThatDay.
+  ///
+  /// In en, this message translates to:
+  /// **'No Events for that Day'**
+  String get noEventsForThatDay;
+
+  /// No description provided for @eventMemories.
+  ///
+  /// In en, this message translates to:
+  /// **'Event Memories'**
+  String get eventMemories;
+
+  /// No description provided for @noEndedEventsYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No ended events yet.'**
+  String get noEndedEventsYet;
+
+  /// No description provided for @eventMemory.
+  ///
+  /// In en, this message translates to:
+  /// **'Event Memory'**
+  String get eventMemory;
 }
 
 class _SDelegate extends LocalizationsDelegate<S> {
