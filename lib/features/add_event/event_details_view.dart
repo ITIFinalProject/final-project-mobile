@@ -4,6 +4,7 @@ import 'package:eventify_app/core/routes.dart';
 import 'package:eventify_app/features/add_event/create_contact.dart';
 import 'package:eventify_app/features/add_event/widgets/custom_text.dart';
 import 'package:eventify_app/features/add_event/widgets/custom_text_form_field.dart';
+import 'package:eventify_app/features/profile/cubit/theme_cubit.dart';
 import 'package:eventify_app/models.dart/event_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -65,6 +66,9 @@ class _EventDetailsViewState extends State<EventDetailsView> {
 
   @override
   Widget build(BuildContext context) {
+     final thememode = context.watch<ThemeCubit>().state;
+    final isDarkMode = thememode == ThemeMode.dark;
+
     return BlocConsumer<CreateEventCubit, CreateEventState>(
       listener: (context, state) {
         if (state is CreateEventSuccess) {
@@ -76,6 +80,7 @@ class _EventDetailsViewState extends State<EventDetailsView> {
         }
       },
       builder: (BuildContext context, CreateEventState state) {
+
         return Scaffold(
           appBar: AppBar(
             title: Text('2 of 5: Event Details'),
@@ -105,12 +110,17 @@ class _EventDetailsViewState extends State<EventDetailsView> {
                       value: selectedEventCategory,
                       style: TextStyle(
                         fontSize: 18,
-                        color: ThemeManager.primaryColor,
+                        color: isDarkMode?ThemeManager.secondaryColor.withOpacity(0.8): ThemeManager.primaryColor,
                       ),
                       borderRadius: BorderRadius.circular(15),
-                      // decoration: CustomInputDecoration.getDecoration(
-                      //   hintText: 'Select event category',
-                      // ),
+                      decoration: InputDecoration(
+                        hintStyle: TextStyle(
+                          color: isDarkMode
+                              ? ThemeManager.lightPinkColor
+                              : ThemeManager.primaryColor,
+                        ),
+                        hintText: 'Select event category',
+                      ),
 
                       items:
                           eventTypes.map((value) {
@@ -151,12 +161,15 @@ class _EventDetailsViewState extends State<EventDetailsView> {
                       value: selectedEventType,
                       style: TextStyle(
                         fontSize: 18,
-                        color: ThemeManager.primaryColor,
+                      color: isDarkMode?ThemeManager.secondaryColor.withOpacity(0.8): ThemeManager.primaryColor,
                       ),
                       borderRadius: BorderRadius.circular(15),
-                      // decoration: CustomInputDecoration.getDecoration(
-                      //   hintText: 'Select event type',
-                      // ),
+                      decoration:InputDecoration(
+                        hintStyle: TextStyle(
+                          color: isDarkMode?ThemeManager.lightPinkColor: ThemeManager.primaryColor,
+                        ),
+                        hintText: 'Select event type',
+                      ),
 
                       items:
                           ['Private', 'Public'].map((value) {

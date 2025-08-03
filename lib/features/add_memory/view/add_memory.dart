@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:eventify_app/features/add_memory/view/video_player_view.dart';
+import 'package:eventify_app/features/profile/cubit/theme_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -37,12 +38,17 @@ class _AddMemoryState extends State<AddMemory> {
 
   @override
   Widget build(BuildContext context) {
+     final thememode = context.watch<ThemeCubit>().state;
+    final isDarkMode = thememode == ThemeMode.dark;
+
     return Scaffold(
       appBar: AppBar(title: Text('${widget.event.title} Memories')),
       body: BlocBuilder<MemoryCubit, MemoryState>(
         builder: (context, state) {
           if (state is MemoryLoading) {
-            return const Center(child: CircularProgressIndicator());
+            return  Center(child: CircularProgressIndicator(
+              color: isDarkMode?ThemeManager.lightPinkColor: ThemeManager.primaryColor,
+            ));
           } else if (state is MemoriesLoaded) {
             final memories = state.memories;
             if (memories.isEmpty) {
@@ -86,7 +92,7 @@ class _AddMemoryState extends State<AddMemory> {
                       ? Card(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15),
-                      side: BorderSide(color: ThemeManager.secondaryColor)
+                      side: BorderSide(color:  isDarkMode? ThemeManager.lightPinkColor : ThemeManager.primaryColor),
                     ),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(15),
@@ -97,7 +103,7 @@ class _AddMemoryState extends State<AddMemory> {
                               if (loadingProgress == null) return child;
                               return Center(
                                 child: CircularProgressIndicator(
-                                  color: ThemeManager.primaryColor,
+                                  color: isDarkMode? ThemeManager.lightPinkColor : ThemeManager.primaryColor,
                                 ),
                               );
                             },
@@ -107,7 +113,7 @@ class _AddMemoryState extends State<AddMemory> {
                                 decoration: BoxDecoration(
                                   color: Colors.grey[200],
                                     borderRadius: BorderRadius.circular(15),
-                                    border: Border.all(color: ThemeManager.secondaryColor)
+                                    border: Border.all(color:isDarkMode?ThemeManager.lightPinkColor: ThemeManager.secondaryColor)
                                 ),
                                 child: const Icon(
                                   Icons.broken_image,
@@ -122,12 +128,12 @@ class _AddMemoryState extends State<AddMemory> {
                       : ClipRRect(
                         borderRadius: BorderRadius.circular(8),
                         child: Container(
-                          color: Colors.black, // Placeholder for video
-                          child: const Center(
+                          color:isDarkMode?ThemeManager.lightPinkColor: ThemeManager.primaryColor, // Placeholder for video
+                          child:  Center(
                             child: Icon(
                               Icons.videocam,
                               size: 48,
-                              color: Colors.white,
+                              color: isDarkMode?ThemeManager.primaryColor: ThemeManager.lightPinkColor,
                             ),
                           ),
                         ),
@@ -144,10 +150,11 @@ class _AddMemoryState extends State<AddMemory> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _pickImage,
-        backgroundColor: ThemeManager.primaryColor,
-        child: const Icon(
+        backgroundColor: isDarkMode?ThemeManager.secondaryColor
+        .withOpacity(0.8): ThemeManager.primaryColor ,
+        child:  Icon(
           Icons.add_a_photo_outlined,
-          color: Colors.white,
+          color: ThemeManager.lightPinkColor,
           size: 30,
         ),
       ),

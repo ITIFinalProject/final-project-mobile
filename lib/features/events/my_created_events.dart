@@ -111,9 +111,9 @@ class _MyCreatedEventsState extends State<MyCreatedEvents> with RouteAware {
             return AlertDialog(
               content: Text('Are you sure you want to delete this event' , style: TextStyle(
                   fontSize: 16,
-                color: ThemeManager.primaryColor
+                color: ThemeManager.secondaryColor
               ),),
-              title: Text('Delete Event'),
+              title: Text('Delete Event',style: TextStyle(color: ThemeManager.primaryColor),),
               actions: [
                 TextButton(onPressed: (){
                   context.read<EventCubit>().deleteEvent(eventId);

@@ -340,13 +340,13 @@ class _CardEventState extends State<CardEvent> {
                               widget.event.bannerUrl!.isNotEmpty
                           ? Image.network(
                             widget.event.bannerUrl!,
-                            height:size.height*0.06,
+                            height:size.height*0.2,
                             width: double.infinity,
                             fit: BoxFit.cover,
                             loadingBuilder: (context, child, loadingProgress) {
                               if (loadingProgress == null) return child;
                               return Container(
-                                height: size.height*0.06,
+                                height: size.height*0.2,
                                 alignment: Alignment.center,
                                 child: CircularProgressIndicator(
                                   color: ThemeManager.primaryColor,
@@ -355,7 +355,7 @@ class _CardEventState extends State<CardEvent> {
                             },
                             errorBuilder: (context, error, stackTrace) {
                               return Container(
-                                height: size.height*0.06,
+                                height: size.height*0.2,
                                 color: Colors.grey[300],
                                 child: const Icon(
                                   Icons.broken_image,
@@ -368,7 +368,7 @@ class _CardEventState extends State<CardEvent> {
                           : (widget.event.templateIndex != null)
                           ? Image.asset(
                             'assets/images/template${widget.event.templateIndex}.jpg',
-                            height: size.height*0.06,
+                            height: size.height*0.2,
                             width: double.infinity,
                             fit: BoxFit.cover,
                           )
