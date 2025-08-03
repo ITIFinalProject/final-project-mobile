@@ -1,6 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:eventify_app/generated/l10n.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../../../core/theme.dart';
+import '../../profile/cubit/theme_cubit.dart';
 
 typedef Change = void Function(String)?;
 
@@ -11,10 +14,16 @@ class SearchInputField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeMode = context
+        .watch<ThemeCubit>()
+        .state;
+    final isDark = themeMode == ThemeMode.dark;
     return TextField(
       onChanged: onChange,
       decoration: InputDecoration(
-        hintText:S.of(context).search ,
+        hintText: S
+            .of(context)
+            .search,
         prefixIcon: const Icon(Icons.search),
         filled: true,
         fillColor: Colors.white,
@@ -25,11 +34,13 @@ class SearchInputField extends StatelessWidget {
         enabled: true,
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(color: ThemeManager.darkPinkColor),
+          borderSide: BorderSide(color: ThemeManager.darkPinkColor, width: 1.5),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
-          borderSide: const BorderSide(color: Color(0xFF1B3C53), width: 2),
+          borderSide: BorderSide(
+              color: isDark ? ThemeManager.secondaryColor : ThemeManager
+                  .primaryColor, width: 2),
         ),
       ),
     );

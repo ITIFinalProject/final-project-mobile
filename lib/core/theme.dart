@@ -47,8 +47,7 @@ class ThemeManager{
         borderSide: BorderSide(color: ThemeManager.primaryColor),
         borderRadius: BorderRadius.circular(13),
       ),
-    )
-
+    ),
   );
   static ThemeData darkTheme = ThemeData(
     scaffoldBackgroundColor: primaryColor,
