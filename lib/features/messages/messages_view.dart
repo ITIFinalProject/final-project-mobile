@@ -3,9 +3,10 @@ import 'package:eventify_app/features/events/event_cubit/event_cubit.dart';
 import 'package:eventify_app/features/events/widgets/card_no_events.dart';
 import 'package:eventify_app/features/messages/chat_view.dart';
 import 'package:eventify_app/features/profile/cubit/theme_cubit.dart';
+import 'package:eventify_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:eventify_app/generated/l10n.dart';
+
 import '../events/event_cubit/event_state.dart';
 
 class MessagesView extends StatefulWidget {
@@ -48,6 +49,9 @@ class _MessagesViewState extends State<MessagesView> {
                 itemCount: events.length,
                 itemBuilder: (context, index) {
                   final event = events[index];
+                  final unread = context
+                      .watch<EventCubit>()
+                      .unreadMessages[event.id] ?? 0;
                   return Card(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15),
@@ -58,7 +62,7 @@ class _MessagesViewState extends State<MessagesView> {
                     child: ListTile(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15),
-                        side: BorderSide(color: ThemeManager.primaryColor),  
+                        side: BorderSide(color: ThemeManager.primaryColor),
                       ),
                       leading: CircleAvatar(
                         backgroundColor: ThemeManager.primaryColor,
@@ -68,15 +72,28 @@ class _MessagesViewState extends State<MessagesView> {
                         event.title ?? '',
                         style: TextStyle(color: ThemeManager.primaryColor),
                       ),
-                      subtitle: Text(S.of(context).send_a_message_to_your_guests),
-                      onTap: () {
-                        Navigator.push(
+                      subtitle: Text(S
+                          .of(context)
+                          .send_a_message_to_your_guests),
+                      onTap: () async {
+                        await Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (_) => ChatPage(eventId: event.id),
                           ),
                         );
+                        context.read<EventCubit>().fetchJoinedEvents();
                       },
+                      trailing: unread > 0
+                          ? CircleAvatar(
+                        backgroundColor: Colors.red,
+                        radius: 15,
+                        child: Text('$unread', style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold)),
+                      )
+                          : null,
                     ),
                   );
                 },

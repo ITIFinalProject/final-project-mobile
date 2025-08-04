@@ -8,7 +8,6 @@ class EventChatLoading extends EventChatState {}
 
 class EventChatLoaded extends EventChatState {
   final List<EventChatMessage> messages;
-
   EventChatLoaded(this.messages);
 }
 

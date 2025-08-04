@@ -12,12 +12,16 @@ class EventCubit extends Cubit<EventState> {
   Set<String> _interestedEventIds = {};
 
   Set<String> get interestedEventIds => _interestedEventIds;
+  Map<String, int> _unreadMessages = {}; // eventId -> count
+
+  Map<String, int> get unreadMessages => _unreadMessages;
+
   Future<void> fetchEvents() async {
     emit(EventLoading());
 
     try {
       final snapshot =
-          await FirebaseFirestore.instance.collection('events').get();
+      await FirebaseFirestore.instance.collection('events').get();
 
       final events =
 
@@ -94,21 +98,48 @@ class EventCubit extends Cubit<EventState> {
       }
 
       final snapshot =
-          await FirebaseFirestore.instance
-              .collection('users')
-              .doc(user.uid)
-              .collection('eventsJoined')
-              .get();
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .collection('eventsJoined')
+          .get();
 
       final events =
-          snapshot.docs.map((doc) => EventModel.fromMap(doc.data())).toList();
+      snapshot.docs.map((doc) => EventModel.fromMap(doc.data())).toList();
+      _unreadMessages = await _calculateUnreadMessages(events, user.uid);
       emit(EventJoinedLoaded(events));
-
     } catch (e) {
       emit(EventError("Error fetching joined events"));
     }
   }
 
+  Future<Map<String, int>> _calculateUnreadMessages(List<EventModel> events,
+      String userId) async {
+    Map<String, int> result = {};
+
+    for (final event in events) {
+      final query = await FirebaseFirestore.instance
+          .collection('events')
+          .doc(event.id)
+          .collection('chats')
+          .get();
+
+      int unreadCount = 0;
+
+      for (final doc in query.docs) {
+        final data = doc.data();
+        final List readByList = data['readBy'] ?? [];
+
+        if (!readByList.contains(userId)) {
+          unreadCount++;
+        }
+      }
+
+      result[event.id] = unreadCount;
+    }
+
+    return result;
+  }
   Future<void> fetchMyEvents() async {
     emit(EventLoading());
 
