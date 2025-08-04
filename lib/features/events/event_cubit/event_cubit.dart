@@ -45,10 +45,26 @@ class EventCubit extends Cubit<EventState> {
         emit(EventJoinError("User not logged in"));
         return;
       }
-      if (event.capacity <= 0) {
+      final eventRef = FirebaseFirestore.instance
+          .collection('events')
+          .doc(event.id);
+      final eventSnapshot = await eventRef.get();
+
+      if (!eventSnapshot.exists) {
+        emit(EventJoinError("Event does not exist"));
+        return;
+      }
+
+      final data = eventSnapshot.data()!;
+      final currentAttendees = int.tryParse("${data['currentAttendees']}") ?? 0;
+      final capacity = int.tryParse("${data['capacity']}") ?? 0;
+
+      if (currentAttendees >= capacity) {
         emit(EventJoinError("Sorry, this event is full."));
         return;
       }
+
+      // أضف الحدث في قائمة المستخدم
       final userEventRef = FirebaseFirestore.instance
           .collection('users')
           .doc(user.uid)
@@ -57,10 +73,8 @@ class EventCubit extends Cubit<EventState> {
 
       await userEventRef.set(event.toMap());
 
-      final eventRef = FirebaseFirestore.instance
-          .collection('events')
-          .doc(event.id);
-      await eventRef.update({'capacity': event.capacity - 1});
+      // لو currentAttendees مش موجود، بيبدأ من 1
+      await eventRef.update({'currentAttendees': currentAttendees + 1});
 
       emit(EventJoinSuccess());
       await fetchJoinedEvents();
@@ -140,7 +154,13 @@ class EventCubit extends Cubit<EventState> {
           .collection('interestedEvents')
           .doc(eventId)
           .delete();
-
+      // Also remove from current user's joined events
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .collection('eventsJoined')
+          .doc(eventId)
+          .delete();
 
       _interestedEventIds.remove(eventId);
       // await fetchMyEvents();
