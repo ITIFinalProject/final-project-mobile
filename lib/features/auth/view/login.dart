@@ -295,7 +295,6 @@ class _LoginViewState extends State<LoginView> {
     onTap: () => FocusScope.of(context).unfocus(),
     child: Stack(
       children: [
-        // خلفية متدرجة
         Container(
           decoration: const BoxDecoration(
             gradient: LinearGradient(

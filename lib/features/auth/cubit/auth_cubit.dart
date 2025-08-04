@@ -4,13 +4,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eventify_app/features/auth/cubit/auth_state.dart';
 import 'package:eventify_app/features/auth/models/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' hide AuthState;
 import 'package:uuid/uuid.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 
 
 class AuthCubit extends Cubit<AuthState> {
@@ -37,11 +37,30 @@ class AuthCubit extends Cubit<AuthState> {
         emit(AuthFailure("User data not found in Firestore"));
         return;
       }
+      Map<String, dynamic> data = doc.data()!;
 
-      UserModel user = UserModel.fromFireStore(doc.data()!);
+      // 👇 Check and add default status if missing
+      if (data['status'] == null) {
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(result.user!.uid)
+            .update({'status': 'active'});
+
+        data['status'] = 'active'; // update local map too
+      }
+
+      UserModel user = UserModel.fromFireStore(data);
+
+      // 👇 Prevent access if user is disabled
+      if (user.status == 'disabled') {
+        await _auth.signOut();
+        prefs.setString('userId', '');
+        emit(AuthFailure("تم تعطيل حسابك من قبل الإدارة."));
+        return;
+      }
 
       emit(AuthSuccess(user));
-      await _saveFcmToken(user.uid??'');
+      await _saveFcmToken(user.uid ?? '');
     } on FirebaseAuthException catch (e) {
       emit(AuthFailure(e.message ?? "Unknown error"));
     } catch (e) {
@@ -68,6 +87,7 @@ class AuthCubit extends Cubit<AuthState> {
         email: email,
         phone: phone,
         address: address,
+        status: 'active',
       );
       await FirebaseFirestore.instance
           .collection('users')
@@ -130,6 +150,14 @@ class AuthCubit extends Cubit<AuthState> {
 
         if (doc.exists) {
           UserModel userModel = UserModel.fromFireStore(doc.data()!);
+          if (userModel.status == 'disabled') {
+            // المستخدم موقوف
+            await _auth.signOut();
+            await GoogleSignIn().signOut();
+            prefs.setString('userId', '');
+            emit(AuthFailure("تم تعطيل حسابك من قبل الإدارة."));
+            return;
+          }
           emit(AuthSuccess(userModel));
         } else {
           await _auth.signOut();
