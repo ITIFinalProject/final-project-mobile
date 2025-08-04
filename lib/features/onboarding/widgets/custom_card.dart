@@ -1,5 +1,7 @@
 import 'package:eventify_app/core/theme.dart';
+import 'package:eventify_app/features/profile/cubit/theme_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CustomCard extends StatelessWidget {
   final String imagePath;
@@ -15,6 +17,8 @@ class CustomCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeMode = context.watch<ThemeCubit>().state;
+    final isDark = themeMode == ThemeMode.dark;
     var size = MediaQuery.of(context).size;
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -40,7 +44,7 @@ class CustomCard extends StatelessWidget {
         Text(
           title,
           style: TextStyle(
-            color: ThemeManager.primaryColor,
+            color: isDark?ThemeManager.lightPinkColor: ThemeManager.primaryColor,
             fontWeight: FontWeight.bold,
             fontSize: 25,
             shadows: [BoxShadow(color: Colors.redAccent[100]!, blurRadius: 50)],
@@ -49,7 +53,7 @@ class CustomCard extends StatelessWidget {
         Text(
           text,
           style: TextStyle(
-            color: ThemeManager.secondaryColor,
+            color: isDark? ThemeManager.lightPinkColor:ThemeManager.primaryColor,
             fontWeight: FontWeight.normal,
             fontSize: 20,
           ),
