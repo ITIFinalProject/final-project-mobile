@@ -21,7 +21,6 @@ class EventPreviewPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final thememode = context.watch<ThemeCubit>().state;
     final isDarkMode = thememode == ThemeMode.dark;
     final args = ModalRoute.of(context)?.settings.arguments;
@@ -36,9 +35,9 @@ class EventPreviewPage extends StatelessWidget {
     String? imageUrl = event.bannerUrl;
     var date;
     if (event.date.contains('_')) {
-      date = event.date.split('_').first;
+      date = event.date.split('_').first.trim();
     } else {
-      date = event.date;
+      date = event.date.trim();
     }
     DateTime? eventDateTime;
     try {
@@ -56,7 +55,6 @@ class EventPreviewPage extends StatelessWidget {
     bool isUpcoming =
         eventDateTime != null && DateTime.now().isBefore(eventDateTime!);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-
       if (FirebaseAuth.instance.currentUser != null) {
         context.read<EventCubit>().fetchJoinedEvents();
       }
@@ -68,7 +66,6 @@ class EventPreviewPage extends StatelessWidget {
           // context.read<EventCubit>().fetchEvents();
         }
       },
-
 
       child: Scaffold(
         backgroundColor:
@@ -120,19 +117,25 @@ class EventPreviewPage extends StatelessWidget {
                         ),
               ),
               Container(
-  margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-  padding: const EdgeInsets.all(20),
-  decoration: BoxDecoration(
-    color: isDarkMode ? ThemeManager.primaryColor : Colors.white,
-    borderRadius: BorderRadius.circular(24),
-    boxShadow: [
-      BoxShadow(
-        color: Colors.black12,
-        blurRadius: 10,
-        offset: Offset(0, 4),
-      ),
-    ],
-  ),
+                margin: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color:
+                      isDarkMode
+                          ? ThemeManager.secondaryColor.withOpacity(0.5)
+                          : Colors.white,
+                  borderRadius: BorderRadius.circular(24),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black12,
+                      blurRadius: 10,
+                      offset: Offset(0, 4),
+                    ),
+                  ],
+                ),
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
@@ -453,7 +456,7 @@ class EventPreviewPage extends StatelessWidget {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
                                         content: Text(eventState.message),
-                                          backgroundColor: Colors.red,
+                                        backgroundColor: Colors.red,
                                       ),
                                     );
                                   } else if (eventState is EventError) {
@@ -461,9 +464,8 @@ class EventPreviewPage extends StatelessWidget {
                                       SnackBar(
                                         content: Text(
                                           "Error: ${eventState.message}",
-
                                         ),
-                                          backgroundColor: Colors.red,
+                                        backgroundColor: Colors.red,
                                       ),
                                     );
                                   }
@@ -483,7 +485,9 @@ class EventPreviewPage extends StatelessWidget {
                                     );
 
                                     if (hasJoined && isUpcoming) {
-                                      return DisableButton(label: "Already Joined");
+                                      return DisableButton(
+                                        label: "Already Joined",
+                                      );
                                     } else if (hasJoined && isPast) {
                                       return _activeButton(
                                         "Add Memory",
@@ -501,7 +505,7 @@ class EventPreviewPage extends StatelessWidget {
                                       );
                                     } else if (!hasJoined && isPast) {
                                       return DisableButton(
-                                     label:    "Event is Finished",
+                                        label: "Event is Finished",
                                       );
                                     } else {
                                       // If user hasn't joined and event is upcoming or past but not joined
@@ -562,11 +566,7 @@ Widget _InfoBox({required IconData icon, required String label}) {
       color: const Color(0xfff9f3ef),
       borderRadius: BorderRadius.circular(16),
       boxShadow: [
-        BoxShadow(
-          color: Colors.black12,
-          blurRadius: 6,
-          offset: Offset(0, 2),
-        ),
+        BoxShadow(color: Colors.black12, blurRadius: 6, offset: Offset(0, 2)),
       ],
     ),
     child: Row(
@@ -587,8 +587,6 @@ Widget _InfoBox({required IconData icon, required String label}) {
     ),
   );
 }
-
-
 
 Widget _activeButton(String label, IconData icon, VoidCallback onPressed) {
   return SizedBox(
