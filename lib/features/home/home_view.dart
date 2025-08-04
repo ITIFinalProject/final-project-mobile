@@ -45,6 +45,9 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
+     final thememode = context.watch<ThemeCubit>().state;
+    final isDarkMode = thememode == ThemeMode.dark;
+
     final themeMode = context
         .watch<ThemeCubit>()
         .state;
@@ -151,7 +154,13 @@ class _HomeViewState extends State<HomeView> {
                                 Navigator.pushNamed(context, AppRoutes.eventPreview,arguments: event);
                               },
                               child: ListTile(
-                                title: Text(event.title),
+                                
+                                title: Text(event.title,style: TextStyle(
+                                  color: isDark ? ThemeManager.lightPinkColor : ThemeManager.primaryColor,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                )),
+                                
                                 onTap: () {
                                   Navigator.pushNamed(
                                     context,
@@ -163,9 +172,11 @@ class _HomeViewState extends State<HomeView> {
                             );
                           },
                         )
-                            : const Padding(
+                            :  Padding(
                           padding: EdgeInsets.all(16.0),
-                          child: Text("No results found."),
+                          child: Text("No results found.",style: TextStyle(
+                            color: isDarkMode?ThemeManager.primaryColor:ThemeManager.lightPinkColor,
+                          ),),
                         ),
                       ],
                       const SizedBox(height: 20),
