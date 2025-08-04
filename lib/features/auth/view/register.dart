@@ -3,6 +3,7 @@ import 'package:eventify_app/core/theme.dart';
 import 'package:eventify_app/features/auth/view/login.dart';
 import 'package:eventify_app/features/auth/view/widgets/custom_button.dart';
 import 'package:eventify_app/features/auth/view/widgets/custom_text_field.dart';
+import 'package:eventify_app/features/profile/cubit/theme_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -30,6 +31,8 @@ class _RegisterViewState extends State<RegisterView> {
 
   @override
   Widget build(BuildContext context) {
+    final themeMode = context.watch<ThemeCubit>().state;
+    final isDark = themeMode == ThemeMode.dark;
     return BlocConsumer<AuthCubit, AuthState>(
       listener: (context, state) {
         if (state is AuthSuccess) {
@@ -48,9 +51,11 @@ class _RegisterViewState extends State<RegisterView> {
       children: [
         // خلفية متدرجة
         Container(
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [
+              colors:
+                  isDark? [ThemeManager.primaryColor]:
+               [
                 Color(0xFFE1F5FE), // أزرق فاتح جداً
                 Color(0xFFFFFFFF), // أبيض
               ],
@@ -66,7 +71,7 @@ class _RegisterViewState extends State<RegisterView> {
           left: -60,
           child: CircleAvatar(
             radius: 100,
-            backgroundColor: ThemeManager.primaryColor.withOpacity(0.2),
+            backgroundColor:isDark?ThemeManager.secondaryColor.withOpacity(0.6):  ThemeManager.primaryColor.withOpacity(0.2),
           ),
         ),
         Positioned(
@@ -74,7 +79,7 @@ class _RegisterViewState extends State<RegisterView> {
           right: -30,
           child: CircleAvatar(
             radius: 70,
-            backgroundColor: ThemeManager.primaryColor.withOpacity(0.2),
+            backgroundColor:isDark?ThemeManager.secondaryColor.withOpacity(0.6):  ThemeManager.primaryColor.withOpacity(0.2),
           ),
         ),
         Positioned(
@@ -82,7 +87,7 @@ class _RegisterViewState extends State<RegisterView> {
           left: 30,
           child: CircleAvatar(
             radius: 60,
-            backgroundColor: ThemeManager.primaryColor.withOpacity(0.15),
+            backgroundColor:isDark?ThemeManager.secondaryColor.withOpacity(0.6):  ThemeManager.primaryColor.withOpacity(0.15),
           ),
         ),
         Positioned(
@@ -90,7 +95,7 @@ class _RegisterViewState extends State<RegisterView> {
           right: 20,
           child: CircleAvatar(
             radius: 45,
-            backgroundColor: ThemeManager.primaryColor.withOpacity(0.19),
+            backgroundColor: isDark?ThemeManager.secondaryColor.withOpacity(0.6): ThemeManager.primaryColor.withOpacity(0.19),
           ),
         ),
 
@@ -111,7 +116,7 @@ class _RegisterViewState extends State<RegisterView> {
                       style: TextStyle(
                         fontSize: 32,
                         fontWeight: FontWeight.bold,
-                        color: ThemeManager.primaryColor,
+                        color: isDark?ThemeManager.lightPinkColor: ThemeManager.primaryColor
                       ),
                     ),
                     SizedBox(height: 20),
@@ -191,8 +196,7 @@ class _RegisterViewState extends State<RegisterView> {
                                 )
                                 : buttonText(text: 'Sign Up'),
 
-                        buttonColor: ThemeManager.primaryColor,
-
+                        buttonColor: isDark? ThemeManager.secondaryColor.withOpacity(0.7):ThemeManager.primaryColor,
                         vPadding: 14,
                         hPadding: 100,
                       ),
@@ -215,7 +219,7 @@ class _RegisterViewState extends State<RegisterView> {
                             Expanded(
                               child: Divider(
                                 thickness: 1,
-                                color: ThemeManager.secondaryColor,
+                                color: ThemeManager.lightPinkColor,
                               ),
                             ),
                             Padding(
@@ -225,14 +229,14 @@ class _RegisterViewState extends State<RegisterView> {
                               child: Text(
                                 'or',
                                 style: TextStyle(
-                                  color: ThemeManager.primaryColor,
+                                  color: ThemeManager.lightPinkColor,
                                 ),
                               ),
                             ),
                             Expanded(
                               child: Divider(
                                 thickness: 1,
-                                color: ThemeManager.secondaryColor,
+                                color: ThemeManager.lightPinkColor,
                               ),
                             ),
                           ],
@@ -248,7 +252,7 @@ class _RegisterViewState extends State<RegisterView> {
                               context.read<AuthCubit>().signInWithGoogle();
                             },
                             child: CircleAvatar(
-                              backgroundColor: ThemeManager.primaryColor,
+                              backgroundColor: isDark? ThemeManager.lightPinkColor:ThemeManager.primaryColor,
                               radius: 28,
                               backgroundImage: AssetImage(
                                 'assets/images/google_logo.png',
@@ -274,7 +278,7 @@ class _RegisterViewState extends State<RegisterView> {
                         children: [
                           Text(
                             'Already have an account ?',
-                            style: TextStyle(color: ThemeManager.primaryColor),
+                            style: TextStyle(color:isDark? ThemeManager.lightPinkColor:ThemeManager.primaryColor),
                           ),
                           TextButton(
                             onPressed: () {
@@ -290,7 +294,7 @@ class _RegisterViewState extends State<RegisterView> {
                             child: Text(
                               "Login In Now",
                               style: TextStyle(
-                                color: ThemeManager.secondaryColor,
+                                color: isDark? ThemeManager.lightPinkColor:ThemeManager.primaryColor,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),

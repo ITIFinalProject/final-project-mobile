@@ -21,12 +21,18 @@ class SearchInputField extends StatelessWidget {
     return TextField(
       onChanged: onChange,
       decoration: InputDecoration(
+        hintStyle: TextStyle(
+          color: isDark ? ThemeManager.lightPinkColor : ThemeManager.primaryColor,
+          fontSize: 16,
+        ),
         hintText: S
             .of(context)
             .search,
-        prefixIcon: const Icon(Icons.search),
+        prefixIcon:  Icon(Icons.search,color: isDark?ThemeManager.lightPinkColor:ThemeManager.primaryColor,),
         filled: true,
-        fillColor: Colors.white,
+        fillColor: isDark
+            ? ThemeManager.secondaryColor.withOpacity(0.4)
+            : ThemeManager.lightPinkColor,
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 20,
           vertical: 15,

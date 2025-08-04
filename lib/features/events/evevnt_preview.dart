@@ -3,6 +3,7 @@ import 'package:eventify_app/core/theme.dart';
 import 'package:eventify_app/features/add_memory/view/add_memory.dart';
 import 'package:eventify_app/features/auth/cubit/auth_cubit.dart';
 import 'package:eventify_app/features/events/widgets/card_no_events.dart';
+import 'package:eventify_app/features/events/widgets/disable_button.dart';
 import 'package:eventify_app/features/profile/cubit/theme_cubit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -20,9 +21,9 @@ class EventPreviewPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     final thememode = context.watch<ThemeCubit>().state;
     final isDarkMode = thememode == ThemeMode.dark;
-
     final args = ModalRoute.of(context)?.settings.arguments;
 
     if (args == null || args is! EventModel) {
@@ -55,6 +56,7 @@ class EventPreviewPage extends StatelessWidget {
     bool isUpcoming =
         eventDateTime != null && DateTime.now().isBefore(eventDateTime!);
     WidgetsBinding.instance.addPostFrameCallback((_) {
+
       if (FirebaseAuth.instance.currentUser != null) {
         context.read<EventCubit>().fetchJoinedEvents();
       }
@@ -66,6 +68,8 @@ class EventPreviewPage extends StatelessWidget {
           // context.read<EventCubit>().fetchEvents();
         }
       },
+
+
       child: Scaffold(
         backgroundColor:
             isDarkMode
@@ -116,18 +120,19 @@ class EventPreviewPage extends StatelessWidget {
                         ),
               ),
               Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: isDarkMode ? ThemeManager.primaryColor : Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black12,
-                      blurRadius: 8,
-                      offset: Offset(0, 2),
-                    ),
-                  ],
-                ),
+  margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+  padding: const EdgeInsets.all(20),
+  decoration: BoxDecoration(
+    color: isDarkMode ? ThemeManager.primaryColor : Colors.white,
+    borderRadius: BorderRadius.circular(24),
+    boxShadow: [
+      BoxShadow(
+        color: Colors.black12,
+        blurRadius: 10,
+        offset: Offset(0, 4),
+      ),
+    ],
+  ),
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
@@ -448,6 +453,7 @@ class EventPreviewPage extends StatelessWidget {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
                                         content: Text(eventState.message),
+                                          backgroundColor: Colors.red,
                                       ),
                                     );
                                   } else if (eventState is EventError) {
@@ -455,7 +461,9 @@ class EventPreviewPage extends StatelessWidget {
                                       SnackBar(
                                         content: Text(
                                           "Error: ${eventState.message}",
+
                                         ),
+                                          backgroundColor: Colors.red,
                                       ),
                                     );
                                   }
@@ -475,7 +483,7 @@ class EventPreviewPage extends StatelessWidget {
                                     );
 
                                     if (hasJoined && isUpcoming) {
-                                      return _disabledButton("Already Joined");
+                                      return DisableButton(label: "Already Joined");
                                     } else if (hasJoined && isPast) {
                                       return _activeButton(
                                         "Add Memory",
@@ -492,8 +500,8 @@ class EventPreviewPage extends StatelessWidget {
                                         },
                                       );
                                     } else if (!hasJoined && isPast) {
-                                      return _disabledButton(
-                                        "Event is Finished",
+                                      return DisableButton(
+                                     label:    "Event is Finished",
                                       );
                                     } else {
                                       // If user hasn't joined and event is upcoming or past but not joined
@@ -548,34 +556,39 @@ class EventPreviewPage extends StatelessWidget {
 
 Widget _InfoBox({required IconData icon, required String label}) {
   return Container(
-    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+    margin: const EdgeInsets.only(bottom: 8),
+    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
     decoration: BoxDecoration(
       color: const Color(0xfff9f3ef),
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: BorderRadius.circular(16),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black12,
+          blurRadius: 6,
+          offset: Offset(0, 2),
+        ),
+      ],
     ),
     child: Row(
       children: [
-        Icon(icon, size: 16, color: ThemeManager.primaryColor),
-        const SizedBox(width: 4),
-        Text(label, style: const TextStyle(color: ThemeManager.primaryColor)),
+        Icon(icon, size: 18, color: ThemeManager.primaryColor),
+        const SizedBox(width: 10),
+        Flexible(
+          child: Text(
+            label,
+            style: const TextStyle(
+              color: ThemeManager.primaryColor,
+              fontSize: 15,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
       ],
     ),
   );
 }
 
-Widget _disabledButton(String label) {
-  return SizedBox(
-    width: double.infinity,
-    child: ElevatedButton(
-      onPressed: null,
-      child: Text(label),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.grey[400],
-        foregroundColor: Colors.white,
-      ),
-    ),
-  );
-}
+
 
 Widget _activeButton(String label, IconData icon, VoidCallback onPressed) {
   return SizedBox(
