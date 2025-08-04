@@ -10,7 +10,6 @@ class EventChatCubit extends Cubit<EventChatState> {
   final String eventId;
   final FirebaseFirestore firestore;
   StreamSubscription? _subscription;
-
   String? currentUserId;
   String? currentUserName;
 
@@ -32,13 +31,29 @@ class EventChatCubit extends Cubit<EventChatState> {
         .orderBy('createdAt', descending: false)
         .snapshots()
         .listen((snapshot) {
-          final messages =
-              snapshot.docs
-                  .where((doc) => doc.data().containsKey('createdAt'))
-                  .map((doc) => EventChatMessage.fromFireStore(doc))
-                  .toList();
+      final messages =
+      snapshot.docs
+          .where((doc) => doc.data().containsKey('createdAt'))
+          .map((doc) => EventChatMessage.fromFireStore(doc))
+          .toList();
 
-          emit(EventChatLoaded(messages));
+      for (final doc in snapshot.docs) {
+        final data = doc.data();
+        final List readByList = data['readBy'] ?? [];
+        final docId = doc.id;
+
+        if (!readByList.contains(currentUserId)) {
+          firestore
+              .collection('events')
+              .doc(eventId)
+              .collection('chats')
+              .doc(docId)
+              .update({
+            'readBy': FieldValue.arrayUnion([currentUserId])
+          });
+        }
+      }
+      emit(EventChatLoaded(messages));
         });
   }
 
@@ -51,8 +66,10 @@ class EventChatCubit extends Cubit<EventChatState> {
       'senderName': currentUserName,
       'message': text.trim(),
       'createdAt': FieldValue.serverTimestamp(),
+      'readBy': [currentUserId],
     });
   }
+
 
   @override
   Future<void> close() {

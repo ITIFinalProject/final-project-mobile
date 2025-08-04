@@ -12,12 +12,16 @@ class EventCubit extends Cubit<EventState> {
   Set<String> _interestedEventIds = {};
 
   Set<String> get interestedEventIds => _interestedEventIds;
+  Map<String, int> _unreadMessages = {}; // eventId -> count
+
+  Map<String, int> get unreadMessages => _unreadMessages;
+
   Future<void> fetchEvents() async {
     emit(EventLoading());
 
     try {
       final snapshot =
-          await FirebaseFirestore.instance.collection('events').get();
+      await FirebaseFirestore.instance.collection('events').get();
 
       final events =
 
@@ -45,10 +49,26 @@ class EventCubit extends Cubit<EventState> {
         emit(EventJoinError("User not logged in"));
         return;
       }
-      if (event.capacity <= 0) {
+      final eventRef = FirebaseFirestore.instance
+          .collection('events')
+          .doc(event.id);
+      final eventSnapshot = await eventRef.get();
+
+      if (!eventSnapshot.exists) {
+        emit(EventJoinError("Event does not exist"));
+        return;
+      }
+
+      final data = eventSnapshot.data()!;
+      final currentAttendees = int.tryParse("${data['currentAttendees']}") ?? 0;
+      final capacity = int.tryParse("${data['capacity']}") ?? 0;
+
+      if (currentAttendees >= capacity) {
         emit(EventJoinError("Sorry, this event is full."));
         return;
       }
+
+      // أضف الحدث في قائمة المستخدم
       final userEventRef = FirebaseFirestore.instance
           .collection('users')
           .doc(user.uid)
@@ -57,10 +77,8 @@ class EventCubit extends Cubit<EventState> {
 
       await userEventRef.set(event.toMap());
 
-      final eventRef = FirebaseFirestore.instance
-          .collection('events')
-          .doc(event.id);
-      await eventRef.update({'capacity': event.capacity - 1});
+      // لو currentAttendees مش موجود، بيبدأ من 1
+      await eventRef.update({'currentAttendees': currentAttendees + 1});
 
       emit(EventJoinSuccess());
       await fetchJoinedEvents();
@@ -80,21 +98,48 @@ class EventCubit extends Cubit<EventState> {
       }
 
       final snapshot =
-          await FirebaseFirestore.instance
-              .collection('users')
-              .doc(user.uid)
-              .collection('eventsJoined')
-              .get();
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .collection('eventsJoined')
+          .get();
 
       final events =
-          snapshot.docs.map((doc) => EventModel.fromMap(doc.data())).toList();
+      snapshot.docs.map((doc) => EventModel.fromMap(doc.data())).toList();
+      _unreadMessages = await _calculateUnreadMessages(events, user.uid);
       emit(EventJoinedLoaded(events));
-
     } catch (e) {
       emit(EventError("Error fetching joined events"));
     }
   }
 
+  Future<Map<String, int>> _calculateUnreadMessages(List<EventModel> events,
+      String userId) async {
+    Map<String, int> result = {};
+
+    for (final event in events) {
+      final query = await FirebaseFirestore.instance
+          .collection('events')
+          .doc(event.id)
+          .collection('chats')
+          .get();
+
+      int unreadCount = 0;
+
+      for (final doc in query.docs) {
+        final data = doc.data();
+        final List readByList = data['readBy'] ?? [];
+
+        if (!readByList.contains(userId)) {
+          unreadCount++;
+        }
+      }
+
+      result[event.id] = unreadCount;
+    }
+
+    return result;
+  }
   Future<void> fetchMyEvents() async {
     emit(EventLoading());
 
@@ -140,7 +185,13 @@ class EventCubit extends Cubit<EventState> {
           .collection('interestedEvents')
           .doc(eventId)
           .delete();
-
+      // Also remove from current user's joined events
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .collection('eventsJoined')
+          .doc(eventId)
+          .delete();
 
       _interestedEventIds.remove(eventId);
       // await fetchMyEvents();

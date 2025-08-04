@@ -1,7 +1,9 @@
 import 'package:eventify_app/core/routes.dart';
 import 'package:eventify_app/core/theme.dart';
 import 'package:eventify_app/features/onboarding/widgets/custom_card.dart';
+import 'package:eventify_app/features/profile/cubit/theme_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class OnboardingScreen extends StatefulWidget {
@@ -18,6 +20,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final themeMode = context.watch<ThemeCubit>().state;
+    final isDark = themeMode == ThemeMode.dark;
     var size = MediaQuery.of(context).size;
     return Scaffold(
       body: Stack(
@@ -61,7 +65,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     Navigator.pushReplacementNamed(context, AppRoutes.login);
                   },
                   child: Text(
-                    'Skip', style: TextStyle(color: ThemeManager.primaryColor,
+                    'Skip', style: TextStyle(color: isDark?ThemeManager.lightPinkColor: ThemeManager.primaryColor,
                       fontWeight: FontWeight.w600,
                       fontSize: 20),),
                 ),
@@ -69,8 +73,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   controller: _controller,
                   count: 3,
                   effect: ExpandingDotsEffect(
-                      dotColor: ThemeManager.darkPinkColor,
-                      activeDotColor: ThemeManager.secondaryColor
+                      dotColor:isDark?ThemeManager.secondaryColor: ThemeManager.darkPinkColor,
+                      activeDotColor: isDark?ThemeManager.darkPinkColor:ThemeManager.secondaryColor
                   ),
                 ),
                 ElevatedButton(
@@ -79,7 +83,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       borderRadius: BorderRadius.circular(10),
 
                     ),
-                    backgroundColor: ThemeManager.primaryColor,
+                    backgroundColor: isDark?ThemeManager.secondaryColor.withOpacity(0.8): ThemeManager.primaryColor,
 
                   ),
                   onPressed: () {

@@ -80,11 +80,16 @@ class _SplashScreenState extends State<SplashScreen> {
               Navigator.pushReplacementNamed(context, AppRoutes.layout);
             } else if (state is AuthLoggedOut) {
               Navigator.pushReplacementNamed(context, AppRoutes.onBoarding);
+            } else if (state is AuthFailure &&
+                state.error == "تم تعطيل حسابك من قبل الإدارة.") {
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(SnackBar(content: Text(state.error)));
             }
           },
+
           child: Scaffold(
-            backgroundColor:
-                isDark ? ThemeManager.primaryColor : Colors.white,
+            backgroundColor: isDark ? ThemeManager.primaryColor : Colors.white,
             body: Center(
               child: Image.asset(
                 isDark

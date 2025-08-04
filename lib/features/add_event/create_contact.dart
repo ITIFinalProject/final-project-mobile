@@ -3,18 +3,17 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eventify_app/core/routes.dart';
 import 'package:eventify_app/features/add_event/logic/create_event_cubit/create_event_cubit.dart';
-import 'package:eventify_app/features/add_event/logic/invite_state_cubit/invite_cubit.dart';
 import 'package:eventify_app/features/add_event/logic/invite_state_cubit/invite_state.dart';
+import 'package:eventify_app/features/add_event/widgets/custom_text.dart';
 import 'package:eventify_app/features/auth/models/user_model.dart';
 import 'package:eventify_app/features/profile/cubit/theme_cubit.dart';
+import 'package:eventify_app/generated/l10n.dart';
 import 'package:eventify_app/models.dart/event_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'package:eventify_app/features/add_event/widgets/custom_text.dart';
-import 'package:eventify_app/features/add_event/widgets/custom_text_form_field.dart';
-import '../../../core/theme.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+
+import '../../../core/theme.dart';
 class CreateContact extends StatefulWidget {
   // final int capacity;
   final EventModel event;
@@ -36,17 +35,16 @@ class _CreateContactState extends State<CreateContact> {
      final thememode = context.watch<ThemeCubit>().state;
     final isDarkMode = thememode == ThemeMode.dark;
 
-    
+
     var size = MediaQuery.of(context).size;
 
     return BlocConsumer<CreateEventCubit, CreateEventState>(
-      
       listener: (context, state) {
         if (state is CreateEventSuccess) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text("Invitations sent successfully ✅"),
-              backgroundColor:Colors.green ,
-            ),
+            SnackBar(content: Text(S
+                .of(context)
+                .invitations_sent), backgroundColor: Colors.green,),
           );
           Navigator.pop(context);
         } else if (state is CreateEventError) {
@@ -55,18 +53,18 @@ class _CreateContactState extends State<CreateContact> {
           ).showSnackBar(SnackBar(content: Text(state.message),
           backgroundColor:Colors.red ,
           ),
-          
+
           );
         }
       },
       builder: (context, state) {
-
         return Scaffold(
-          
           appBar: AppBar(
-            title: Text('Create Contact'),
+            title: Text(S
+                .of(context)
+                .create_contact),
             centerTitle: true,
-           
+
           ),
           body: SingleChildScrollView(
             child: Form(
@@ -74,20 +72,23 @@ class _CreateContactState extends State<CreateContact> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  CustomText(title: 'Guest Email'),
+                  CustomText(title: S
+                      .of(context)
+                      .guest_email),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25,vertical: 16),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 25, vertical: 16),
                     child: Expanded(
                       child: TypeAheadField<Map<String, dynamic>>(
                         suggestionsCallback: (pattern) async {
                           if (pattern.isEmpty) return [];
-                    
+
                           final snapshot = await FirebaseFirestore.instance
                               .collection('users')
                               .where('email', isGreaterThanOrEqualTo: pattern)
                               .where('email', isLessThanOrEqualTo: pattern + '\uf8ff')
                               .get();
-                    
+
                           return snapshot.docs.map((doc) => doc.data()).toList();
                         },
                         itemBuilder: (context, Map<String, dynamic> suggestion) {
@@ -105,14 +106,16 @@ class _CreateContactState extends State<CreateContact> {
                             });
                           } else if (guestEmails.length >= widget.event.capacity) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text("Capacity reached"),
-                              
-                              backgroundColor: Colors.red,
+                              SnackBar(content: Text(S
+                                  .of(context)
+                                  .capacity_reached),
+
+                                backgroundColor: Colors.red,
                               ),
                             );
                           }
                         },
-                    
+
                       ),
                     ),
                   ),
@@ -122,7 +125,7 @@ class _CreateContactState extends State<CreateContact> {
                     (email) => Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 18,vertical: 10),
                       child: ListTile(
-                        
+
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15),
                           side: BorderSide(color:isDarkMode?ThemeManager.lightPinkColor:ThemeManager.primaryColor, ),
@@ -130,7 +133,7 @@ class _CreateContactState extends State<CreateContact> {
                         title: Text(email,style: TextStyle(
                           color: isDarkMode?ThemeManager.lightPinkColor:ThemeManager.primaryColor,
                         )),
-                        
+
                         trailing: IconButton(
                           icon: Icon(Icons.remove_circle, color: Colors.red),
                           onPressed: () {
@@ -155,7 +158,9 @@ class _CreateContactState extends State<CreateContact> {
                         children: [
                           CustomElevatedButton(
                             onPressed: () => Navigator.pop(context),
-                            title: ('Cancel'),
+                            title: (S
+                                .of(context)
+                                .cancel),
                           ),
                           (state is CreateEventLoading)?Center(
                             child: CircularProgressIndicator(
@@ -170,7 +175,9 @@ class _CreateContactState extends State<CreateContact> {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
                                       content: Text(
-                                        "Please add at least one guest",
+                                          S
+                                              .of(context)
+                                              .please_add_one_guest
                                       ),
                                       backgroundColor: Colors.red,
                                     ),
@@ -205,7 +212,9 @@ class _CreateContactState extends State<CreateContact> {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
                                         content: Text(
-                                          "No valid registered users found.",
+                                          S
+                                              .of(context)
+                                              .no_valid_users_found,
                                         ),
                                       ),
                                     );
@@ -236,14 +245,17 @@ class _CreateContactState extends State<CreateContact> {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
                                       content: Text(
-                                        "Error fetching guest data",
+                                          S
+                                              .of(context)
+                                              .error_fetching_guest_data
                                       ),
                                     ),
                                   );
                                 };
-                              
-                            },
-                            title: ('Save'),
+                              },
+                            title: (S
+                                .of(context)
+                                .save),
                           ),
                         ],
                       ),

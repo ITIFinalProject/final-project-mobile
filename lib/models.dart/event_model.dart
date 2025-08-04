@@ -17,8 +17,9 @@ class EventModel extends Equatable {
   final String? hostId;
   final String type;
   final List<UserModel>? guests;
+  final int? currentAttendees;
 
-  const EventModel( {
+  const EventModel({
     required this.hostName,
     required this.type,
     required this.id,
@@ -33,6 +34,7 @@ class EventModel extends Equatable {
     this.bannerUrl,
     this.templateIndex,
     this.guests
+    , this.currentAttendees
   });
 
   // EventModel copyWith({
@@ -165,10 +167,11 @@ String _formatToISO(String dateTime) {
     category: map['category']?.toString() ?? '',
     // ✅ نقرأ guests بس لو type = Private
     guests: (map['type']?.toString().toLowerCase() == 'private' &&
-            map['guests'] != null)
+        map['guests'] != null)
         ? List<UserModel>.from(
-            (map['guests'] as List).map((e) => UserModel.fromFireStore(e)))
+        (map['guests'] as List).map((e) => UserModel.fromFireStore(e)))
         : null,
+    currentAttendees: map['currentAttendees'],
   );
 }
 

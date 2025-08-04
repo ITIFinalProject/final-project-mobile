@@ -106,17 +106,28 @@ class _LayoutViewState extends State<LayoutView> {
 
   @override
   Widget build(BuildContext context) {
-    final themeMode = context.watch<ThemeCubit>().state;
+    final themeMode = context
+        .watch<ThemeCubit>()
+        .state;
     final isDark = themeMode == ThemeMode.dark;
+    final totalUnread = context
+        .watch<EventCubit>()
+        .unreadMessages
+        .values
+        .fold<int>(
+      0,
+          (sum, count) => sum + count,
+    );
+
     return Scaffold(
-      body: pages[currentIndex],
-      bottomNavigationBar:
+        body: pages[currentIndex],
+        bottomNavigationBar:
         CurvedNavigationBar(
-            backgroundColor: Colors.transparent,
-            color:
-                isDark ? ThemeManager.lightPinkColor : ThemeManager.primaryColor,
-            buttonBackgroundColor:
-                isDark
+          backgroundColor: Colors.transparent,
+          color:
+          isDark ? ThemeManager.lightPinkColor : ThemeManager.primaryColor,
+          buttonBackgroundColor:
+          isDark
                     ? ThemeManager.lightPinkColor
                     : ThemeManager.darkPinkColor.withAlpha(255),
             index: currentIndex,
@@ -147,31 +158,55 @@ class _LayoutViewState extends State<LayoutView> {
               Icon(
                 Icons.add_circle_outline,
                 color:
-                    currentIndex == 2
-                        ? ThemeManager.primaryColor
-                        : isDark
-                        ? ThemeManager.secondaryColor
-                        : ThemeManager.darkPinkColor,
+                currentIndex == 2
+                    ? ThemeManager.primaryColor
+                    : isDark
+                    ? ThemeManager.secondaryColor
+                    : ThemeManager.darkPinkColor,
                 size: 30,
               ),
-              Icon(
-                Icons.message_outlined,
-                color:
+              Stack(
+                children: [
+                  Icon(
+                    Icons.message_outlined,
+                    color:
                     currentIndex == 3
                         ? ThemeManager.primaryColor
                         : isDark
                         ? ThemeManager.secondaryColor
                         : ThemeManager.darkPinkColor,
-                size: 30,
+                    size: 30,
+                  ),
+                  if (totalUnread > 0)
+                    Positioned(
+                      right: 0,
+                      top: 0,
+                      child: Container(
+                        padding: const EdgeInsets.all(4),
+                        decoration: const BoxDecoration(
+                          color: Colors.red,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Text(
+                          '$totalUnread',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 10,
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
               ),
+
               Icon(
                 Icons.settings,
                 color:
-                    currentIndex == 4
-                        ? ThemeManager.primaryColor
-                        : isDark
-                        ? ThemeManager.secondaryColor
-                        : ThemeManager.darkPinkColor,
+                currentIndex == 4
+                    ? ThemeManager.primaryColor
+                    : isDark
+                    ? ThemeManager.secondaryColor
+                    : ThemeManager.darkPinkColor,
                 size: 30,
               ),
             ],

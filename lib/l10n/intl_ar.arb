@@ -22,6 +22,7 @@
   "event_title": "عنوان الفعالية",
   "enter_event_title": "أدخل عنوان الفعالية",
   "event_category": "فئة الفعالية",
+  "pleaseselect_event_category":"من فضلك اختر فئة الفعالية",
   "select_event_category": "اختر فئة الفعالية",
   "event_description": "وصف الفعالية",
   "update_event":"تحديث الفعالية",
@@ -29,6 +30,8 @@
   "write_your_event_description": "اكتب وصف الفعالية",
   "please_enter_your_event_description":"من فضلك ادخل وصف الفعالية",
   "event_type": "نوع الفعالية",
+  "edit_event":"تعديل الفعالية",
+  "event_updated_successfully": "تم تحديث الفعالية بنجاح",
   "select_event_type": "اختر نوع الفعالية",
   "please_select_event_type":"من فضلك اختر نوع الفعالية",
   "please_enter_your_event_title":"من فضلك ادخل اسم الفعالية",
@@ -36,15 +39,64 @@
   "public": "عامة",
   "event_timing": "موعد الفعالية",
   "start_date": "تاريخ البدء",
+  "please_enter_your_start_date":"من فضلك ادخل تاريخ البدء",
+  "please_enter_your_end_date":"من فضلك ادخل تاريخ الانتهاء",
+  "please_enter_your_start_time":"من فضلك ادخل وقت البدء",
+  "please_enter_your_end_time":"من فضلك ادخل وقت الانتهاء",
+  "end_datetime_must_be_after_start_datetime":"يجب ان يكون تاريخ/وقت الانتهاء بعد تاريخ/وقت البدء",
   "start_time": "وقت البدء",
+  "start_text": "البداية: {start}",
+"pick_location":"اختيار الموقع",
+"addguests":"٤ من ٥: أضف الضيوف",
+"search_contacts": "ابحث عن جهات الاتصال",
+"no_number": "لا يوجد رقم",
+"done": "تم",
+"see_all": "عرض الكل",
+"next_review_send": "التالي: المراجعة والإرسال",
+"invitations_sent": "تم إرسال الدعوات بنجاح",
+"create_contact": "إنشاء جهة اتصال",
+"guest_email": "البريد الإلكتروني للضيف",
+"capacity_reached": "تم الوصول إلى الحد الأقصى للسعة",
+"cancel": "إلغاء",
+"please_add_one_guest": "يرجى إضافة ضيف واحد على الأقل",
+"no_valid_users_found": "لم يتم العثور على مستخدمين مسجلين صالحين.",
+"error_fetching_guest_data": "حدث خطأ أثناء جلب بيانات الضيوف",
+"save": "حفظ",
+"failed_to_create_event": "فشل في إنشاء الحدث",
+"event_details_step": "٢ من ٥: تفاصيل الحدث",
+
+
+
+
+
+
+
+
+
+
+
+
+
+  "yyyymmdd":"عام-شهر-يوم",
   "end_date": "تاريخ الانتهاء",
   "end_time": "وقت الانتهاء",
   "location": "الموقع",
+  "enter_event_location":"ادخل مكان الفعالية",
+  "please_enter_your_event_location":"من فضلك ادخل مكان الفعالية",
+  "category":"الفئة",
+  "select_category":"اختر الفئة",
+  "please_select_category":"من فضلك اختر الفئة",
+  "capacity":"السعة",
+  "enter_number_of_attendees":"ادخل عدد الحضور",
+  "please_enter_capacity":"من فضلك ادخل عدد الحضور",
+  "enter_valid_number":"ادخل رقم صالح",
   "open_google_maps": "افتح خرائط جوجل",
   "attendees": "الحضور",
   "enter_number_of_attendees": "أدخل عدد الحضور",
+  "please_enter_number_of_attendees": "من فضلك أدخل عدد الحضور" ,
   "hosted_by": "بواسطة",
   "enter_host_name": "أدخل اسم المنظم",
+  "please_enter_host_name": "من فضلك أدخل اسم المنظم",
   "next_preview": "التالي: المعاينة",
   "upcoming_events": "الفعاليات القادمة",
   "recommended_events": "الفعاليات المقترحة",
@@ -96,7 +148,34 @@
     "password_min_length": "كلمة المرور يجب أن تكون على الأقل 6 أحرف",
     "passwords_do_not_match": "كلمتا المرور غير متطابقتين",
     "wrong_password":"كلمة سر خاطئة حاول مرة اخرى",
-    "customize_step_title": "١ من ٥: التخصيص"
+    "customize_step_title": "١ من ٥: التخصيص",
+"ok": "حسنًا",
+"delete_event": "حذف الفعالية",
+"confirm_delete_event": "هل أنت متأكد أنك تريد حذف هذه الفعالية؟",
+"no_events_created": "لم يتم إنشاء أي فعاليات",
+"no_created_events": "لم تقم بإنشاء أي أحداث بعد.",
+"interestedEvents": "الفعاليات المهتم بها",
+"noInterestedEvents": "لا توجد فعاليات مهتم بها حتى الآن.",
+"joinedSuccessfully": "تم الانضمام بنجاح",
+"interestedEvents": "الفعاليات المهتم بها",
+"noEventsForThatDay": "لا توجد فعاليات لهذا اليوم",
+"createEventAndMakeMemories": "أنشئ فعالية واصنع بعض الذكريات",
+"eventDeletedSuccessfully": "تم حذف الفعالية بنجاح",
+"eventMemories": "ذكريات الفعالية",
+"eventMemory": "ذكرى الفعالية",
+
+"noEndedEventsYet": "لا توجد فعاليات منتهية بعد."
+
+
+
+
+
+
+
+
+
+
+
 
 
 

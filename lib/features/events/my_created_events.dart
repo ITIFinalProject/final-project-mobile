@@ -1,16 +1,13 @@
 import 'package:eventify_app/core/theme.dart';
-import 'package:eventify_app/features/add_event/edit%20event/edit_event_view.dart';
 import 'package:eventify_app/features/events/event_cubit/event_cubit.dart';
 import 'package:eventify_app/features/events/event_cubit/event_state.dart';
 import 'package:eventify_app/features/events/widgets/card_no_events.dart';
 import 'package:eventify_app/features/events/widgets/event_card.dart';
+import 'package:eventify_app/generated/l10n.dart';
 import 'package:eventify_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:eventify_app/generated/l10n.dart';
 
-import '../../core/routes.dart';
-import '../add_memory/view/add_memory.dart';
 import '../profile/cubit/theme_cubit.dart';
 
 class MyCreatedEvents extends StatefulWidget {
@@ -64,8 +61,12 @@ class _MyCreatedEventsState extends State<MyCreatedEvents> with RouteAware {
           } else if (state is EventLoaded) {
             if (state.events.isEmpty) {
               return CardNoEvents(
-                text: '"You haven’t created any events yet."',
-                title: 'No Events Created',
+                text: S
+                    .of(context)
+                    .no_created_events,
+                title: S
+                    .of(context)
+                    .no_events_created,
               );
             }
             return ListView.builder(
@@ -100,6 +101,7 @@ class _MyCreatedEventsState extends State<MyCreatedEvents> with RouteAware {
       ),
     );
   }
+
   showDialogDelete(String eventId) {
     showDialog(context: context, builder: (context) {
       return  BlocBuilder<EventCubit, EventState>(
@@ -109,18 +111,27 @@ class _MyCreatedEventsState extends State<MyCreatedEvents> with RouteAware {
             Navigator.pop(context);
           }else{
             return AlertDialog(
-              content: Text('Are you sure you want to delete this event' , style: TextStyle(
+              content: Text(S
+                  .of(context)
+                  .confirm_delete_event, style: TextStyle(
                   fontSize: 16,
-                color: ThemeManager.secondaryColor
+                  color: ThemeManager.secondaryColor
               ),),
-              title: Text('Delete Event',style: TextStyle(color: ThemeManager.primaryColor),),
+              title: Text(S
+                  .of(context)
+                  .delete_event,
+                style: TextStyle(color: ThemeManager.primaryColor),),
               actions: [
-                TextButton(onPressed: (){
+                TextButton(onPressed: () {
                   context.read<EventCubit>().deleteEvent(eventId);
-                }, child: Text('Ok',style: TextStyle(color: ThemeManager.primaryColor),)),
-                TextButton(onPressed: (){
+                }, child: Text(S
+                    .of(context)
+                    .ok, style: TextStyle(color: ThemeManager.primaryColor),)),
+                TextButton(onPressed: () {
                   Navigator.pop(context);
-                }, child: Text('Cancel', style: TextStyle(color: Colors.grey),)),
+                }, child: Text(S
+                    .of(context)
+                    .cancel, style: TextStyle(color: Colors.grey),))
               ],
             );
           }

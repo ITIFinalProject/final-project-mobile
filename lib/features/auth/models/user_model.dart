@@ -5,6 +5,7 @@ class UserModel {
   String? address;
   String? imagePath;
   String? phone;
+  String? status;
   final String? fcmToken;
 
   UserModel({
@@ -15,6 +16,7 @@ class UserModel {
     this.phone,
     this.uid,
     this.fcmToken,
+    this.status
   });
 
   UserModel.fromFireStore(Map<String, dynamic> user)
@@ -26,17 +28,19 @@ class UserModel {
         phone: user['phone'],
         imagePath: user['imagePath'],
         fcmToken: user['fcmToken'],
+      status: user['status']
       );
 
   Map<String, dynamic> toFireStore() {
     return {
-      'uid':uid,
+      'uid': uid,
       'name': name,
       'email': email,
       'address': address,
       'phone': phone,
       'imagePath': imagePath,
       'fcmToken': fcmToken,
+      'status': status ?? 'active',
     };
   }
 }
