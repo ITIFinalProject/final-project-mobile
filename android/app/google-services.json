@@ -12,7 +12,20 @@
           "package_name": "com.example.eventify_app"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "620047535861-n96r0mfo3u6627ucdch442e82568es91.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.eventify_app",
+            "certificate_hash": "262339dc5f776e84e905e609027bb0c17b7ab7da"
+          }
+        },
+        {
+          "client_id": "620047535861-hrtr4kqhiluljmg3j9prn31smcke8u4s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBvAr1w7llGJClZsjbs9YT3wwnUu7v38eA"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "620047535861-hrtr4kqhiluljmg3j9prn31smcke8u4s.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

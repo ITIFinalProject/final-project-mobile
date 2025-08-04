@@ -1,4 +1,188 @@
 {
-"login":"تسجيل دخول",
-"register":"انشاء حساب"
+  "@@locale": "ar",
+  "login": "تسجيل الدخول",
+  "register": "إنشاء حساب",
+  "welcome": "مرحبًا",
+  "entertainment": "ترفيه",
+  "educationalAndbusiness": "تعليمي وأعمال",
+  "culturalAndarts": "ثقافة وفنون",
+  "sportsAndfitness": "رياضة ولياقة",
+  "technologyAndinnovation": "تقنية وابتكار",
+  "travelAndadventure": "سفر ومغامرة",
+  "events": "الفعاليات",
+  "no_events": "لا توجد فعاليات",
+  "customize": "تخصيص",
+  "your_event_cover_here": "غلاف الفعالية هنا",
+  "upload_image": "رفع صورة",
+  "choose_template": "اختر قالبًا",
+  "messages": "الرسائل",
+  "no_joined_events_yet": "لم تنضم إلى أي فعاليات بعد",
+  "next_event_details": "التالي: تفاصيل الفعالية",
+  "step_2_of_5_event_details": "2 من 5: تفاصيل الفعالية",
+  "event_title": "عنوان الفعالية",
+  "enter_event_title": "أدخل عنوان الفعالية",
+  "event_category": "فئة الفعالية",
+  "pleaseselect_event_category":"من فضلك اختر فئة الفعالية",
+  "select_event_category": "اختر فئة الفعالية",
+  "event_description": "وصف الفعالية",
+  "update_event":"تحديث الفعالية",
+  "create_event":"انشئ فعاليه",
+  "write_your_event_description": "اكتب وصف الفعالية",
+  "please_enter_your_event_description":"من فضلك ادخل وصف الفعالية",
+  "event_type": "نوع الفعالية",
+  "edit_event":"تعديل الفعالية",
+  "event_updated_successfully": "تم تحديث الفعالية بنجاح",
+  "select_event_type": "اختر نوع الفعالية",
+  "please_select_event_type":"من فضلك اختر نوع الفعالية",
+  "please_enter_your_event_title":"من فضلك ادخل اسم الفعالية",
+  "private": "خاصة",
+  "public": "عامة",
+  "event_timing": "موعد الفعالية",
+  "start_date": "تاريخ البدء",
+  "please_enter_your_start_date":"من فضلك ادخل تاريخ البدء",
+  "please_enter_your_end_date":"من فضلك ادخل تاريخ الانتهاء",
+  "please_enter_your_start_time":"من فضلك ادخل وقت البدء",
+  "please_enter_your_end_time":"من فضلك ادخل وقت الانتهاء",
+  "end_datetime_must_be_after_start_datetime":"يجب ان يكون تاريخ/وقت الانتهاء بعد تاريخ/وقت البدء",
+  "start_time": "وقت البدء",
+  "start_text": "البداية: {start}",
+"pick_location":"اختيار الموقع",
+"addguests":"٤ من ٥: أضف الضيوف",
+"search_contacts": "ابحث عن جهات الاتصال",
+"no_number": "لا يوجد رقم",
+"done": "تم",
+"see_all": "عرض الكل",
+"next_review_send": "التالي: المراجعة والإرسال",
+"invitations_sent": "تم إرسال الدعوات بنجاح",
+"create_contact": "إنشاء جهة اتصال",
+"guest_email": "البريد الإلكتروني للضيف",
+"capacity_reached": "تم الوصول إلى الحد الأقصى للسعة",
+"cancel": "إلغاء",
+"please_add_one_guest": "يرجى إضافة ضيف واحد على الأقل",
+"no_valid_users_found": "لم يتم العثور على مستخدمين مسجلين صالحين.",
+"error_fetching_guest_data": "حدث خطأ أثناء جلب بيانات الضيوف",
+"save": "حفظ",
+"failed_to_create_event": "فشل في إنشاء الحدث",
+"event_details_step": "٢ من ٥: تفاصيل الحدث",
+
+
+
+
+
+
+
+
+
+
+
+
+
+  "yyyymmdd":"عام-شهر-يوم",
+  "end_date": "تاريخ الانتهاء",
+  "end_time": "وقت الانتهاء",
+  "location": "الموقع",
+  "enter_event_location":"ادخل مكان الفعالية",
+  "please_enter_your_event_location":"من فضلك ادخل مكان الفعالية",
+  "category":"الفئة",
+  "select_category":"اختر الفئة",
+  "please_select_category":"من فضلك اختر الفئة",
+  "capacity":"السعة",
+  "enter_number_of_attendees":"ادخل عدد الحضور",
+  "please_enter_capacity":"من فضلك ادخل عدد الحضور",
+  "enter_valid_number":"ادخل رقم صالح",
+  "open_google_maps": "افتح خرائط جوجل",
+  "attendees": "الحضور",
+  "enter_number_of_attendees": "أدخل عدد الحضور",
+  "please_enter_number_of_attendees": "من فضلك أدخل عدد الحضور" ,
+  "hosted_by": "بواسطة",
+  "enter_host_name": "أدخل اسم المنظم",
+  "please_enter_host_name": "من فضلك أدخل اسم المنظم",
+  "next_preview": "التالي: المعاينة",
+  "upcoming_events": "الفعاليات القادمة",
+  "recommended_events": "الفعاليات المقترحة",
+  "search": "بحث",
+  "no_events_desc": "انشئ حدث وكون بعض الذكريات",
+  "change_theme": "تغيير النمط",
+  "change_language": "تغيير اللغة",
+  "edit_profile": "تعديل الملف الشخصي",
+  "name": "الاسم",
+  "email": "البريد الإلكتروني",
+  "phone": "رقم الهاتف",
+  "address": "العنوان",
+  "save_changes": "حفظ التغييرات",
+  "profile_updated_successfully": "تم تحديث الملف الشخصي بنجاح",
+  "notification": "الإشعارات",
+  "contact_us": "اتصل بنا",
+  "sign_out": "تسجيل الخروج",
+  "change_password": "تغيير كلمة المرور",
+  "forgot_password": "نسيت كلمة المرور؟",
+  "verify_password": "تأكيد كلمة المرور",
+  "verify": "تحقق",
+  "enter_old_password1": "أدخل كلمة المرور القديمة",
+  "new_password": "كلمة المرور الجديدة",
+  "confirm_password": "تأكيد كلمة المرور",
+  "password_updated_successfully": "تم تحديث كلمة المرور بنجاح",
+  "save_password": "حفظ كلمة المرور",
+  "my_events": "فعالياتي",
+  "edit": "تعديل",
+  "delete": "حذف",
+  "event_memories": "ذكريات الفعاليات",
+  "no_ended_events_yet": "لا توجد فعاليات منتهية بعد",
+  "no_user_data_found": "لم يتم العثور على بيانات المستخدم",
+  "take_a_photo":"التقط صورة",
+  "choose_from_gallery":"اختر من المعرض",
+  "no_events_found_in_this_category":"لم يتم العثور على اى أحداث فى هذه الفئة",
+  "join":"انضم",
+  "ask_ai_about_anything":"اسأل الذكاء الاصطناعى عن اى شئ",
+  "ai_chat":"دردشة مع الذكاء الاصطناعى",
+   "write_your_message_here":"اكتب رسالتك هنا",
+   "no_results_found": "لا توجد نتائج",
+   "login_required_message": "يجب تسجيل الدخول للوصول إلى الدردشة",
+   "chat": "الدردشة",
+   "no_messages_yet": "لا توجد رسائل بعد",
+   "write_a_message": "اكتب رسالة...",
+   "messages":"الرسائل",
+   "no_joined_events_yet":"لم تنضم الى اى احداث بعد",
+    "send_a_message_to_your_guests":"ارسل رسالة الى ضيوفك",
+    "enter_old_password": "من فضلك أدخل كلمة المرور القديمة",
+    "password_min_length": "كلمة المرور يجب أن تكون على الأقل 6 أحرف",
+    "passwords_do_not_match": "كلمتا المرور غير متطابقتين",
+    "wrong_password":"كلمة سر خاطئة حاول مرة اخرى",
+    "customize_step_title": "١ من ٥: التخصيص",
+"ok": "حسنًا",
+"delete_event": "حذف الفعالية",
+"confirm_delete_event": "هل أنت متأكد أنك تريد حذف هذه الفعالية؟",
+"no_events_created": "لم يتم إنشاء أي فعاليات",
+"no_created_events": "لم تقم بإنشاء أي أحداث بعد.",
+"interestedEvents": "الفعاليات المهتم بها",
+"noInterestedEvents": "لا توجد فعاليات مهتم بها حتى الآن.",
+"joinedSuccessfully": "تم الانضمام بنجاح",
+"interestedEvents": "الفعاليات المهتم بها",
+"noEventsForThatDay": "لا توجد فعاليات لهذا اليوم",
+"createEventAndMakeMemories": "أنشئ فعالية واصنع بعض الذكريات",
+"eventDeletedSuccessfully": "تم حذف الفعالية بنجاح",
+"eventMemories": "ذكريات الفعالية",
+"eventMemory": "ذكرى الفعالية",
+
+"noEndedEventsYet": "لا توجد فعاليات منتهية بعد."
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

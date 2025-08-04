@@ -1,0 +1,111 @@
+// custom textfield******
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../../core/theme.dart';
+import '../../../profile/cubit/theme_cubit.dart';
+
+typedef Validator = String? Function(String?);
+
+class CustomTextFIeld extends StatelessWidget {
+  String lable;
+  Validator? validator;
+  IconData icon;
+  IconData? suffixIcon;
+  VoidCallback? onPressedIcon;
+  int lines;
+  bool obscure;
+  TextEditingController textFieldController;
+  String? initialValue;
+  bool enable;
+
+  CustomTextFIeld({
+    super.key,
+    required this.lable,
+    required this.icon,
+    this.lines = 1,
+    this.initialValue,
+    this.obscure = false,
+    this.enable = true,
+    this.validator,
+    this.suffixIcon,
+    this.onPressedIcon,
+
+    required this.textFieldController,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final themeMode = context.watch<ThemeCubit>().state;
+    final isDark = themeMode == ThemeMode.dark;
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+      child: TextFormField(
+        controller: textFieldController,
+        minLines: lines,
+        initialValue: initialValue,
+        maxLines: lines > 1 ? lines : 1,
+        obscureText: obscure,
+        enabled: enable,
+        decoration: InputDecoration(
+          prefix: Icon(icon, color: isDark?ThemeManager.lightPinkColor:ThemeManager.primaryColor),
+          label: Text(lable , style: TextStyle(
+            color: isDark?ThemeManager.lightPinkColor:ThemeManager.primaryColor,
+            fontSize: 18,
+            fontWeight: FontWeight.bold
+          ),),
+          // labelStyle: TextStyle(color: ThemeManager.primaryColor),
+          suffixIcon: IconButton(
+            icon: Icon(suffixIcon, color: isDark?ThemeManager.lightPinkColor:ThemeManager.primaryColor),
+            onPressed: onPressedIcon,
+          ),
+          // labelStyle: TextStyle(color: color),
+          // focusedBorder: OutlineInputBorder(
+          //   borderSide: BorderSide(color: ThemeManager.primaryColor),
+          //   borderRadius: BorderRadius.circular(13),
+          // ),
+          // disabledBorder: OutlineInputBorder(
+          //   borderSide: BorderSide(color: ThemeManager.primaryColor),
+          //   borderRadius: BorderRadius.circular(13),
+          // ),
+          // enabledBorder: OutlineInputBorder(
+          //   borderSide: BorderSide(color: ThemeManager.primaryColor),
+          //   borderRadius: BorderRadius.circular(13),
+          // ),
+          // errorBorder: OutlineInputBorder(
+          //   borderSide: BorderSide(color: Colors.red),
+          //   borderRadius: BorderRadius.circular(13),
+          // ),
+          // focusedErrorBorder: OutlineInputBorder(
+          //   borderSide: BorderSide(color: Colors.red),
+          //   borderRadius: BorderRadius.circular(13),
+          // ),
+        ),
+        validator:
+            validator ??
+            (value) {
+              if (value!.isEmpty) {
+                return "Please enter your $lable ....";
+              }
+              if (lable == "Email") {
+                if (!RegExp(r"^[^@]+@[^@]+\.[^@]+").hasMatch(value)) {
+                  return "Please enter a valid email. ..";
+                }
+              }
+              if (lable == "Password") {
+                if (value.length < 6) {
+                  return 'Password must be at least 6 characters';
+                }
+              }
+              if (lable == "Phone") {
+                if (!RegExp(r"^01[0125]\d{8}").hasMatch(value)) {
+                  return 'Please enter a valid phone like 01012345678.';
+                }
+              }
+
+              return null;
+            },
+      ),
+    );
+  }
+}

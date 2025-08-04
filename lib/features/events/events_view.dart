@@ -1,0 +1,361 @@
+import 'package:eventify_app/core/theme.dart';
+import 'package:eventify_app/features/events/widgets/card_no_events.dart';
+import 'package:eventify_app/features/events/widgets/event_card.dart';
+import 'package:eventify_app/features/profile/cubit/theme_cubit.dart';
+import 'package:eventify_app/generated/l10n.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
+import 'package:table_calendar/table_calendar.dart';
+
+import '../../main.dart'; // Assuming routeObserver is defined in main.dart
+import '../../models.dart/event_model.dart'; // Make sure EventModel is imported
+import 'event_cubit/event_cubit.dart';
+import 'event_cubit/event_state.dart';
+
+class EventsView extends StatefulWidget {
+  const EventsView({super.key});
+
+  @override
+  State<EventsView> createState() => _EventsViewState();
+}
+
+class _EventsViewState extends State<EventsView>
+    with RouteAware, WidgetsBindingObserver {
+  DateTime? selectedDate = DateTime.now();
+  List<EventModel> allEvents = []; // To store all fetched events
+  List<EventModel> interestedEvents = []; // To store interested events
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this); // Add observer for app lifecycle
+    // Fetch events immediately when the widget is initialized
+    _fetchData();
+  }
+
+  void _fetchData() {
+    context.read<EventCubit>().fetchEvents(); // Fetch all public events
+    context
+        .read<EventCubit>()
+        .fetchInterestedEvents(); // Fetch events the user is interested in
+    // Note: fetchMyEvents() might be for a different tab/view, so keeping it out unless needed here.
+  }
+
+  @override
+  void didPopNext() {
+    // Called when the current route has been popped off, and this route is in view again.
+    // This is crucial for refreshing data when returning from another page.
+    _fetchData();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Subscribe to route events after the widget is fully initialized
+    // to ensure ModalRoute.of(context) is not null.
+    final ModalRoute<dynamic>? currentRoute = ModalRoute.of(context);
+    if (currentRoute != null) {
+      routeObserver.subscribe(this, currentRoute);
+    }
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // Fetch data when the app resumes from the background
+    if (state == AppLifecycleState.resumed) {
+      _fetchData();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final themeMode = context
+        .watch<ThemeCubit>()
+        .state;
+    final isDarkMode = themeMode == ThemeMode.dark;
+
+    final currentUser = FirebaseAuth.instance.currentUser;
+    return Scaffold(
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(70),
+        child: AppBar(
+          title: Padding(
+            padding: const EdgeInsets.only(top: 20),
+            child: Text(S
+                .of(context)
+                .events),
+          ),
+        ),
+      ),
+      body: BlocConsumer<EventCubit, EventState>(
+        listener: (context, state) {
+          if (state is EventJoinSuccess) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(S
+                  .of(context)
+                  .joinedSuccessfully)),
+            );
+            // Crucially, refetch all events to update the list
+            _fetchData(); // Trigger full refresh
+          } else if (state is EventJoinError) {
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(state.message)));
+          } else if (state is EventError) {
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text("Error: ${state.message}")));
+          } else if (state is EventDeleted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(S
+                  .of(context)
+                  .eventDeletedSuccessfully)),
+            );
+            _fetchData(); // Refresh data after deletion
+            Navigator.pop(context); // Pop the delete dialog if it was showing
+          }
+          // We update the local lists here
+          if (state is EventLoaded) {
+            allEvents = state.events;
+          } else if (state is EventInterestedLoaded) {
+            interestedEvents = state.interestedEvents;
+          }
+        },
+        builder: (context, state) {
+          // Display loading indicator if any relevant loading state
+          if (state is EventLoading) {
+            return Center(
+              child: CircularProgressIndicator(
+                color: ThemeManager.primaryColor,
+              ),
+            );
+          }
+          final List<EventModel> currentEventsToDisplay;
+
+          // Determine which events to display based on the last loaded state
+          if (state is EventLoaded) {
+            currentEventsToDisplay = state.events;
+          } else if (state is EventInterestedLoaded) {
+            currentEventsToDisplay = allEvents;
+          } else {
+            currentEventsToDisplay = allEvents;
+          }
+
+          // --- Start UI Filtering Logic ---
+          final List<EventModel> filteredEventsByAccess =
+          currentEventsToDisplay.where((event) {
+            // Rule 1: Always include public events
+            if (event.type.toLowerCase() == 'public') {
+              return true;
+            }
+
+            // Rule 2: If a user is logged in, include events they host
+            if (currentUser != null && event.hostId == currentUser.uid) {
+              return true;
+            }
+
+            // Rule 3: If a user is logged in, include private events they are invited to
+            if (currentUser != null &&
+                event.type.toLowerCase() == 'private' &&
+                event.guests != null) {
+              return event.guests!.any(
+                    (guest) => guest.uid == currentUser.uid,
+              );
+            }
+
+            // Exclude all other events (e.g., private events not hosted by or for the user)
+            return false;
+          }).toList();
+          // --- End UI Filtering Logic ---
+
+          // Now apply date filtering to the already access-filtered events
+          final List<EventModel> finalFilteredEvents =
+          filteredEventsByAccess.where((event) {
+            if (selectedDate == null)
+              return true; // Show all if no date selected
+
+            try {
+              // Normalize event date to remove time parts for comparison
+              String eventDateString =
+              event.date.contains('_')
+                  ? event.date
+                  .split('_')
+                  .first
+                  .trim()
+                  : event.date.trim();
+
+              // Robust date parsing for "yyyy-MM-dd"
+              final DateTime eventDate = DateFormat(
+                'yyyy-MM-dd',
+              ).parse(eventDateString);
+
+              // Compare only year, month, and day
+              return eventDate.year == selectedDate!.year &&
+                  eventDate.month == selectedDate!.month &&
+                  eventDate.day == selectedDate!.day;
+            } catch (e) {
+              print(
+                "Error parsing event date for filtering: ${event.date} -> $e",
+              );
+              return false; // Exclude events with unparsable dates
+            }
+          }).toList();
+          return SafeArea(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 16),
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color:
+                      isDarkMode
+                          ? ThemeManager.secondaryColor.withOpacity(0.8)
+                          : ThemeManager.lightPinkColor,
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: const Color(0xFF456882).withOpacity(0.2),
+                          blurRadius: 6,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: TableCalendar(
+                      eventLoader: (day) {
+                        return allEvents.where((event) {
+                          try {
+                            final eventDateString = event.date.contains('_')
+                                ? event.date
+                                .split('_')
+                                .first
+                                .trim()
+                                : event.date.trim();
+                            final eventDate = DateFormat('yyyy-MM-dd').parse(
+                                eventDateString);
+
+                            final isSameDayEvent = eventDate.year == day.year &&
+                                eventDate.month == day.month &&
+                                eventDate.day == day.day;
+
+                            // تحقق من نوع الحدث
+                            final isVisible = event.type == 'Public' ||
+                                (event.type == 'Private' &&
+                                    event.guests!.contains(currentUser!.uid));
+
+                            return isSameDayEvent && isVisible;
+                          } catch (e) {
+                            return false;
+                          }
+                        }).toList();
+                      },
+
+                      calendarBuilders: CalendarBuilders(
+                        markerBuilder: (context, date, events) {
+                          if (events.isNotEmpty) {
+                            return Positioned(
+                              bottom: 1,
+                              child: Container(
+                                width: 6,
+                                height: 6,
+                                decoration: BoxDecoration(
+                                  color: isDarkMode ? ThemeManager
+                                      .lightPinkColor : ThemeManager
+                                      .primaryColor,
+                                  shape: BoxShape.circle,
+                                ),
+                              ),
+                            );
+                          }
+                          return const SizedBox();
+                        },
+                      ),
+
+                      firstDay: DateTime.utc(2020, 1, 1),
+                      lastDay: DateTime.utc(2030, 12, 31),
+                      focusedDay:
+                      selectedDate ??
+                          DateTime.now(),
+                      // Use selectedDate for focusedDay
+                      headerStyle: const HeaderStyle(
+                        formatButtonVisible: false,
+                        titleCentered: true,
+                        leftChevronIcon: Icon(Icons.chevron_left),
+                        rightChevronIcon: Icon(Icons.chevron_right),
+                      ),
+                      calendarStyle: CalendarStyle(
+                        todayDecoration: BoxDecoration(
+                          color: ThemeManager.darkPinkColor,
+                          shape: BoxShape.circle,
+                        ),
+                        selectedDecoration: BoxDecoration(
+                          color: Color(0xFF1B3C53),
+                          shape: BoxShape.circle,
+                        ),
+
+                        rangeEndDecoration: BoxDecoration(
+                          color: ThemeManager.primaryColor.withOpacity(0.5),
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                      daysOfWeekStyle: const DaysOfWeekStyle(
+                        weekendStyle: TextStyle(
+                          color: ThemeManager.primaryColor,
+                        ),
+                        weekdayStyle: TextStyle(color: Colors.black87),
+                      ),
+
+                      availableGestures: AvailableGestures.all,
+                      onDaySelected: (newSelectedDay, newFocusedDay) {
+                        setState(() {
+                          selectedDate = newSelectedDay;
+                          // Update focusedDay to the newly selected day to keep calendar centered
+                          // focusedDay = newFocusedDay; // Not needed if focusedDay uses selectedDate
+                        });
+                      },
+                      selectedDayPredicate: (day) {
+                        return isSameDay(selectedDate, day);
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+
+                  (finalFilteredEvents.isEmpty)
+                      ? CardNoEvents(
+                    text: S
+                        .of(context)
+                        .createEventAndMakeMemories,
+                    title: S
+                        .of(context)
+                        .noEventsForThatDay,
+                  )
+                      : Column(
+                    children:
+                    finalFilteredEvents.map((event) {
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 12),
+                        child: CardEvent(event: event),
+                      );
+                    }).toList(),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+
+  @override
+  void dispose() {
+    routeObserver.unsubscribe(this);
+    WidgetsBinding.instance.removeObserver(this); // Remove observer
+    super.dispose();
+  }
+}
