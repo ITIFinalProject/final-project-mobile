@@ -2,17 +2,19 @@
 class MemoryModel{
    String eventId;
    String url;
-   String type; // 'image' or 'video'
+   String type;
+
    MemoryModel({
-      required this.eventId,
-      required this.url,
-      required this.type,
+     required this.eventId,
+     required this.url,
+     required this.type,
    });
-    Map<String, dynamic> toMap() {
-      return {
-        'id': eventId,
-        'url': url,
-        'type': type,
+
+   Map<String, dynamic> toMap() {
+     return {
+       'id': eventId,
+       'url': url,
+       'type': type,
 
       };
     }
