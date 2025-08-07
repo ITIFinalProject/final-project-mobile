@@ -55,8 +55,41 @@ class AuthCubit extends Cubit<AuthState> {
       if (user.status == 'disabled') {
         await _auth.signOut();
         prefs.setString('userId', '');
-        emit(AuthFailure("تم تعطيل حسابك من قبل الإدارة."));
+        emit(AuthFailure(
+            "Your account has been disabled by the administration."));
         return;
+      }
+      if (user.status == 'banned') {
+        final bannedUntil = data['banUntil'];
+        if (bannedUntil != null) {
+          final bannedUntilDate = (bannedUntil as Timestamp).toDate();
+          final now = DateTime.now();
+
+          if (now.isAfter(bannedUntilDate)) {
+            // ✅ ban period is over, set status back to active
+            await FirebaseFirestore.instance
+                .collection('users')
+                .doc(user.uid)
+                .update({'status': 'active'});
+
+            data['status'] = 'active';
+            user = UserModel.fromFireStore(data);
+          } else {
+            // ❌ still banned
+            await _auth.signOut();
+            prefs.setString('userId', '');
+            emit(AuthFailure(
+                "Your account has been banned for 30 days. Please try again later."));
+            return;
+          }
+        } else {
+          // ❌ banned but no bannedUntil → invalid data
+          await _auth.signOut();
+          prefs.setString('userId', '');
+          emit(AuthFailure(
+              "Your account has been banned by the administration."));
+          return;
+        }
       }
 
       emit(AuthSuccess(user));
@@ -133,11 +166,58 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
+  // void checkUserLoggedIn() async {
+  //   await Future.delayed(const Duration(seconds: 2));
+  //
+  //   final currentUser = FirebaseAuth.instance.currentUser;
+  //
+  //   final prefs = await SharedPreferences.getInstance();
+  //   final localUserId = prefs.getString('userId');
+  //
+  //   if (currentUser != null && currentUser.uid == localUserId) {
+  //     try {
+  //       final doc = await FirebaseFirestore.instance
+  //           .collection('users')
+  //           .doc(currentUser.uid)
+  //           .get();
+  //
+  //       if (doc.exists) {
+  //         UserModel userModel = UserModel.fromFireStore(doc.data()!);
+  //         if (userModel.status == 'disabled') {
+  //           // المستخدم موقوف
+  //           await _auth.signOut();
+  //           await GoogleSignIn().signOut();
+  //           prefs.setString('userId', '');
+  //           emit(AuthFailure("تم تعطيل حسابك من قبل الإدارة."));
+  //           return;
+  //         }
+  //         emit(AuthSuccess(userModel));
+  //       } else {
+  //         await _auth.signOut();
+  //         await GoogleSignIn().signOut();
+  //         final prefs = await SharedPreferences.getInstance();
+  //         prefs.setString('userId','');
+  //         emit(AuthLoggedOut());
+  //       }
+  //     } catch (e) {
+  //       await _auth.signOut();
+  //       await GoogleSignIn().signOut();
+  //       final prefs = await SharedPreferences.getInstance();
+  //       prefs.setString('userId','');
+  //       emit(AuthLoggedOut());
+  //     }
+  //   } else {
+  //     await _auth.signOut();
+  //     await GoogleSignIn().signOut();
+  //     final prefs = await SharedPreferences.getInstance();
+  //     prefs.setString('userId','');
+  //     emit(AuthLoggedOut());
+  //   }
+  // }
   void checkUserLoggedIn() async {
     await Future.delayed(const Duration(seconds: 2));
 
     final currentUser = FirebaseAuth.instance.currentUser;
-
     final prefs = await SharedPreferences.getInstance();
     final localUserId = prefs.getString('userId');
 
@@ -149,35 +229,73 @@ class AuthCubit extends Cubit<AuthState> {
             .get();
 
         if (doc.exists) {
-          UserModel userModel = UserModel.fromFireStore(doc.data()!);
+          Map<String, dynamic> userData = doc.data()!;
+          final userModel = UserModel.fromFireStore(userData);
+
+          // Check if user is banned
+          if (userModel.status == 'banned') {
+            final bannedUntil = userData['banUntil'];
+
+            if (bannedUntil != null) {
+              final bannedUntilDate = (bannedUntil as Timestamp).toDate();
+              final now = DateTime.now();
+
+              if (now.isAfter(bannedUntilDate)) {
+                // Ban period is over, set status back to active
+                await FirebaseFirestore.instance
+                    .collection('users')
+                    .doc(currentUser.uid)
+                    .update({'status': 'active'});
+
+                userModel.status = 'active';
+                emit(AuthSuccess(userModel));
+                return;
+              } else {
+                // Still banned
+                await _auth.signOut();
+                await GoogleSignIn().signOut();
+                prefs.setString('userId', '');
+                emit(AuthFailure(
+                    "Your account has been banned for 30 days. Please try again later."));
+                return;
+              }
+            } else {
+              // bannedWithoutTime = invalid data
+              await _auth.signOut();
+              await GoogleSignIn().signOut();
+              prefs.setString('userId', '');
+              emit(AuthFailure(
+                  "Your account has been disabled by the administration."));
+              return;
+            }
+          }
+
+          // Check if user is disabled
           if (userModel.status == 'disabled') {
-            // المستخدم موقوف
             await _auth.signOut();
             await GoogleSignIn().signOut();
             prefs.setString('userId', '');
             emit(AuthFailure("تم تعطيل حسابك من قبل الإدارة."));
             return;
           }
+
           emit(AuthSuccess(userModel));
         } else {
           await _auth.signOut();
           await GoogleSignIn().signOut();
-          final prefs = await SharedPreferences.getInstance();
-          prefs.setString('userId','');
+          prefs.setString('userId', '');
           emit(AuthLoggedOut());
         }
       } catch (e) {
         await _auth.signOut();
         await GoogleSignIn().signOut();
-        final prefs = await SharedPreferences.getInstance();
-        prefs.setString('userId','');
+        prefs.setString('userId', '');
         emit(AuthLoggedOut());
       }
     } else {
       await _auth.signOut();
       await GoogleSignIn().signOut();
-      final prefs = await SharedPreferences.getInstance();
-      prefs.setString('userId','');
+      prefs.setString('userId', '');
       emit(AuthLoggedOut());
     }
   }
