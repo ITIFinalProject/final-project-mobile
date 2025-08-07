@@ -125,7 +125,6 @@ class _SplashScreenState extends State<SplashScreen> {
       animType: AnimType.rightSlide,
       title: title,
       desc: desc,
-      btnCancelOnPress: () {},
       btnOkOnPress: () {},
     )
       ..show();
