@@ -187,6 +187,12 @@ class _ProfileViewState extends State<ProfileView> {
         animType: AnimType.rightSlide,
         title: 'Sign Out',
         desc: 'Are you sure you want to sign out?',
+        titleTextStyle: TextStyle(
+            color: ThemeManager.primaryColor
+        ),
+        descTextStyle: TextStyle(
+            color: ThemeManager.secondaryColor
+        ),
         btnOkOnPress: () {
           context.read<AuthCubit>().signOut();
         },
