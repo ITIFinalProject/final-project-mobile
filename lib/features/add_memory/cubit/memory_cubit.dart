@@ -109,8 +109,18 @@ class MemoryCubit extends Cubit<MemoryState> {
           .delete();
 
       log("✅ Memory deleted successfully");
+      final snapshot = await firestore
+          .collection('events')
+          .doc(eventId)
+          .collection('memories')
+          .get();
 
-      await fetchMemories(memoryId);
+      final memories = snapshot.docs.map((doc) {
+        final data = doc.data();
+        data['id'] = doc.id;
+        return MemoryModel.fromMap(data);
+      }).toList();
+      emit(MemoriesLoaded(memories));
     } catch (e) {
       log("❌ Error deleting memory: $e");
       emit(MemoryError("Failed to delete memory: $e"));

@@ -413,7 +413,7 @@ class _EventDetailsViewState extends State<EventDetailsView> {
                               .addguests
                               : S
                               .of(context)
-                              .next_preview,
+                              .create_event,
                           onPressed: () {
                             // لو Public → يكمل createEvent عادي
                             createEvent();

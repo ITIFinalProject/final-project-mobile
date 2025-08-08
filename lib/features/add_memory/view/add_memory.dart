@@ -45,7 +45,9 @@ class _AddMemoryState extends State<AddMemory> {
     final isDarkMode = thememode == ThemeMode.dark;
     final userId = FirebaseAuth.instance.currentUser?.uid;
     final isOwner = widget.event.hostId == userId;
-
+    var size = MediaQuery
+        .of(context)
+        .size;
     return Scaffold(
       appBar: AppBar(title: Text('${widget.event.title} Memories')),
       body: BlocBuilder<MemoryCubit, MemoryState>(
@@ -94,17 +96,18 @@ class _AddMemoryState extends State<AddMemory> {
                       },
                        child: Stack(
                            children: [
-                             isImage
-                                 ? Card(
-                               shape: RoundedRectangleBorder(
-                                 borderRadius: BorderRadius.circular(15),
-                                 side: BorderSide(
-                                     color: isDarkMode ? ThemeManager
-                                         .lightPinkColor : ThemeManager
-                                         .primaryColor),
-                               ),
-                               child: ClipRRect(
-                                 borderRadius: BorderRadius.circular(15),
+                             AspectRatio(aspectRatio: 1,
+                               child: isImage
+                                   ? Card(
+                                 shape: RoundedRectangleBorder(
+                                   borderRadius: BorderRadius.circular(15),
+                                   side: BorderSide(
+                                       color: isDarkMode ? ThemeManager
+                                           .lightPinkColor : ThemeManager
+                                           .primaryColor),
+                                 ),
+                                 child: ClipRRect(
+                                   borderRadius: BorderRadius.circular(15),
                                  child: Image.network(
                                    memory.url,
                             fit: BoxFit.cover,
@@ -131,16 +134,15 @@ class _AddMemoryState extends State<AddMemory> {
                                 ),
                               );
                             },
-                          ),
-                        ),
-                      )
-                      : ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                               child: Container(
-                                 color: isDarkMode
-                                     ? ThemeManager.lightPinkColor
-                                     : ThemeManager.primaryColor,
-                                 // Placeholder for video
+                                 ),
+                                 ),
+                               )
+                                   : Container(
+                                 decoration: BoxDecoration(
+                                   color: isDarkMode
+                                       ? ThemeManager.lightPinkColor
+                                       : ThemeManager.primaryColor,
+                                   borderRadius: BorderRadius.circular(15),),
                                  child: Center(
                                    child: Icon(
                                      Icons.videocam,
@@ -150,12 +152,11 @@ class _AddMemoryState extends State<AddMemory> {
                                          .lightPinkColor,
                                    ),
                                  ),
-                               ),
-                             ),
+                               ),),
                              if(isOwner)
                                Positioned(
                                  top: 5,
-                                 right: 35,
+                                 right: 5,
                                  child: CircleAvatar(
                                    backgroundColor: Colors.red.withOpacity(0.8),
                                    radius: 16,
