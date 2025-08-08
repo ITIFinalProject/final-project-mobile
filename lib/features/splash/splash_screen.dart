@@ -46,6 +46,7 @@
 //   }
 // }
 
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:eventify_app/core/routes.dart';
 import 'package:eventify_app/core/theme.dart';
 import 'package:eventify_app/features/auth/cubit/auth_cubit.dart';
@@ -81,10 +82,15 @@ class _SplashScreenState extends State<SplashScreen> {
             } else if (state is AuthLoggedOut) {
               Navigator.pushReplacementNamed(context, AppRoutes.onBoarding);
             } else if (state is AuthFailure &&
-                state.error == "تم تعطيل حسابك من قبل الإدارة.") {
-              ScaffoldMessenger.of(
-                context,
-              ).showSnackBar(SnackBar(content: Text(state.error)));
+                state.error ==
+                    "Your account has been disabled by the administration.") {
+              showErrorDialog(title: 'Account Disable',
+                  desc: "Your account has been disabled by the administration.");
+            } else if (state is AuthFailure &&
+                state.error ==
+                    "Your account has been banned for 30 days. Please try again later.") {
+              showErrorDialog(title: 'Account Banned',
+                  desc: "Your account has been banned for 30 days. Please try again later.");
             }
           },
 
@@ -95,8 +101,14 @@ class _SplashScreenState extends State<SplashScreen> {
                 isDark
                     ? 'assets/images/logo_dark.png'
                     : 'assets/images/logo_light.jpeg',
-                width: MediaQuery.of(context).size.width * 0.6,
-                height: MediaQuery.of(context).size.height * 0.3,
+                width: MediaQuery
+                    .of(context)
+                    .size
+                    .width * 0.6,
+                height: MediaQuery
+                    .of(context)
+                    .size
+                    .height * 0.3,
                 fit: BoxFit.contain,
               ),
             ),
@@ -104,5 +116,17 @@ class _SplashScreenState extends State<SplashScreen> {
         );
       },
     );
+  }
+
+  showErrorDialog({required String title, required String desc}) {
+    return AwesomeDialog(
+      context: context,
+      dialogType: DialogType.error,
+      animType: AnimType.rightSlide,
+      title: title,
+      desc: desc,
+      btnOkOnPress: () {},
+    )
+      ..show();
   }
 }

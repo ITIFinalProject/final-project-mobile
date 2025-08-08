@@ -1,10 +1,10 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:eventify_app/core/routes.dart';
 import 'package:eventify_app/core/theme.dart';
 import 'package:eventify_app/features/auth/cubit/auth_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../core/alet_utils.dart';
 import '../../generated/l10n.dart';
 import '../auth/cubit/auth_state.dart';
 import 'cubit/language_cubit.dart';
@@ -40,7 +40,7 @@ class _ProfileViewState extends State<ProfileView> {
               Navigator.pushNamedAndRemoveUntil(
                 context,
                 AppRoutes.login,
-                (route) => true,
+                    (route) => true,
               );
             }
           },
@@ -164,29 +164,54 @@ class _ProfileViewState extends State<ProfileView> {
                   ),
 
                   _infoTile(S.of(context).sign_out, Icons.logout, () {
-                    Future.microtask(() => showAlertDialog());
+                    Future.microtask(() => showSignOutDialog());
                   }),
                 ],
               );
             }
 
-            return  Center(child: Text(S.of(context).no_user_data_found));
+            return Center(child: Text(S
+                .of(context)
+                .no_user_data_found));
           },
         ),
       ),
     );
   }
 
-  showAlertDialog() {
-    showWarningQuickAlert(
-      context: context,
-      title: 'Sign Out',
-      message: 'Are you sure you want to sign out?',
-      onPressed: () {
-        context.read<AuthCubit>().signOut();
-      },
-    );
+
+  showSignOutDialog() {
+    return AwesomeDialog(
+        context: context,
+        dialogType: DialogType.error,
+        animType: AnimType.rightSlide,
+        title: 'Sign Out',
+        desc: 'Are you sure you want to sign out?',
+        titleTextStyle: TextStyle(
+            color: ThemeManager.primaryColor
+        ),
+        descTextStyle: TextStyle(
+            color: ThemeManager.secondaryColor
+        ),
+        btnOkOnPress: () {
+          context.read<AuthCubit>().signOut();
+        },
+        btnCancelOnPress: () {}
+    )
+      ..show();
   }
+
+  // showAlertDialog() {
+  //   // showWarningQuickAlert(
+  //   //   context: context,
+  //   //   title: 'Sign Out',
+  //   //   message: 'Are you sure you want to sign out?',
+  //   //   onPressed: () {
+  //   //     context.read<AuthCubit>().signOut();
+  //   //   },
+  //   // );
+  //
+  // }
 
   //   return AwesomeDialog(
   //     context: context,

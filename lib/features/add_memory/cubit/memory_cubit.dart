@@ -3,9 +3,9 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eventify_app/features/add_memory/models/memory_model.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+
 import 'memory_state.dart';
 
 class MemoryCubit extends Cubit<MemoryState> {
@@ -44,20 +44,20 @@ class MemoryCubit extends Cubit<MemoryState> {
 
       print('Done uploading to Supabase: $publicUrl');
 
-      await firestore
+      final memoryRef = await firestore
           .collection('events')
           .doc(eventId)
           .collection('memories')
           .add({
         'url': publicUrl,
         'type': type,
-         'id':eventId
+        'id': '',
+        'createdAt': FieldValue.serverTimestamp()
       });
-
+      await memoryRef.update({'id': memoryRef.id});
       print('Done uploading to Firestore');
       emit(MemoryUploaded());
 
-      // ✅ تحديث الذكريات بعد الرفع
       await fetchMemories(eventId);
     } catch (e, stackTrace) {
       print('Error uploading memory: $e');
@@ -77,11 +77,61 @@ class MemoryCubit extends Cubit<MemoryState> {
           .collection('memories')
           .get();
 
-      final memories = snapshot.docs.map((doc) => MemoryModel.fromMap(doc.data())).toList();
+      final memories = snapshot.docs.map((doc) {
+        final data = doc.data();
+        data['id'] = doc.id;
+        return MemoryModel.fromMap(data);
+      }).toList();
 
       emit(MemoriesLoaded(memories));
     } catch (e) {
       emit(MemoryError(e.toString()));
     }
   }
+
+  Future<void> deleteMemory({
+    required String eventId,
+    required String memoryId,
+    required String fileUrl,
+  }) async {
+    emit(MemoryLoading());
+
+    try {
+      final storagePath = _getStoragePathFromUrl(fileUrl);
+      await supabase.storage.from('memories').remove([storagePath]);
+
+
+      await firestore
+          .collection('events')
+          .doc(eventId)
+          .collection('memories')
+          .doc(memoryId)
+          .delete();
+
+      log("✅ Memory deleted successfully");
+      final snapshot = await firestore
+          .collection('events')
+          .doc(eventId)
+          .collection('memories')
+          .get();
+
+      final memories = snapshot.docs.map((doc) {
+        final data = doc.data();
+        data['id'] = doc.id;
+        return MemoryModel.fromMap(data);
+      }).toList();
+      emit(MemoriesLoaded(memories));
+    } catch (e) {
+      log("❌ Error deleting memory: $e");
+      emit(MemoryError("Failed to delete memory: $e"));
+    }
+  }
+
+  String _getStoragePathFromUrl(String url) {
+    final uri = Uri.parse(url);
+    final index = uri.path.indexOf('/memories/');
+    if (index == -1) return '';
+    return uri.path.substring(index + '/memories/'.length);
+  }
+
 }
