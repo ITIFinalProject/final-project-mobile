@@ -5,6 +5,7 @@ import 'package:eventify_app/features/auth/cubit/auth_cubit.dart';
 import 'package:eventify_app/features/events/widgets/card_no_events.dart';
 import 'package:eventify_app/features/events/widgets/disable_button.dart';
 import 'package:eventify_app/features/profile/cubit/theme_cubit.dart';
+import 'package:eventify_app/features/reports/view/report_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -150,10 +151,31 @@ class EventPreviewPage extends StatelessWidget {
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
                               color:
-                                  isDarkMode
-                                      ? ThemeManager.lightPinkColor
-                                      : ThemeManager.primaryColor,
+                              isDarkMode
+                                  ? ThemeManager.lightPinkColor
+                                  : ThemeManager.primaryColor,
                             ),
+                          ),
+                          BlocBuilder<AuthCubit, AuthState>(
+                            builder: (context, authState) {
+                              if (authState is AuthSuccess &&
+                                  event.hostId != authState.user.uid) {
+                                return CircleAvatar(
+                                    backgroundColor: ThemeManager
+                                        .lightPinkColor,
+                                    child: IconButton(icon: Icon(Icons.flag,
+                                      color: ThemeManager.secondaryColor,),
+                                      onPressed: () {
+                                        Navigator.push(context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ReportView(event: event,
+                                                        user: authState.user)));
+                                      },
+                                    ));
+                              }
+                              return const SizedBox.shrink();
+                            },
                           ),
                         ],
                       ),

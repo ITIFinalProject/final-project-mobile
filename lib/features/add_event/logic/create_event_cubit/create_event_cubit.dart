@@ -171,8 +171,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../../../core/fcm_service.dart';
-
 part 'create_event_state.dart';
 
 class CreateEventCubit extends Cubit<CreateEventState> {
@@ -233,7 +231,8 @@ class CreateEventCubit extends Cubit<CreateEventState> {
         guests: guests,
 
       );
-      if (type.toLowerCase() == 'private' && guests != null && guests.isNotEmpty) {
+      if (type.toLowerCase() == 'private' && guests != null &&
+          guests.isNotEmpty) {
         await sendPrivateInvitations(guests: guests, event: newEvent);
       }
 
@@ -242,8 +241,14 @@ class CreateEventCubit extends Cubit<CreateEventState> {
           .collection('events')
           .doc(eventId)
           .set(newEvent.toMap());
-
+      final currentUser = FirebaseAuth.instance.currentUser;
       print('✅ Event saved successfully to Firestore!');
+      final userEventRef = FirebaseFirestore.instance
+          .collection('users')
+          .doc(currentUser!.uid)
+          .collection('eventsJoined')
+          .doc(eventId);
+      await userEventRef.set(newEvent.toMap());
       emit(CreateEventSuccess(newEvent));
     } catch (e, stackTrace) {
       print('Error creating event: $e');

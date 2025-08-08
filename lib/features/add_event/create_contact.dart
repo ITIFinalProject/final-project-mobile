@@ -78,45 +78,45 @@ class _CreateContactState extends State<CreateContact> {
                   Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 25, vertical: 16),
-                    child: Expanded(
-                      child: TypeAheadField<Map<String, dynamic>>(
-                        suggestionsCallback: (pattern) async {
-                          if (pattern.isEmpty) return [];
+                    child: TypeAheadField<Map<String, dynamic>>(
+                      suggestionsCallback: (pattern) async {
+                        if (pattern.isEmpty) return [];
 
-                          final snapshot = await FirebaseFirestore.instance
-                              .collection('users')
-                              .where('email', isGreaterThanOrEqualTo: pattern)
-                              .where('email', isLessThanOrEqualTo: pattern + '\uf8ff')
-                              .get();
+                        final snapshot = await FirebaseFirestore.instance
+                            .collection('users')
+                            .where('email', isGreaterThanOrEqualTo: pattern)
+                            .where(
+                            'email', isLessThanOrEqualTo: pattern + '\uf8ff')
+                            .get();
 
-                          return snapshot.docs.map((doc) => doc.data()).toList();
-                        },
-                        itemBuilder: (context, Map<String, dynamic> suggestion) {
-                          return ListTile(
-                            title: Text(suggestion['name'] ?? ''),
-                            subtitle: Text(suggestion['email']),
+                        return snapshot.docs.map((doc) => doc.data()).toList();
+                      },
+                      itemBuilder: (context, Map<String, dynamic> suggestion) {
+                        return ListTile(
+                          title: Text(suggestion['name'] ?? ''),
+                          subtitle: Text(suggestion['email']),
+                        );
+                      },
+                      onSelected: (suggestion) {
+                        if (!guestEmails.contains(suggestion['email']) &&
+                            guestEmails.length < widget.event.capacity) {
+                          setState(() {
+                            guestEmails.add(suggestion['email']);
+                            emailController.clear();
+                          });
+                        } else if (guestEmails.length >= widget.event
+                            .capacity) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text(S
+                                .of(context)
+                                .capacity_reached),
+
+                              backgroundColor: Colors.red,
+                            ),
                           );
-                        },
-                        onSelected: (suggestion) {
-                          if (!guestEmails.contains(suggestion['email']) &&
-                              guestEmails.length < widget.event.capacity) {
-                            setState(() {
-                              guestEmails.add(suggestion['email']);
-                              emailController.clear();
-                            });
-                          } else if (guestEmails.length >= widget.event.capacity) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text(S
-                                  .of(context)
-                                  .capacity_reached),
+                        }
+                      },
 
-                                backgroundColor: Colors.red,
-                              ),
-                            );
-                          }
-                        },
-
-                      ),
                     ),
                   ),
 

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:eventify_app/features/add_memory/view/video_player_view.dart';
 import 'package:eventify_app/features/profile/cubit/theme_cubit.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -38,16 +39,23 @@ class _AddMemoryState extends State<AddMemory> {
 
   @override
   Widget build(BuildContext context) {
-     final thememode = context.watch<ThemeCubit>().state;
+    final thememode = context
+        .watch<ThemeCubit>()
+        .state;
     final isDarkMode = thememode == ThemeMode.dark;
-
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    final isOwner = widget.event.hostId == userId;
+    var size = MediaQuery
+        .of(context)
+        .size;
     return Scaffold(
       appBar: AppBar(title: Text('${widget.event.title} Memories')),
       body: BlocBuilder<MemoryCubit, MemoryState>(
         builder: (context, state) {
           if (state is MemoryLoading) {
-            return  Center(child: CircularProgressIndicator(
-              color: isDarkMode?ThemeManager.lightPinkColor: ThemeManager.primaryColor,
+            return Center(child: CircularProgressIndicator(
+              color: isDarkMode ? ThemeManager.lightPinkColor : ThemeManager
+                  .primaryColor,
             ));
           } else if (state is MemoriesLoaded) {
             final memories = state.memories;
@@ -84,20 +92,24 @@ class _AddMemoryState extends State<AddMemory> {
                           builder: (_) => VideoPlayerView(videoUrl: memory.url),
                         ),
                       );
-
                     }
-                  },
-                     child:
-                   isImage
-                      ? Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                      side: BorderSide(color:  isDarkMode? ThemeManager.lightPinkColor : ThemeManager.primaryColor),
-                    ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(15),
-                          child: Image.network(
-                            memory.url,
+                      },
+                       child: Stack(
+                           children: [
+                             AspectRatio(aspectRatio: 1,
+                               child: isImage
+                                   ? Card(
+                                 shape: RoundedRectangleBorder(
+                                   borderRadius: BorderRadius.circular(15),
+                                   side: BorderSide(
+                                       color: isDarkMode ? ThemeManager
+                                           .lightPinkColor : ThemeManager
+                                           .primaryColor),
+                                 ),
+                                 child: ClipRRect(
+                                   borderRadius: BorderRadius.circular(15),
+                                 child: Image.network(
+                                   memory.url,
                             fit: BoxFit.cover,
                             loadingBuilder: (context, child, loadingProgress) {
                               if (loadingProgress == null) return child;
@@ -122,22 +134,49 @@ class _AddMemoryState extends State<AddMemory> {
                                 ),
                               );
                             },
-                          ),
-                        ),
-                      )
-                      : ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: Container(
-                          color:isDarkMode?ThemeManager.lightPinkColor: ThemeManager.primaryColor, // Placeholder for video
-                          child:  Center(
-                            child: Icon(
-                              Icons.videocam,
-                              size: 48,
-                              color: isDarkMode?ThemeManager.primaryColor: ThemeManager.lightPinkColor,
-                            ),
-                          ),
-                        ),
-                      ));
+                                 ),
+                                 ),
+                               )
+                                   : Container(
+                                 decoration: BoxDecoration(
+                                   color: isDarkMode
+                                       ? ThemeManager.lightPinkColor
+                                       : ThemeManager.primaryColor,
+                                   borderRadius: BorderRadius.circular(15),),
+                                 child: Center(
+                                   child: Icon(
+                                     Icons.videocam,
+                                     size: 48,
+                                     color: isDarkMode ? ThemeManager
+                                         .primaryColor : ThemeManager
+                                         .lightPinkColor,
+                                   ),
+                                 ),
+                               ),),
+                             if(isOwner)
+                               Positioned(
+                                 top: 5,
+                                 right: 5,
+                                 child: CircleAvatar(
+                                   backgroundColor: Colors.red.withOpacity(0.8),
+                                   radius: 16,
+                                   child: IconButton(
+                                     padding: EdgeInsets.zero,
+                                     icon: const Icon(Icons.delete, size: 18,
+                                         color: Colors.white),
+                                     onPressed: () async {
+                                       await context.read<MemoryCubit>()
+                                           .deleteMemory(
+                                         eventId: widget.event.id,
+                                         memoryId: memory.eventId,
+                                         fileUrl: memory.url,
+                                       );
+                                     },
+                                   ),
+                                 ),
+                               ),
+                           ])
+                   );
                 },
               );
             }
@@ -214,7 +253,7 @@ class _AddMemoryState extends State<AddMemory> {
         context.read<MemoryCubit>().uploadMemory(
           type: type,
           file: file,
-          eventId: widget.event.id, // Use ! here because we've checked for null
+          eventId: widget.event.id,
         );
       }
     }
