@@ -270,7 +270,6 @@
 // }
 import 'package:eventify_app/core/routes.dart';
 import 'package:eventify_app/core/theme.dart';
-import 'package:eventify_app/generated/l10n.dart';
 import 'package:eventify_app/models.dart/event_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -284,12 +283,16 @@ import '../event_cubit/event_state.dart';
 
 class CardEvent extends StatefulWidget {
   final EventModel event;
+
   // final VoidCallback? onEdit;
   final VoidCallback? onDelete;
+
   // final bool isInterested;
   final VoidCallback? onJoin;
+
   // final VoidCallback onAddMemory;
   // final VoidCallback onToggleInterested;
+  final bool showStar;
 
   const CardEvent({
     super.key,
@@ -299,6 +302,7 @@ class CardEvent extends StatefulWidget {
     // required this.isInterested,
     // required this.onToggleInterested,
     this.onJoin,
+    this.showStar = true
     // required this.onAddMemory,
   });
 
@@ -378,33 +382,34 @@ class _CardEventState extends State<CardEvent> {
                 ),
 
                 // ⭐ زر النجمةد
-                BlocBuilder<EventCubit, EventState>(
-                  builder: (context, state) {
-                    final isInterested = context
-                        .read<EventCubit>()
-                        .isInterested(widget.event.id);
+                if (widget.showStar)
+                  BlocBuilder<EventCubit, EventState>(
+                    builder: (context, state) {
+                      final isInterested = context
+                          .read<EventCubit>()
+                          .isInterested(widget.event.id);
 
-                    return IconButton(
-                      style: IconButton.styleFrom(
-                        backgroundColor: Colors.white.withOpacity(0.6),
-                        shape: const CircleBorder(),
-                        padding: const EdgeInsets.all(6),
-                        shadowColor: Colors.black12,
-                        elevation: 2,
-                      ),
-                      icon: Icon(
-                        isInterested ? Icons.star : Icons.star_border,
-                        color: isInterested ? Colors.yellow[700] : Colors.white,
-                        size: 30,
-                      ),
-                      onPressed: () {
-                        context.read<EventCubit>().toggleInterestedEvent(
-                          widget.event,
-                        );
-                      },
-                    );
-                  },
-                ),
+                      return IconButton(
+                        style: IconButton.styleFrom(
+                          backgroundColor: Colors.white.withOpacity(0.6),
+                          shape: const CircleBorder(),
+                          padding: const EdgeInsets.all(6),
+                          shadowColor: Colors.black12,
+                          elevation: 2,
+                        ),
+                        icon: Icon(
+                          isInterested ? Icons.star : Icons.star_border,
+                          color: isInterested ? Colors.yellow[700] : Colors.white,
+                          size: 30,
+                        ),
+                        onPressed: () {
+                          context.read<EventCubit>().toggleInterestedEvent(
+                            widget.event,
+                          );
+                        },
+                      );
+                    },
+                  ),
               ],
             ),
 

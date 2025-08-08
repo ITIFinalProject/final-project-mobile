@@ -145,15 +145,19 @@ class EventPreviewPage extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            event.title,
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color:
-                              isDarkMode
-                                  ? ThemeManager.lightPinkColor
-                                  : ThemeManager.primaryColor,
+                          Expanded(
+                            child: Text(
+                              event.title,
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color:
+                                isDarkMode
+                                    ? ThemeManager.lightPinkColor
+                                    : ThemeManager.primaryColor,
+                              ),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
                           BlocBuilder<AuthCubit, AuthState>(

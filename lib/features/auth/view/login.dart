@@ -5,6 +5,7 @@ import 'package:eventify_app/core/theme.dart';
 import 'package:eventify_app/features/auth/view/register.dart';
 import 'package:eventify_app/features/auth/view/widgets/custom_button.dart';
 import 'package:eventify_app/features/auth/view/widgets/custom_text_field.dart';
+import 'package:eventify_app/features/layout/layout.dart';
 import 'package:eventify_app/features/profile/cubit/theme_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -33,7 +34,8 @@ class _LoginViewState extends State<LoginView> {
     return BlocConsumer<AuthCubit, AuthState>(
       listener: (context, state) {
         if (state is AuthSuccess) {
-          Navigator.pushReplacementNamed(context, AppRoutes.layout);
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => LayoutView()));
         } else if (state is AuthFailure) {
           errorMessage = state.error;
         }

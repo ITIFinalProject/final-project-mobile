@@ -84,6 +84,7 @@ class _MyCreatedEventsState extends State<MyCreatedEvents> with RouteAware {
                     onJoin: () {
                       context.read<EventCubit>().joinEvent(event);
                     },
+                    showStar: false,
                   ), //  نفس الكارد اللي بتستخدميه في EventsView
                 );
               },
