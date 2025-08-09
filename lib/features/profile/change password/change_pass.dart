@@ -2,9 +2,9 @@ import 'package:eventify_app/core/routes.dart';
 import 'package:eventify_app/features/add_event/widgets/custom_text.dart';
 import 'package:eventify_app/features/add_event/widgets/custom_text_form_field.dart';
 import 'package:eventify_app/features/auth/cubit/auth_cubit.dart';
+import 'package:eventify_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:eventify_app/generated/l10n.dart';
 
 class ChangePass extends StatefulWidget {
   const ChangePass({super.key});
@@ -57,8 +57,8 @@ class _ChangePassState extends State<ChangePass> {
                     title: S.of(context).save_password,
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
-                        final authCubit = context.read<AuthCubit>();
-                        f (newPassController.text !=
+                        inal authCubit = context.read<AuthCubit>();
+                      if (newPassController.text !=
                           confirmPassController.text) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
@@ -83,7 +83,7 @@ class _ChangePassState extends State<ChangePass> {
                     }
                   },
                 ),
-                ],
+              ],
               ),
             ),  
         ),
