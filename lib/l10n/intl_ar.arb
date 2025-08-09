@@ -64,19 +64,6 @@
 "save": "حفظ",
 "failed_to_create_event": "فشل في إنشاء الحدث",
 "event_details_step": "٢ من ٥: تفاصيل الحدث",
-
-
-
-
-
-
-
-
-
-
-
-
-
   "yyyymmdd":"عام-شهر-يوم",
   "end_date": "تاريخ الانتهاء",
   "end_time": "وقت الانتهاء",
@@ -164,7 +151,8 @@
 "eventMemories": "ذكريات الفعالية",
 "eventMemory": "ذكرى الفعالية",
 
-"noEndedEventsYet": "لا توجد فعاليات منتهية بعد."
+"noEndedEventsYet": "لا توجد فعاليات منتهية بعد.",
+"joinedEvents":"الفعاليات التي تم الانضمام لها "
 
 
 

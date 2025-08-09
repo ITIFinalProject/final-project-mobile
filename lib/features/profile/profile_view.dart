@@ -83,16 +83,29 @@ class _ProfileViewState extends State<ProfileView> {
                   ),
                   const SizedBox(height: 30),
 
-                  _infoTile(S.of(context).edit_profile, Icons.person, () {
+                  _infoTile(S
+                      .of(context)
+                      .edit_profile, Icons.person, () {
                     Navigator.pushNamed(context, AppRoutes.editProfile);
                   }),
-                  _infoTile(S.of(context).change_password, Icons.lock, () {
+                  _infoTile(S
+                      .of(context)
+                      .change_password, Icons.lock, () {
                     Navigator.pushNamed(context, AppRoutes.verifyOldPassword);
                   }),
-                  _infoTile(S.of(context).my_events, Icons.event_rounded, () {
+                  _infoTile(S
+                      .of(context)
+                      .my_events, Icons.event_rounded, () {
                     Navigator.pushNamed(context, AppRoutes.myCreatedEvents);
                   }),
-                  _infoTile(S.of(context).event_memories, Icons.memory, () {
+                  _infoTile(S
+                      .of(context)
+                      .joinedEvents, Icons.event_note, () {
+                    Navigator.pushNamed(context, AppRoutes.joinedEvents);
+                  }),
+                  _infoTile(S
+                      .of(context)
+                      .event_memories, Icons.memory, () {
                     Navigator.pushNamed(context, AppRoutes.eventMemories);
                   }),
                   BlocBuilder<ThemeCubit, ThemeMode>(
@@ -101,7 +114,9 @@ class _ProfileViewState extends State<ProfileView> {
                       return ListTile(
                         leading: Icon(
                           Icons.brightness_6,
-                          color: isDark?ThemeManager.lightPinkColor:ThemeManager.primaryColor,
+                          color: isDark
+                              ? ThemeManager.lightPinkColor
+                              : ThemeManager.primaryColor,
                         ),
                         title: Text(
                           S.of(context).change_theme,

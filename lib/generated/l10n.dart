@@ -1520,6 +1520,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Joined Events `
+  String get joinedEvents {
+    return Intl.message(
+      'Joined Events ',
+      name: 'joinedEvents',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
