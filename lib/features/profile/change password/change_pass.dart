@@ -66,23 +66,21 @@ class _ChangePassState extends State<ChangePass> {
                               backgroundColor: Colors.red,
                             ),
                           );
-                          return;
-                        } else
-                          await authCubit
-                            ..updatePassword(newPassController.text);
-        
-                        ScaffoldMessenger.of(context).showSnackBar(
-                           SnackBar(
-                            content: Text(S.of(context).password_updated_successfully),
-                            backgroundColor: Colors.green,
+                          return; else
+                        await authCubit
+                          ..updatePassword(newPassController.text);
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            S.of(context).password_updated_successfully,
                           ),
-                        );
-                        Navigator.pushReplacementNamed(
-                          context,
-                          AppRoutes.profileView,
-                        );
-                      }
-                    },
+                          backgroundColor: Colors.green,
+                        ),
+                      );
+                      Navigator.pushReplacementNamed(context, AppRoutes.layout);
+                    }
+                  },
                   ),
                 ],
               ),

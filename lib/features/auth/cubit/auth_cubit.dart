@@ -466,29 +466,32 @@ class AuthCubit extends Cubit<AuthState> {
     emit(AuthLoading());
     try {
       final user = FirebaseAuth.instance.currentUser;
-      if (password != null && password.isNotEmpty) {
+      if (password.isNotEmpty) {
         await user!.updatePassword(password);
       }
-      emit(
-        AuthSuccess(
-          UserModel(
-              name: user!.displayName,
-              email: user.email,
-              phone: user.phoneNumber,
-              imagePath: user.photoURL
-          ),
-        ),
-      );
+
+      // ✅ بعد تحديث الباسورد، رجّع البيانات الكاملة من Firestore
+      final doc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user!.uid)
+          .get();
+
+      if (!doc.exists) {
+        emit(AuthFailure("User data not found"));
+        return;
+      }
+
+      final userModel = UserModel.fromFireStore(doc.data()!);
+
+      emit(AuthSuccess(userModel));
     } on FirebaseAuthException catch (e) {
-      print(e.message);
-      emit(
-        AuthFailure(e.message ?? 'An error occurred while updating password.'),
-      );
+      emit(AuthFailure(
+          e.message ?? 'An error occurred while updating password.'));
     } catch (e) {
-      print(e);
       emit(AuthFailure(e.toString()));
     }
   }
+
 
   Future<void> reauthenticateAndUpdateEmail({
     required String currentEmail,

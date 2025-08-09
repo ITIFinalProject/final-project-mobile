@@ -31,10 +31,25 @@ class _MapPickerScreenState extends State<MapPickerScreen> {
             pos.latitude,
             pos.longitude,
           );
-          String address = placemarks.first.street ?? 'Picked Location';
+          Placemark place = placemarks.first;
+
+          String address = [
+            place.street,
+            place.subLocality,
+            place.locality,
+            place.administrativeArea,
+            place.postalCode,
+            place.country,
+          ].where((e) => e != null && e.isNotEmpty).join(', ');
+          // String address = placemarks.first.street?.isNotEmpty == true
+          //     ? placemarks.first.street!
+          //     : placemarks.first.name ?? 'Picked Location';
+
+          if (!mounted) return; // تأكد إن الواجهة لسه موجودة
 
           Navigator.pop(context, address);
         },
+
         markers:
         selectedLocation != null
             ? {
