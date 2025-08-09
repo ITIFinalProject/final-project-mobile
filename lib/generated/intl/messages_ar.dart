@@ -121,6 +121,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "invitations_sent":
         MessageLookupByLibrary.simpleMessage("تم إرسال الدعوات بنجاح"),
         "join": MessageLookupByLibrary.simpleMessage("انضم"),
+        "joinedEvents": MessageLookupByLibrary.simpleMessage(
+            "الفعاليات التي تم الانضمام لها "),
         "joinedSuccessfully":
         MessageLookupByLibrary.simpleMessage("تم الانضمام بنجاح"),
         "location": MessageLookupByLibrary.simpleMessage("الموقع"),
