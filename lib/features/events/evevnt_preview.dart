@@ -75,9 +75,10 @@ class EventPreviewPage extends StatelessWidget {
                 : ThemeManager.lightPinkColor,
         appBar: AppBar(
           backgroundColor:
-              isDarkMode
-                  ? ThemeManager.lightPinkColor.withOpacity(0.9)
-                  : ThemeManager.primaryColor.withOpacity(0.9),
+          isDarkMode
+              ? ThemeManager.lightPinkColor.withOpacity(0.9)
+              : ThemeManager.primaryColor.withOpacity(0.9),
+          title: Text('Event Details'),
         ),
         body: SingleChildScrollView(
           child: Column(
