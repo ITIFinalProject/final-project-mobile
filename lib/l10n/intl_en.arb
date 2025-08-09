@@ -28,14 +28,6 @@
 "interestedEvents": "Interested Events",
 "eventDeletedSuccessfully": "Event Deleted Successfully",
 
-
-
-
-
-
-
-
-  
   "update_event":"Update Event",
   "create_event":"Create Event",
   "customize":"Customize",
@@ -81,18 +73,6 @@
 "save": "Save",
 "failed_to_create_event": "Failed to create event",
 "event_details_step": "2 of 5: Event Details",
-
-
-
-
-
-
-
-
-
-
-
-
   "end_date":"End Date",
   "please_enter_your_start_date":"please enter your start date",
   "please_enter_your_end_date":"please enter your end date",
@@ -176,8 +156,8 @@
   "noEventsForThatDay": "No Events for that Day",
   "eventMemories": "Event Memories",
   "noEndedEventsYet": "No ended events yet.",
-  "eventMemory": "Event Memory"
-
+  "eventMemory": "Event Memory",
+"joinedEvents":"Joined Events "
 
 
 

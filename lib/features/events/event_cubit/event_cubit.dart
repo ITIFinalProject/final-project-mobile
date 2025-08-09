@@ -113,6 +113,48 @@ class EventCubit extends Cubit<EventState> {
     }
   }
 
+  Future<void> leaveEvent(EventModel event) async {
+    emit(EventLoading());
+
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        emit(EventError("User not logged in"));
+        return;
+      }
+
+      final firestore = FirebaseFirestore.instance;
+
+      // 1️⃣ حذف الحدث من eventsJoined عند المستخدم
+      await firestore
+          .collection('users')
+          .doc(user.uid)
+          .collection('eventsJoined')
+          .doc(event.id)
+          .delete();
+
+      // 2️⃣ تقليل currentAttendees في الحدث نفسه
+      final eventRef = firestore.collection('events').doc(event.id);
+
+      await firestore.runTransaction((transaction) async {
+        final snapshot = await transaction.get(eventRef);
+        if (!snapshot.exists) return;
+
+        final currentAttendees = (snapshot['currentAttendees'] ?? 0) as int;
+        transaction.update(eventRef, {
+          'currentAttendees': currentAttendees > 0
+              ? currentAttendees - 1
+              : 0, // ماينزلش عن الصفر
+        });
+      });
+
+      // 3️⃣ تحديث اللستة بعد الحذف
+      await fetchJoinedEvents();
+    } catch (e) {
+      emit(EventError("Error leaving event: $e"));
+    }
+  }
+
   Future<Map<String, int>> _calculateUnreadMessages(List<EventModel> events,
       String userId) async {
     Map<String, int> result = {};
