@@ -58,15 +58,16 @@ class _ChangePassState extends State<ChangePass> {
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
                         final authCubit = context.read<AuthCubit>();
-                        if (newPassController.text !=
-                            confirmPassController.text) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                             SnackBar(
-                              content: Text(S.of(context).passwords_do_not_match),
-                              backgroundColor: Colors.red,
-                            ),
-                          );
-                          return; else
+                        f (newPassController.text !=
+                          confirmPassController.text) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(S.of(context).passwords_do_not_match),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                        return;
+                      } else
                         await authCubit
                           ..updatePassword(newPassController.text);
 
@@ -81,7 +82,7 @@ class _ChangePassState extends State<ChangePass> {
                       Navigator.pushReplacementNamed(context, AppRoutes.layout);
                     }
                   },
-                  ),
+                ),
                 ],
               ),
             ),  
